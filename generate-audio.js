@@ -22,8 +22,20 @@ const MANIFEST_PATH = path.join(AUDIO_DIR, 'manifest.json');
 // specific voice a given piece of text gets, and the app needs to agree
 // with this script about that, or a live-VOICEVOX fallback in the browser
 // could use a different voice than the pre-generated file did.
-const FEMALE_SPEAKERS = [{ id: 2, name: 'Shikoku Metan' }, { id: 8, name: 'Kasukabe Tsumugi' }];
-const MALE_SPEAKERS = [{ id: 52, name: 'Suzumatsu Shuji' }, { id: 21, name: 'Kenzaki' }];
+const FEMALE_SPEAKERS = [
+  { id: 2, name: 'Shikoku Metan', style: 'Bright & playful' },
+  { id: 8, name: 'Kasukabe Tsumugi', style: 'Calm & clear' },
+  { id: 10, name: 'Amehare Hau', style: 'Soft & gentle' },
+  { id: 9, name: 'Namine Ritsu', style: 'Cool & low-toned' },
+  { id: 16, name: 'Kyushu Sora', style: 'Warm & friendly' }
+];
+const MALE_SPEAKERS = [
+  { id: 52, name: 'Suzumatsu Shuji', style: 'Smooth & mature' },
+  { id: 21, name: 'Kenzaki', style: 'Deep & steady' },
+  { id: 11, name: 'Kurono Takehiro', style: 'Energetic & warm' },
+  { id: 12, name: 'Shirakami Kotaro', style: 'Upbeat & enthusiastic' },
+  { id: 13, name: 'Aoyama Ryusei', style: 'Bold & hot-blooded' }
+];
 function pickSpeakerId(gender, text) {
   const pool = gender === 'male' ? MALE_SPEAKERS : FEMALE_SPEAKERS;
   let h = 0;
