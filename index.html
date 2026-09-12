@@ -902,7 +902,6 @@ const DUO_RAW = [
   {word:'バスケットボール',reading:'バスケットボール',meaning:'Basketball'},
   {word:'します',reading:'します',meaning:'Makes, are doing, make'},
   {word:'テレビ',reading:'テレビ',meaning:'TV'},
-  {word:'を',reading:'を',meaning:'Object marker — through, with, for'},
   {word:'えいが',reading:'えいが',meaning:'Movie'},
   {word:'見ます',reading:'みます',meaning:'Watch, will watch, watches'},
   {word:'しずか',reading:'しずか',meaning:'Quiet'},
@@ -914,7 +913,6 @@ const DUO_RAW = [
   {word:'日本',reading:'にほん',meaning:'Japan'},
   {word:'どう',reading:'どう',meaning:'How'},
   {word:'おおさか',reading:'おおさか',meaning:'Osaka'},
-  {word:'も',reading:'も',meaning:'Even, any, also'},
   {word:'にすんでいます',reading:'にすんでいます',meaning:'Live in'},
   {word:'私',reading:'わたし',meaning:'Me, I'},
   {word:'トロント',reading:'トロント',meaning:'Toronto'},
@@ -944,7 +942,6 @@ const DUO_RAW = [
   {word:'一',reading:'いち',meaning:'One'},
   {word:'二',reading:'に',meaning:'Two'},
   {word:'いま',reading:'いま',meaning:'Now'},
-  {word:'に',reading:'に',meaning:'Through, made, with'},
   {word:'じ',reading:'じ',meaning:"O'clock"},
   {word:'いち',reading:'いち',meaning:'One'},
   {word:'なかやま',reading:'なかやま',meaning:'Nakayama'},
@@ -954,7 +951,6 @@ const DUO_RAW = [
   {word:'やまぐち',reading:'やまぐち',meaning:'Yamaguchi'},
   {word:'たなか',reading:'たなか',meaning:'Tanaka'},
   {word:'くつ',reading:'くつ',meaning:'Shoe'},
-  {word:'の',reading:'の',meaning:"For, 's, one"},
   {word:'てぶくろ',reading:'てぶくろ',meaning:'Glove, gloves, mitten'},
   {word:'しろい',reading:'しろい',meaning:'White'},
   {word:'かばん',reading:'かばん',meaning:'Bag, bags'},
@@ -965,7 +961,6 @@ const DUO_RAW = [
   {word:'だいがく',reading:'だいがく',meaning:'University'},
   {word:'えき',reading:'えき',meaning:'Station'},
   {word:'デパート',reading:'デパート',meaning:'Department store'},
-  {word:'じゃない',reading:'じゃない',meaning:"Do not, am not, I'm not"},
   {word:'ここ',reading:'ここ',meaning:'Here, this place'},
   {word:'バスてい',reading:'バスてい',meaning:'Bus stop'},
   {word:'コンビニ',reading:'コンビニ',meaning:'Convenience store'},
@@ -984,7 +979,6 @@ const DUO_RAW = [
   {word:'にほん',reading:'にほん',meaning:'Japan'},
   {word:'アメリカ',reading:'アメリカ',meaning:'America'},
   {word:'ケーキ',reading:'ケーキ',meaning:'Cake'},
-  {word:'か',reading:'か',meaning:'Or, is it?'},
   {word:'ピザ',reading:'ピザ',meaning:'Pizza'},
   {word:'はい',reading:'はい',meaning:'Yes'},
   {word:'おいしい',reading:'おいしい',meaning:'Good, delicious, tasty'},
@@ -1234,7 +1228,44 @@ const KANJI = [
 //   blankAnswerAccepted: ["wa"],       // optional — accepted romaji/alt answers for the blank
 //   level: 1
 // }
-const GRAMMAR = [];
+const GRAMMAR = [
+  {
+    id: 'g-wo', title: 'を', subtitle: 'Direct object particle',
+    explanation: 'Marks the direct object of a verb — the thing the action is being done to. Pronounced "wo" but written with the hiragana を. Comes right after the noun it marks.',
+    example: { jp: 'パンを食べます。', romaji: 'Pan wo tabemasu.', en: 'I eat bread.' },
+    blankAnswer: 'を', blankAnswerAccepted: ['wo', 'o'], level: 1
+  },
+  {
+    id: 'g-ni', title: 'に', subtitle: 'Particle: time, location, or target of an action',
+    explanation: 'One of the most common particles — marks a point in time ("at 7 o\'clock"), a location something exists at or moves to, or the indirect object/target of an action. Which meaning it has depends on context.',
+    example: { jp: '7時に起きます。', romaji: 'Shichi-ji ni okimasu.', en: 'I wake up at 7 o\'clock.' },
+    blankAnswer: 'に', blankAnswerAccepted: ['ni'], level: 1
+  },
+  {
+    id: 'g-mo', title: 'も', subtitle: 'Particle: also, too, even',
+    explanation: 'Replaces は or が when saying something applies "too" or "also" — or emphasizes an extreme case ("even"). Attaches directly to the noun.',
+    example: { jp: '私も学生です。', romaji: 'Watashi mo gakusei desu.', en: 'I am also a student.' },
+    blankAnswer: 'も', blankAnswerAccepted: ['mo'], level: 1
+  },
+  {
+    id: 'g-no', title: 'の', subtitle: "Particle: possessive ('s), or links nouns",
+    explanation: 'Works like an apostrophe-s in English — "A の B" means "A\'s B" or "B of A." Also links two nouns together.',
+    example: { jp: 'これは私の本です。', romaji: 'Kore wa watashi no hon desu.', en: 'This is my book.' },
+    blankAnswer: 'の', blankAnswerAccepted: ['no'], level: 1
+  },
+  {
+    id: 'g-ka', title: 'か', subtitle: 'Turns a statement into a question',
+    explanation: 'Added to the end of a sentence to make it a yes/no (or open) question — no need to change word order like in English, just add か.',
+    example: { jp: 'これは本ですか。', romaji: 'Kore wa hon desu ka?', en: 'Is this a book?' },
+    blankAnswer: 'か', blankAnswerAccepted: ['ka'], level: 1
+  },
+  {
+    id: 'g-janai', title: 'じゃない', subtitle: 'Casual negative of です',
+    explanation: 'The casual negative of です ("is/am/are") — used to say something is NOT the case. じゃありません is the more polite version of the same thing.',
+    example: { jp: 'これは本じゃない。', romaji: 'Kore wa hon ja nai.', en: "This isn't a book." },
+    blankAnswer: 'じゃない', blankAnswerAccepted: ['janai', 'ja nai'], level: 1
+  }
+];
 
 // Sentence bank for the Sentences tab's Read & Type / Translate modes.
 // A sentence only appears once EVERY id in its requiredVocab/requiredKanji/
@@ -1459,7 +1490,7 @@ function postLoadInit() {
 const COLOR_MAP = {
   vocab:   { accent: '#AA00FF', dark: '#8600B9', light: '#EDC8FF' },
   kanji:   { accent: '#FF00AA', dark: '#B9007B', light: '#FFD4F1' },
-  grammar: { accent: '#00AAFF', dark: '#0069AC', light: '#CBEBFF' }
+  grammar: { accent: '#00AA00', dark: '#007A00', light: '#CDF5CD' }
 };
 const SECTION_LABEL = { vocab: 'Vocabulary', kanji: 'Kanji', grammar: 'Grammar' };
 const SECTION_CHIP = { vocab: '語', kanji: '字', grammar: '文法' };
