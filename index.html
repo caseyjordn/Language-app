@@ -108,6 +108,11 @@
     font-size:11px;font-weight:700;color:#8A6D1F;background:#FFF7E6;border:1px dashed #E0BE6A;
     border-radius:var(--border-radius-pill);padding:5px 8px;cursor:pointer;flex:none;
   }
+  .settings-btn{
+    display:flex;align-items:center;justify-content:center;width:34px;height:34px;font-size:17px;
+    text-decoration:none;color:var(--color-widget-primary-text);border-radius:50%;flex:none;
+  }
+  .settings-btn:hover,.settings-btn.active{background:var(--accent-light)}
   @media (max-width:480px){
     .wordmark .en{display:none} /* "日本・" is enough branding at this width, "Practice" just eats space */
     .dev-btn{padding:5px 6px;font-size:10px}
@@ -337,6 +342,14 @@
   .auth-toggle{text-align:center;font-size:13px;margin-top:16px;color:var(--color-widget-secondary-text)}
   .auth-toggle a{color:var(--accent);font-weight:600;cursor:pointer}
   .auth-loading{text-align:center;padding:60px 20px;color:var(--color-widget-secondary-text)}
+
+  .reviews-banner{display:flex;align-items:center;gap:18px;text-decoration:none;background:var(--accent, #AA00FF);color:#fff;border-radius:var(--border-radius-widget);padding:20px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .reviews-banner.is-empty{background:#fff;color:var(--color-widget-primary-text);border:1px solid var(--color-widget-border)}
+  .reviews-banner-count{font-size:34px;font-weight:800;line-height:1;min-width:52px;text-align:center}
+  .reviews-banner-body{flex:1}
+  .reviews-banner-title{font-size:17px;font-weight:700}
+  .reviews-banner-sub{font-size:13px;opacity:.85;margin-top:2px}
+  .reviews-banner .chevron{font-size:22px;opacity:.85}
 
   .custom-vocab-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--color-widget-border);font-size:14px}
   .custom-vocab-row .cv-word{font-weight:700;min-width:70px}
@@ -1411,6 +1424,14 @@ function setItemStage(type, id, stage) {
   STATE.items[itemKey(type, id)] = { stage, availableAt: nextAvailableAt(stage), learnedAt: now(), lastReviewedAt: now() };
 }
 
+// Custom vocab you add yourself (see "Add Custom Vocab" in Settings)
+// starts at Apprentice I like normal, but skips the usual 4-hour wait —
+// it's due for review right away instead of hours from now.
+function introduceCustomItem(type, id) {
+  if (isIntroduced(type, id)) return;
+  STATE.items[itemKey(type, id)] = { stage: 1, availableAt: now(), learnedAt: now(), lastReviewedAt: null };
+}
+
 // NOTE: the one-time progress seed and Duo auto-introduce that used to run
 // unconditionally here were Casey-account-specific (her real pre-app
 // progress) and would have wrongly given every new friend signup a head
@@ -1426,7 +1447,7 @@ function postLoadInit() {
   // review pool yet (mirrors the old Duo behavior: words you add yourself
   // are ones you already know, so they go straight into reviews).
   (STATE.customVocab && STATE.customVocab.vocab || []).forEach(v => {
-    if (!isIntroduced('vocab', v.id)) introduceItem('vocab', v.id);
+    if (!isIntroduced('vocab', v.id)) introduceCustomItem('vocab', v.id);
   });
   saveState();
 }
@@ -1878,6 +1899,8 @@ function render() {
   else if (section === 'practice' && parts[1] === 'custom') view = viewCustomPracticePicker();
   else if (section === 'backup') view = viewBackupRestore();
   else if (section === 'customvocab') view = viewAddCustomVocab();
+  else if (section === 'reviews') view = viewActiveReviews();
+  else if (section === 'settings') view = viewSettings();
   else view = viewDashboard();
 
   root.innerHTML = topNav(section, parts) + view.html;
@@ -1897,8 +1920,7 @@ function topNav(section, parts) {
         <a href="#/kanji" class="${section === 'kanji' ? 'active' : ''}">Kanji</a>
       </div>
       <div class="navright">
-        <button class="dev-btn" onclick="devSkipTime()">DEV: +24h</button>
-        <button class="dev-btn" onclick="signOutUser()" title="${CURRENT_USER_EMAIL || ''}">Sign out</button>
+        <a class="settings-btn ${section === 'settings' ? 'active' : ''}" href="#/settings" title="Settings" aria-label="Settings">⚙</a>
       </div>
     </nav>`;
 }
@@ -1983,8 +2005,19 @@ function viewDashboard() {
       <div class="spread-count" style="background:${COLOR_MAP.kanji.accent}">${spread.kanji[key]}</div>
     </div>`).join('');
 
+  const dueCount = allDueCount();
+
   return { html: `
     <main>
+      <a class="reviews-banner ${dueCount ? '' : 'is-empty'}" href="${dueCount ? '#/reviews' : '#'}" ${dueCount ? '' : 'style="pointer-events:none"'}>
+        <div class="reviews-banner-count">${dueCount}</div>
+        <div class="reviews-banner-body">
+          <div class="reviews-banner-title">${dueCount ? 'Reviews Available' : 'No Reviews Due'}</div>
+          <div class="reviews-banner-sub">${dueCount ? 'Vocab, Kanji, and Grammar due right now — start them together.' : "You're all caught up. Check back later."}</div>
+        </div>
+        ${dueCount ? '<div class="chevron">›</div>' : ''}
+      </a>
+
       <div class="grid">${cards}${sentencesCard}</div>
 
       <div class="grid">
@@ -2012,6 +2045,34 @@ function viewDashboard() {
         <a class="wk-button primary" href="#/practice/custom">Choose items ›</a>
       </div>
 
+    </main>` };
+}
+
+function recordMistake(type, id) {
+  STATE.recentMistakes.push({ type, id, at: now() });
+  if (STATE.recentMistakes.length > 200) STATE.recentMistakes.shift();
+}
+
+/* ======================================================================
+   SETTINGS — the gear icon in the header. Everything account-level and
+   infrequent (custom vocab, backup/restore, sign out, dev tools) lives
+   here instead of cluttering the main header/dashboard, which stays
+   focused on Dashboard/Vocab/Sentences/Kanji.
+   ====================================================================== */
+
+function viewSettings() {
+  return { html: `
+    <div class="topbar">
+      <a class="back-link" href="#/dashboard">‹ Back to Dashboard</a>
+      <div class="section-title">Settings</div>
+    </div>
+    <main>
+      <div class="mistakes-widget">
+        <div class="widget-title-row"><span class="title">Account</span></div>
+        <p class="wk-text">Signed in as <strong>${CURRENT_USER_EMAIL || ''}</strong>.</p>
+        <button class="wk-button" id="settingsSignOut">Sign out</button>
+      </div>
+
       <div class="mistakes-widget">
         <div class="widget-title-row"><span class="title">Add Custom Vocab</span></div>
         <p class="wk-text">Add your own words or kanji from other sources (Duolingo, a textbook, etc.) — they go straight into your reviews.</p>
@@ -2023,12 +2084,18 @@ function viewDashboard() {
         <p class="wk-text">Your progress syncs to the cloud automatically, but you can still export/import a manual backup any time.</p>
         <a class="wk-button" href="#/backup">Open ›</a>
       </div>
-    </main>` };
+
+      <div class="mistakes-widget">
+        <div class="widget-title-row"><span class="title">Developer</span></div>
+        <p class="wk-text">Fast-forward the review clock, for testing SRS timing without waiting real hours.</p>
+        <button class="wk-button" id="settingsDevSkip">+24 hours</button>
+      </div>
+    </main>`, after: attachSettingsHandlers };
 }
 
-function recordMistake(type, id) {
-  STATE.recentMistakes.push({ type, id, at: now() });
-  if (STATE.recentMistakes.length > 200) STATE.recentMistakes.shift();
+function attachSettingsHandlers() {
+  document.getElementById('settingsSignOut').addEventListener('click', signOutUser);
+  document.getElementById('settingsDevSkip').addEventListener('click', devSkipTime);
 }
 
 /* ======================================================================
@@ -2053,7 +2120,7 @@ function viewAddCustomVocab() {
 
   return { html: `
     <div class="topbar">
-      <a class="back-link" href="#/dashboard">‹ Back to Dashboard</a>
+      <a class="back-link" href="#/settings">‹ Back to Settings</a>
       <div class="section-title">Add Custom Vocab</div>
     </div>
     <main>
@@ -2103,7 +2170,7 @@ function attachCustomVocabHandlers() {
     STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
     const item = { id: slugifyCustomId('vocab', word), word, reading, meaning, source: 'custom' };
     STATE.customVocab.vocab.push(item);
-    introduceItem('vocab', item.id);
+    introduceCustomItem('vocab', item.id);
     saveState();
     render();
   });
@@ -2118,7 +2185,7 @@ function attachCustomVocabHandlers() {
     STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
     const item = { id: slugifyCustomId('kanji', char), char, onyomi, kunyomi, meaning, source: 'custom' };
     STATE.customVocab.kanji.push(item);
-    introduceItem('kanji', item.id);
+    introduceCustomItem('kanji', item.id);
     saveState();
     render();
   });
@@ -2147,7 +2214,7 @@ function attachCustomVocabHandlers() {
 function viewBackupRestore() {
   return { html: `
     <div class="topbar">
-      <a class="back-link" href="#/dashboard">‹ Back to Dashboard</a>
+      <a class="back-link" href="#/settings">‹ Back to Settings</a>
       <div class="section-title">Backup / Restore Progress</div>
     </div>
     <main>
@@ -2748,12 +2815,35 @@ function buildMixedQuizSession(entries, mode, backRoute) {
   const questions = [];
   entries.forEach(({ type, item }) => fieldsFor(type).forEach(field => questions.push({ itemType: type, itemId: item.id, field })));
   shuffleArray(questions);
-  return { mode, backRoute, totalQuestions: questions.length, remaining: questions, missByItem: {}, answeredCount: 0 };
+  // Tracks every distinct type in the session so a finished mixed review
+  // (e.g. the "Active Reviews" page, vocab+kanji together) can check
+  // level-up for each type it touched, not just whichever type happened
+  // to be the last question answered.
+  const types = [...new Set(entries.map(e => e.type))];
+  return { mode, backRoute, totalQuestions: questions.length, remaining: questions, missByItem: {}, answeredCount: 0, types };
 }
 
 function viewReview(type) {
   quizSession = buildQuizSession(type, reviewQueueFor(type), 'review');
   return { html: renderQuizQuestion(), after: attachQuizHandlers };
+}
+
+// Cross-category "Active Reviews" — every vocab/kanji/grammar item due
+// right now, in one shuffled session. This is a REAL review (mode
+// 'review'): correct/incorrect here moves the item's actual SRS stage,
+// same as the per-section Reviews button — just combined across types.
+function viewActiveReviews() {
+  const entries = ['vocab', 'kanji', 'grammar']
+    .flatMap(type => reviewQueueFor(type).map(item => ({ type, item })));
+  if (!entries.length) {
+    return { html: `<main><p class="empty-state" style="margin-top:40px">Nothing due for review right now. <a href="#/dashboard">Back to Dashboard</a></p></main>` };
+  }
+  quizSession = buildMixedQuizSession(entries, 'review', 'dashboard');
+  return { html: renderQuizQuestion(), after: attachQuizHandlers };
+}
+
+function allDueCount() {
+  return ['vocab', 'kanji', 'grammar'].reduce((sum, type) => sum + reviewQueueFor(type).length, 0);
 }
 
 function renderQuizQuestion() {
@@ -2873,7 +2963,7 @@ function attachQuizHandlers() {
           saveState();
         }
         if (!quizSession.remaining.length) {
-          if (mode === 'review') maybeLevelUp(type);
+          if (mode === 'review') (quizSession.types || [type]).forEach(t => maybeLevelUp(t));
           saveState();
           navigate(quizSession.backRoute);
         } else {

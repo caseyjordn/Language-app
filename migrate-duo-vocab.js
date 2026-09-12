@@ -50,9 +50,29 @@ function loadAppData() {
   return context.__EXPORTED__;
 }
 
+// BUG FIX: this used to index hoursTable[stage - 1], off-by-one from the
+// real app's nextAvailableAt(), which indexes hoursTable[stage] directly
+// (see index.html — "index = stage (1-8)"). That off-by-one meant
+// stage-1 items (introduceItem, below) got hoursTable[0] === null, i.e.
+// availableAt: null — which reviewQueueFor() treats as "never due". Every
+// Duo word imported this way would have silently never shown up for
+// review, ever.
 function nextAvailableAt(stage, hoursTable) {
-  const hours = hoursTable[stage - 1];
-  return hours === null ? null : Date.now() + hours * 3600 * 1000;
+  const hours = hoursTable[stage];
+  return hours === null || hours === undefined ? null : Date.now() + hours * 3600 * 1000;
+}
+
+// Deterministic pseudo-random spread, so items you'd actually Guru'd at
+// different real-world times don't all land on the exact same due
+// instant (which would dump the whole level on you in one sitting the
+// moment the timer hits). Hashes the item's id into an offset within
+// [0, spreadHours) — same input always gives the same offset, so
+// re-running this script produces a stable schedule rather than
+// reshuffling due times every time.
+function hashSpreadHours(id, spreadHours) {
+  let h = 0;
+  for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h % spreadHours;
 }
 
 const { CORE_VOCAB, KANJI, DUO_RAW, SRS_HOURS } = loadAppData();
@@ -66,16 +86,43 @@ const state = {
   customVocab: { vocab: [], kanji: [], grammar: [] }
 };
 
-function setItemStage(type, id, stage) {
-  state.items[`${type}:${id}`] = { stage, availableAt: nextAvailableAt(stage, SRS_HOURS), learnedAt: Date.now(), lastReviewedAt: Date.now() };
+function setItemStage(type, id, stage, dueNow) {
+  state.items[`${type}:${id}`] = {
+    stage,
+    availableAt: dueNow ? Date.now() - 1000 : nextAvailableAt(stage, SRS_HOURS),
+    learnedAt: Date.now(),
+    lastReviewedAt: Date.now()
+  };
+}
+// Same as setItemStage, but spreads availableAt across the next
+// `spreadHours` instead of everyone landing on the exact same instant —
+// for items that were really Guru'd at different real-world times before
+// this app tracked that, so reviews trickle in instead of piling up.
+function setItemStageSpread(type, id, stage, spreadHours) {
+  state.items[`${type}:${id}`] = {
+    stage,
+    availableAt: Date.now() + hashSpreadHours(id, spreadHours) * 3600 * 1000,
+    learnedAt: Date.now(),
+    lastReviewedAt: Date.now()
+  };
 }
 function introduceItem(type, id) {
   state.items[`${type}:${id}`] = { stage: 1, availableAt: nextAvailableAt(1, SRS_HOURS), learnedAt: Date.now(), lastReviewedAt: null };
 }
 
-CORE_VOCAB.filter(v => v.level === 1 || v.level === 2).forEach(v => setItemStage('vocab', v.id, 5));
-KANJI.filter(k => k.level === 1 || k.level === 2).forEach(k => setItemStage('kanji', k.id, 5));
-KANJI.filter(k => k.level === 3).forEach(k => setItemStage('kanji', k.id, 1));
+// Level 1-2 vocab/kanji: Guru'd, but spread their next-due time across the
+// coming week (Guru I's real interval is ~7 days) instead of all landing
+// on the same moment — you learned these at different times in reality,
+// so their reviews shouldn't all resurface together.
+const GURU_SPREAD_HOURS = 7 * 24;
+CORE_VOCAB.filter(v => v.level === 1 || v.level === 2).forEach(v => setItemStageSpread('vocab', v.id, 5, GURU_SPREAD_HOURS));
+KANJI.filter(k => k.level === 1 || k.level === 2).forEach(k => setItemStageSpread('kanji', k.id, 5, GURU_SPREAD_HOURS));
+
+// Level 3 vocab/kanji: currently at Apprentice III, and due for review
+// right now (not waiting out the normal Apprentice III interval) so they
+// show up in Reviews immediately after import instead of hours/days from now.
+CORE_VOCAB.filter(v => v.level === 3).forEach(v => setItemStage('vocab', v.id, 3, true));
+KANJI.filter(k => k.level === 3).forEach(k => setItemStage('kanji', k.id, 3, true));
 
 DUO_RAW
   .filter(d => !CORE_VOCAB.some(v => v.word === d.word))
@@ -90,5 +137,6 @@ fs.writeFileSync(outPath, JSON.stringify(state, null, 2));
 console.log(`Wrote ${outPath}`);
 console.log(`Vocab L1-2 Guru'd: ${CORE_VOCAB.filter(v => v.level === 1 || v.level === 2).length}`);
 console.log(`Kanji L1-2 Guru'd: ${KANJI.filter(k => k.level === 1 || k.level === 2).length}`);
-console.log(`Kanji L3 introduced: ${KANJI.filter(k => k.level === 3).length}`);
+console.log(`Vocab L3 at Apprentice III, due now: ${CORE_VOCAB.filter(v => v.level === 3).length}`);
+console.log(`Kanji L3 at Apprentice III, due now: ${KANJI.filter(k => k.level === 3).length}`);
 console.log(`Duo words moved to customVocab: ${state.customVocab.vocab.length}`);
