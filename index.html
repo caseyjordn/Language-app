@@ -324,11 +324,33 @@
   .mode-card p{font-size:14px;color:var(--color-widget-secondary-text);line-height:1.6;margin:0 0 16px}
 
   .note{max-width:1000px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+
+  /* ---- Auth / login screen ---- */
+  .auth-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--color-base-background,#F4F4F4)}
+  .auth-card{width:100%;max-width:380px;background:#fff;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-widget);padding:32px 28px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+  .auth-card h1{font-size:20px;margin:0 0 4px;text-align:center}
+  .auth-card .auth-sub{font-size:13px;color:var(--color-widget-secondary-text);text-align:center;margin:0 0 22px}
+  .auth-field{margin-bottom:14px}
+  .auth-field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px;color:var(--color-widget-secondary-text)}
+  .auth-field input{width:100%;box-sizing:border-box;padding:10px 12px;font-size:16px;border:1px solid var(--color-widget-border);border-radius:8px}
+  .auth-error{color:#C00;font-size:13px;margin:4px 0 14px;min-height:1em}
+  .auth-toggle{text-align:center;font-size:13px;margin-top:16px;color:var(--color-widget-secondary-text)}
+  .auth-toggle a{color:var(--accent);font-weight:600;cursor:pointer}
+  .auth-loading{text-align:center;padding:60px 20px;color:var(--color-widget-secondary-text)}
+
+  .custom-vocab-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--color-widget-border);font-size:14px}
+  .custom-vocab-row .cv-word{font-weight:700;min-width:70px}
+  .custom-vocab-row .cv-reading{color:var(--color-widget-secondary-text);min-width:80px}
+  .custom-vocab-row .cv-meaning{flex:1;color:var(--color-widget-secondary-text)}
+  .custom-vocab-row .cv-remove{border:none;background:none;color:#C00;font-size:12.5px;cursor:pointer;padding:4px 8px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 'use strict';
 
@@ -980,16 +1002,13 @@ const DUO_RAW = [
   {word:'すし',reading:'すし',meaning:'Sushi'},
 ];
 
-// Final vocab list: CORE_VOCAB (leveled, WK-style) + any DUO_RAW entry
-// whose word text isn't already covered by CORE_VOCAB. `level` stays
-// undefined on the Duo entries, which is what keeps them out of the
-// leveled Lessons flow (see levelBatch/lessonQueueFor) while still
-// showing up in reviews once introduced.
-const VOCAB = CORE_VOCAB.concat(
-  DUO_RAW
-    .filter(d => !CORE_VOCAB.some(v => v.word === d.word))
-    .map(d => ({ id: d.word, word: d.word, reading: d.reading, meaning: d.meaning, source: 'duo' }))
-);
+// Base vocab list — shared, leveled, WK-style content everyone sees.
+// DUO_RAW above is kept only so migrate-duo-vocab.js can turn it into a
+// one-time custom-vocab import for the account that used to have it
+// auto-merged in; it is NOT merged into VOCAB for every user anymore.
+// Per-user additions (see the "Add Custom Vocab" screen) live in
+// STATE.customVocab and are merged in at read time by contentFor().
+const VOCAB = CORE_VOCAB;
 
 // Kanji. One entry per character. Rebuilt from your FINAL kanji doc, which
 // gives BOTH readings and explains the pattern (on used in compounds, kun
@@ -1345,19 +1364,34 @@ function defaultState() {
     levels: { vocab: 1, kanji: 1, grammar: 1 },
     recentMistakes: [],     // { type, id, at }
     lessonBatchSize: 5,     // how many new items are taught per lesson session before the end-of-batch quiz
-    devTimeOffsetMs: 0      // DEV ONLY — lets the "+24h" button fast-forward review timing for testing
+    devTimeOffsetMs: 0,     // DEV ONLY — lets the "+24h" button fast-forward review timing for testing
+    customVocab: { vocab: [], kanji: [], grammar: [] } // per-user words added from the "Add Custom Vocab" screen
   };
 }
 
-let STATE = loadState();
-function loadState() {
+// STATE starts empty and is only ever populated for real once sign-in
+// resolves (see onAuthStateChanged below) — this app now requires an
+// account, since progress is per-user and synced to the cloud. CURRENT_UID
+// scopes localStorage per-account too, so two friends sharing one browser
+// never see each other's cached progress.
+let STATE = defaultState();
+let CURRENT_UID = null;
+function localKeyFor(uid) { return STORAGE_KEY + ':' + uid; }
+function loadLocalState(uid) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(localKeyFor(uid));
     if (raw) return Object.assign(defaultState(), JSON.parse(raw));
   } catch (e) {}
   return defaultState();
 }
-function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE)); }
+
+// Local save is always synchronous and instant (works offline, no lag while
+// typing/reviewing). Cloud sync piggybacks on every save but is fire-and-
+// forget and debounced — see scheduleCloudSync() below.
+function saveState() {
+  if (CURRENT_UID) localStorage.setItem(localKeyFor(CURRENT_UID), JSON.stringify(STATE));
+  scheduleCloudSync();
+}
 function now() { return Date.now() + STATE.devTimeOffsetMs; }
 
 function itemKey(type, id) { return type + ':' + id; }
@@ -1377,32 +1411,25 @@ function setItemStage(type, id, stage) {
   STATE.items[itemKey(type, id)] = { stage, availableAt: nextAvailableAt(stage), learnedAt: now(), lastReviewedAt: now() };
 }
 
-// ---- ONE-TIME progress seed, matching where you actually are ----
-// Guarded by STATE.seededV1 so this only ever runs once, on whatever
-// device/browser first opens the app after this update — it will NOT
-// re-run and clobber real progress on later loads, even as you add more
-// content. Kanji/Vocab Levels 1-2: you said fully Guru'd. Kanji Level 3:
-// all 30 introduced, none Guru'd yet (set to Apprentice I as a starting
-// point — correct upward from here as your real reviews land). Vocab
-// Level 3: none introduced yet, so nothing seeded there — they'll appear
-// as ordinary Lessons.
-if (!STATE.seededV1) {
-  CORE_VOCAB.filter(v => v.level === 1 || v.level === 2).forEach(v => setItemStage('vocab', v.id, 5));
-  KANJI.filter(k => k.level === 1 || k.level === 2).forEach(k => setItemStage('kanji', k.id, 5));
-  KANJI.filter(k => k.level === 3).forEach(k => setItemStage('kanji', k.id, 1));
-  STATE.levels.vocab = 3;
-  STATE.levels.kanji = 3;
-  STATE.seededV1 = true;
+// NOTE: the one-time progress seed and Duo auto-introduce that used to run
+// unconditionally here were Casey-account-specific (her real pre-app
+// progress) and would have wrongly given every new friend signup a head
+// start. That history was moved out to a one-time backup-JSON import (see
+// migrate-duo-vocab.js) that Casey imports once from the Backup/Restore
+// screen on her own account — new accounts now genuinely start blank.
+//
+// postLoadInit() runs once per sign-in, after STATE has been resolved from
+// local+cloud storage (see onAuthStateChanged below) — NOT at script-parse
+// time, since there's no real STATE to act on until someone's logged in.
+function postLoadInit() {
+  // Auto-introduce any custom vocab a user has added that isn't in their
+  // review pool yet (mirrors the old Duo behavior: words you add yourself
+  // are ones you already know, so they go straight into reviews).
+  (STATE.customVocab && STATE.customVocab.vocab || []).forEach(v => {
+    if (!isIntroduced('vocab', v.id)) introduceItem('vocab', v.id);
+  });
   saveState();
 }
-
-// ---- Ongoing: auto-introduce any Duo vocab not yet in your review pool.
-// Runs every load (cheap — isIntroduced() short-circuits already-seen
-// ones), so new Duo words you add later pick this up automatically
-// without needing a "start lessons" step, since you already know them.
-VOCAB.filter(v => v.source === 'duo' && !isIntroduced('vocab', v.id))
-  .forEach(v => introduceItem('vocab', v.id));
-saveState();
 
 /* ======================================================================
    CONTENT / SECTION HELPERS — generic across vocab / kanji / grammar.
@@ -1418,7 +1445,9 @@ const SECTION_CHIP = { vocab: '語', kanji: '字', grammar: '文法' };
 const BATCH_SIZE = { vocab: 15, kanji: 15, grammar: 5 };
 
 function contentFor(type) {
-  return type === 'vocab' ? VOCAB : type === 'kanji' ? KANJI : GRAMMAR;
+  const base = type === 'vocab' ? VOCAB : type === 'kanji' ? KANJI : GRAMMAR;
+  const custom = (STATE.customVocab && STATE.customVocab[type]) || [];
+  return custom.length ? base.concat(custom) : base;
 }
 function displayWord(type, item) {
   return type === 'kanji' ? item.char : (type === 'grammar' ? item.title : item.word);
@@ -1826,9 +1855,14 @@ function burstConfetti() {
 function currentRoute() { return location.hash.replace(/^#\/?/, '').split('/').filter(Boolean); }
 function navigate(path) { location.hash = path; }
 window.addEventListener('hashchange', render);
-window.addEventListener('DOMContentLoaded', render);
 
+// App boot is gated on sign-in (see the AUTH block near the bottom of this
+// script) — render() is a no-op until APP_BOOTED flips true, so a stray
+// hashchange during the sign-in check can't flash the dashboard against
+// empty STATE before the real account data has loaded.
+let APP_BOOTED = false;
 function render() {
+  if (!APP_BOOTED) return;
   const parts = currentRoute();
   const section = parts[0] || 'dashboard';
   const root = document.getElementById('app');
@@ -1843,6 +1877,7 @@ function render() {
   else if (section === 'sentences') view = viewSentencesRoute(parts.slice(1));
   else if (section === 'practice' && parts[1] === 'custom') view = viewCustomPracticePicker();
   else if (section === 'backup') view = viewBackupRestore();
+  else if (section === 'customvocab') view = viewAddCustomVocab();
   else view = viewDashboard();
 
   root.innerHTML = topNav(section, parts) + view.html;
@@ -1863,8 +1898,13 @@ function topNav(section, parts) {
       </div>
       <div class="navright">
         <button class="dev-btn" onclick="devSkipTime()">DEV: +24h</button>
+        <button class="dev-btn" onclick="signOutUser()" title="${CURRENT_USER_EMAIL || ''}">Sign out</button>
       </div>
     </nav>`;
+}
+
+function signOutUser() {
+  firebase.auth().signOut();
 }
 
 function devSkipTime() {
@@ -1973,8 +2013,14 @@ function viewDashboard() {
       </div>
 
       <div class="mistakes-widget">
+        <div class="widget-title-row"><span class="title">Add Custom Vocab</span></div>
+        <p class="wk-text">Add your own words or kanji from other sources (Duolingo, a textbook, etc.) — they go straight into your reviews.</p>
+        <a class="wk-button primary" href="#/customvocab">Add words ›</a>
+      </div>
+
+      <div class="mistakes-widget">
         <div class="widget-title-row"><span class="title">Backup / Restore</span></div>
-        <p class="wk-text">Your progress lives in this browser only. Export it before switching devices or hosting URLs, or just as a periodic backup.</p>
+        <p class="wk-text">Your progress syncs to the cloud automatically, but you can still export/import a manual backup any time.</p>
         <a class="wk-button" href="#/backup">Open ›</a>
       </div>
     </main>` };
@@ -1983,6 +2029,110 @@ function viewDashboard() {
 function recordMistake(type, id) {
   STATE.recentMistakes.push({ type, id, at: now() });
   if (STATE.recentMistakes.length > 200) STATE.recentMistakes.shift();
+}
+
+/* ======================================================================
+   ADD CUSTOM VOCAB — lets any signed-in user add their own words/kanji
+   from other sources (Duolingo, a textbook, whatever). Added items are
+   introduced immediately (skip Lessons, go straight to Reviews) since if
+   you're adding it yourself you presumably already sort-of know it — same
+   behavior the old Duo auto-import used to have. Stored in
+   STATE.customVocab.{vocab,kanji}, merged in by contentFor().
+   ====================================================================== */
+
+function viewAddCustomVocab() {
+  const myVocab = (STATE.customVocab && STATE.customVocab.vocab) || [];
+  const myKanji = (STATE.customVocab && STATE.customVocab.kanji) || [];
+  const listRow = (type, item) => `
+    <div class="custom-vocab-row">
+      <span class="cv-word">${displayWord(type, item)}</span>
+      <span class="cv-reading">${item.reading || item.onyomi || item.kunyomi || ''}</span>
+      <span class="cv-meaning">${item.meaning}</span>
+      <button class="cv-remove" data-type="${type}" data-id="${item.id}">Remove</button>
+    </div>`;
+
+  return { html: `
+    <div class="topbar">
+      <a class="back-link" href="#/dashboard">‹ Back to Dashboard</a>
+      <div class="section-title">Add Custom Vocab</div>
+    </div>
+    <main>
+      <div class="backup-section">
+        <h2>Add a word</h2>
+        <p class="wk-text">Goes straight into your Vocab reviews (no Lessons step needed).</p>
+        <div class="auth-field"><label>Word</label><input type="text" id="cvWord" placeholder="食べる"></div>
+        <div class="auth-field"><label>Reading</label><input type="text" id="cvReading" placeholder="たべる"></div>
+        <div class="auth-field"><label>Meaning</label><input type="text" id="cvMeaning" placeholder="to eat"></div>
+        <button class="wk-button primary" id="cvAddWord">Add word</button>
+        <span id="cvWordStatus" class="backup-status"></span>
+      </div>
+
+      <div class="backup-section">
+        <h2>Add a kanji</h2>
+        <p class="wk-text">Goes straight into your Kanji reviews.</p>
+        <div class="auth-field"><label>Character</label><input type="text" id="cvChar" placeholder="食"></div>
+        <div class="auth-field"><label>On'yomi (optional)</label><input type="text" id="cvOnyomi" placeholder="ショク"></div>
+        <div class="auth-field"><label>Kun'yomi (optional)</label><input type="text" id="cvKunyomi" placeholder="た(べる)"></div>
+        <div class="auth-field"><label>Meaning</label><input type="text" id="cvKanjiMeaning" placeholder="Eat"></div>
+        <button class="wk-button primary" id="cvAddKanji">Add kanji</button>
+        <span id="cvKanjiStatus" class="backup-status"></span>
+      </div>
+
+      <div class="backup-section">
+        <h2>Your custom words (${myVocab.length})</h2>
+        ${myVocab.length ? myVocab.map(v => listRow('vocab', v)).join('') : '<p class="empty-state">None yet.</p>'}
+      </div>
+      <div class="backup-section">
+        <h2>Your custom kanji (${myKanji.length})</h2>
+        ${myKanji.length ? myKanji.map(k => listRow('kanji', k)).join('') : '<p class="empty-state">None yet.</p>'}
+      </div>
+    </main>`, after: attachCustomVocabHandlers };
+}
+
+function slugifyCustomId(prefix, text) {
+  return 'custom:' + prefix + ':' + text + ':' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function attachCustomVocabHandlers() {
+  document.getElementById('cvAddWord').addEventListener('click', () => {
+    const word = document.getElementById('cvWord').value.trim();
+    const reading = document.getElementById('cvReading').value.trim();
+    const meaning = document.getElementById('cvMeaning').value.trim();
+    const status = document.getElementById('cvWordStatus');
+    if (!word || !reading || !meaning) { status.textContent = 'Fill in all three fields.'; status.style.color = '#C00'; return; }
+    STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
+    const item = { id: slugifyCustomId('vocab', word), word, reading, meaning, source: 'custom' };
+    STATE.customVocab.vocab.push(item);
+    introduceItem('vocab', item.id);
+    saveState();
+    render();
+  });
+
+  document.getElementById('cvAddKanji').addEventListener('click', () => {
+    const char = document.getElementById('cvChar').value.trim();
+    const onyomi = document.getElementById('cvOnyomi').value.trim() || null;
+    const kunyomi = document.getElementById('cvKunyomi').value.trim() || null;
+    const meaning = document.getElementById('cvKanjiMeaning').value.trim();
+    const status = document.getElementById('cvKanjiStatus');
+    if (!char || !meaning || (!onyomi && !kunyomi)) { status.textContent = 'Character, meaning, and at least one reading are required.'; status.style.color = '#C00'; return; }
+    STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
+    const item = { id: slugifyCustomId('kanji', char), char, onyomi, kunyomi, meaning, source: 'custom' };
+    STATE.customVocab.kanji.push(item);
+    introduceItem('kanji', item.id);
+    saveState();
+    render();
+  });
+
+  document.querySelectorAll('.cv-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      const id = btn.dataset.id;
+      STATE.customVocab[type] = STATE.customVocab[type].filter(it => it.id !== id);
+      delete STATE.items[itemKey(type, id)];
+      saveState();
+      render();
+    });
+  });
 }
 
 /* ======================================================================
@@ -2999,7 +3149,125 @@ function attachSentencePracticeHandlers() {
   }
 }
 
-render();
+/* ======================================================================
+   AUTH / CLOUD SYNC — Firebase Authentication (email+password) gates the
+   whole app behind sign-in, and Firestore mirrors STATE per-account so
+   progress follows you across devices/browsers, not just this one
+   browser's localStorage. Uses the Firebase *compat* SDK (loaded via
+   <script> tags at the top of <head>) specifically so this stays a
+   single plain HTML file with no build step / npm / bundler — the
+   modern modular SDK requires ES module imports and a bundler to use
+   sanely, compat doesn't.
+
+   Sync model (kept deliberately simple, per your ask):
+   - On sign-in, if a cloud doc already exists for this account, it wins
+     (cloud is the source of truth for cross-device sync). If there's no
+     cloud doc yet (first-ever sign-in), whatever's in local storage for
+     this browser gets pushed up as the starting point.
+   - Every saveState() schedules a debounced push to Firestore (1s after
+     the last change, so a burst of review answers is one write, not many).
+   - This is last-write-wins, not real-time multi-device merge — if you
+     reviewed offline on two devices before either reconnected, the one
+     that syncs last overwrites the other's meanwhile-changes. Fine for
+     one person on one device at a time, which covers PC+phone in
+     practice, but worth knowing about.
+   ====================================================================== */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCt7D67udsc-Ki22ZUCh9wwoVf_Zn9i6tc",
+  authDomain: "japanese-practice-df9bb.firebaseapp.com",
+  projectId: "japanese-practice-df9bb",
+  storageBucket: "japanese-practice-df9bb.firebasestorage.app",
+  messagingSenderId: "506662605484",
+  appId: "1:506662605484:web:434aa99803a27991e2c509",
+  measurementId: "G-HFR0N7N33H"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let CURRENT_USER_EMAIL = null;
+let cloudSyncTimer = null;
+
+function scheduleCloudSync() {
+  if (!CURRENT_UID) return;
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(() => {
+    db.collection('users').doc(CURRENT_UID).set(STATE).catch(err => {
+      console.warn('Cloud sync failed (will retry on next save):', err.message);
+    });
+  }, 1000);
+}
+
+function renderAuthLoading() {
+  document.getElementById('app').innerHTML = `<div class="auth-shell"><div class="auth-loading">Loading…</div></div>`;
+}
+
+function renderAuthScreen(mode, errorMsg) {
+  const isSignup = mode === 'signup';
+  document.getElementById('app').innerHTML = `
+    <div class="auth-shell">
+      <div class="auth-card">
+        <h1>日本 Practice</h1>
+        <p class="auth-sub">${isSignup ? 'Create an account to start syncing your progress.' : 'Sign in to pick up where you left off.'}</p>
+        <div class="auth-field"><label>Email</label><input type="email" id="authEmail" autocomplete="email"></div>
+        <div class="auth-field"><label>Password</label><input type="password" id="authPassword" autocomplete="${isSignup ? 'new-password' : 'current-password'}"></div>
+        <div class="auth-error">${errorMsg || ''}</div>
+        <button class="wk-button primary" id="authSubmit" style="width:100%">${isSignup ? 'Create account' : 'Sign in'}</button>
+        <div class="auth-toggle">
+          ${isSignup ? 'Already have an account? <a id="authToggle">Sign in</a>' : "New here? <a id=\"authToggle\">Create an account</a>"}
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('authToggle').addEventListener('click', () => renderAuthScreen(isSignup ? 'login' : 'signup'));
+  document.getElementById('authSubmit').addEventListener('click', () => {
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    if (!email || !password) { renderAuthScreen(mode, 'Enter an email and password.'); return; }
+    const action = isSignup
+      ? auth.createUserWithEmailAndPassword(email, password)
+      : auth.signInWithEmailAndPassword(email, password);
+    action.catch(err => renderAuthScreen(mode, err.message));
+  });
+}
+
+// Fired on load, on sign-in, and on sign-out. This is the single place
+// that decides what STATE is and flips the app on — nothing else reads
+// STATE for real until this has run at least once.
+auth.onAuthStateChanged(user => {
+  clearTimeout(cloudSyncTimer);
+  if (!user) {
+    APP_BOOTED = false;
+    CURRENT_UID = null;
+    CURRENT_USER_EMAIL = null;
+    renderAuthScreen('login');
+    return;
+  }
+
+  CURRENT_UID = user.uid;
+  CURRENT_USER_EMAIL = user.email;
+  renderAuthLoading();
+
+  db.collection('users').doc(user.uid).get()
+    .then(doc => {
+      const local = loadLocalState(user.uid);
+      STATE = doc.exists ? Object.assign(defaultState(), doc.data()) : local;
+      postLoadInit();
+      APP_BOOTED = true;
+      if (!location.hash || location.hash === '#/') location.hash = '#/dashboard';
+      render();
+      if (!doc.exists) scheduleCloudSync(); // push local progress up as the starting cloud copy
+    })
+    .catch(err => {
+      console.warn('Could not reach cloud, using local copy:', err.message);
+      STATE = loadLocalState(user.uid);
+      postLoadInit();
+      APP_BOOTED = true;
+      if (!location.hash || location.hash === '#/') location.hash = '#/dashboard';
+      render();
+    });
+});
 
 // register the service worker for offline/installable support. Wrapped in
 // a feature check + try/catch since this also gets opened via Live
