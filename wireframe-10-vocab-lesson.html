@@ -1,0 +1,200 @@
+<!--
+  WIREFRAME SAMPLE 10 of ? — Vocab Lesson (teaching) screen.
+
+  Per your last message: instead of WK's real multi-step lesson slideshow
+  (separate screens for kanji composition -> meaning -> reading -> context)
+  PLUS a separate detail page, this merges them — one scrollable screen per
+  new word that contains the full detail-page content from your two WK
+  reference screenshots (Meaning w/ alternatives + word type + explanation,
+  Reading w/ per-speaker audio buttons + mnemonic, Context patterns of use
+  + common combinations + example sentences, Kanji Composition tile).
+
+  Back/Next moves through the lesson batch (10 words this session, per the
+  Lessons widget count from wireframe 8). Last word's "Next" would hand off
+  into a quick recognition check before these enter the real SRS queue —
+  not built yet, flag if you want that as a separate wireframe or think
+  going straight to full reviews is fine.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 10 — Vocab lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-background:#FFFFFF;
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-widget-divider:#CAD0D6;
+    --color-page-background:#F4F4F4;
+    --color-purple:#AA00FF; --color-purple-dark:#8600B9; --color-purple-light:#EDC8FF;
+    --color-charcoal:#6B7079;
+    --border-radius-tight:4px;
+    --border-radius-normal:8px;
+    --border-radius-widget:16px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+    --font-weight-regular:350;
+    --font-weight-medium:500;
+    --font-weight-bold:600;
+    --font-size-xxsmall:11px;
+    --font-size-xsmall:14px;
+    --font-size-small:16px;
+    --font-size-medium:18px;
+    --font-size-large:24px;
+    --font-size-xlarge:32px;
+    --spacing-xtight:8px;
+    --spacing-tight:12px;
+    --spacing-normal:16px;
+    --spacing-loose:24px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);font-weight:var(--font-weight-regular);color:var(--color-widget-primary-text);min-height:100vh}
+
+  /* focused session chrome — no full nav, just exit + progress, like WK's real lesson/review pages */
+  .session-bar{
+    display:flex;align-items:center;gap:14px;
+    padding:var(--spacing-tight) var(--spacing-loose);
+    background:#fff;border-bottom:1px solid var(--color-widget-divider);
+  }
+  .exit-btn{border:none;background:none;color:var(--color-widget-secondary-text);font-size:20px;cursor:pointer;line-height:1}
+  .session-progress-track{flex:1;height:8px;background:var(--color-locked-bg,#E7E9EB);border-radius:var(--border-radius-tight);overflow:hidden}
+  .session-progress-fill{height:100%;background:var(--color-purple);width:30%}
+  .session-count{font-size:var(--font-size-xxsmall);color:var(--color-widget-secondary-text);white-space:nowrap}
+
+  main{max-width:760px;margin:0 auto;padding:var(--spacing-loose) var(--spacing-normal) 140px}
+
+  .item-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .item-chip{width:54px;height:54px;border-radius:var(--border-radius-normal);background:var(--color-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Noto Sans JP",sans-serif;font-size:26px;flex:none}
+  .item-title{font-size:var(--font-size-xlarge);font-weight:var(--font-weight-bold)}
+  .item-badge{display:inline-block;background:var(--color-purple-light);color:var(--color-purple-dark);font-size:var(--font-size-xxsmall);font-weight:700;padding:2px 10px;border-radius:var(--border-radius-pill);margin-top:4px}
+
+  section{margin-top:var(--spacing-loose)}
+  h2{font-size:var(--font-size-medium);font-weight:700;margin:0 0 8px;border-bottom:1px solid var(--color-widget-divider);padding-bottom:8px}
+
+  .field-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:10px}
+  .field{min-width:120px}
+  .field .k{font-size:var(--font-size-xxsmall);color:var(--color-widget-secondary-text);margin-bottom:2px}
+  .field .v{font-size:var(--font-size-small)}
+  .field .v.primary{font-weight:700}
+
+  .explanation{font-size:var(--font-size-xsmall);line-height:1.6;color:var(--color-widget-primary-text)}
+  .explanation .hl{background:var(--color-purple-light);color:var(--color-purple-dark);padding:0 3px;border-radius:3px}
+
+  .reading-row{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
+  .reading-jp{font-family:"Noto Sans JP",sans-serif;font-size:26px}
+  .audio-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-pill);
+    padding:5px 12px;font-size:var(--font-size-xxsmall);font-weight:700;color:var(--color-widget-primary-text);cursor:pointer;
+  }
+
+  .combo-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .combo-list .item{padding:8px 12px;border-radius:var(--border-radius-normal);background:var(--color-locked-bg,#F4F4F4);font-family:"Noto Sans JP",sans-serif;font-size:var(--font-size-small);margin-bottom:6px}
+  .sentence{margin-bottom:12px}
+  .sentence .jp{font-family:"Noto Sans JP",sans-serif;font-size:var(--font-size-small)}
+  .sentence .en{font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text)}
+
+  .kanji-comp{display:flex;gap:12px}
+  .kanji-comp .ktile{background:var(--color-purple);color:#fff;border-radius:var(--border-radius-normal);padding:14px 16px;text-align:center}
+  .kanji-comp .ktile .k{font-family:"Noto Sans JP",sans-serif;font-size:22px}
+  .kanji-comp .ktile .r{font-family:"Noto Sans JP",sans-serif;font-size:11px;margin-top:4px}
+  .kanji-comp .ktile .m{font-size:10px;opacity:.85}
+
+  .session-footer{
+    position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--color-widget-divider);
+    padding:14px var(--spacing-loose);display:flex;justify-content:space-between;max-width:100%;
+  }
+  .wk-button{border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-normal);padding:10px 20px;font-size:var(--font-size-xsmall);font-weight:700;color:var(--color-widget-primary-text);cursor:pointer}
+  .wk-button.primary{background:var(--color-purple);color:#fff;border-color:var(--color-purple)}
+  .wk-button:disabled{opacity:.4;cursor:default}
+
+  .note{max-width:760px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="session-bar">
+  <button class="exit-btn">×</button>
+  <div class="session-progress-track"><div class="session-progress-fill"></div></div>
+  <div class="session-count">Word 3 of 10</div>
+</div>
+
+<main>
+
+  <div class="item-head">
+    <div class="item-chip" lang="ja">力</div>
+    <div>
+      <div class="item-title">Power</div>
+      <div class="item-badge">Vocabulary · Lv. 4</div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Meaning</h2>
+    <div class="field-row">
+      <div class="field"><div class="k">Primary</div><div class="v primary">Power</div></div>
+      <div class="field"><div class="k">Alternatives</div><div class="v">Strength, Ability</div></div>
+      <div class="field"><div class="k">Word Type</div><div class="v">Noun</div></div>
+    </div>
+    <p class="explanation">When a vocab word is made up of a single kanji and that's it, it almost always takes the meaning from its parent kanji. So, this vocab word also means <span class="hl">power</span>.</p>
+  </section>
+
+  <section>
+    <h2>Reading</h2>
+    <div class="reading-row">
+      <div class="reading-jp">ちから</div>
+      <button class="audio-btn">▶ Kyoko</button>
+      <button class="audio-btn">▶ Kenichi</button>
+    </div>
+    <p class="explanation">When a vocab word is a single kanji standing alone like this, it usually uses the kun'yomi reading. Mnemonic: the martial art that requires the most <span class="hl">power</span> is chee-se kara-te (ちから). Practitioners channel all their power into karate-chopping blocks of cheese.</p>
+  </section>
+
+  <section>
+    <h2>Context</h2>
+    <div class="combo-grid">
+      <div>
+        <div class="k" style="font-size:12px;color:var(--color-widget-secondary-text);margin-bottom:6px">Common Word Combinations</div>
+        <div class="combo-list">
+          <div class="item">力がつく <span style="font-size:11px;color:var(--color-widget-secondary-text)">— to gain strength</span></div>
+          <div class="item">力が入る <span style="font-size:11px;color:var(--color-widget-secondary-text)">— to be filled with strength</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="k" style="font-size:12px;color:var(--color-widget-secondary-text);margin-bottom:6px">Context Sentences</div>
+        <div class="sentence"><div class="jp">力の大きさが、ちがう。</div><div class="en">The size of the forces is different.</div></div>
+        <div class="sentence"><div class="jp">うちではママが大きな力をもってるんですよ。</div><div class="en">At my house, my mom has a lot of power.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Kanji Composition</h2>
+    <div class="kanji-comp">
+      <div class="ktile"><div class="k">力</div><div class="r">りょく</div><div class="m">Power</div></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="session-footer">
+  <button class="wk-button" disabled>‹ Back</button>
+  <button class="wk-button primary">Next ›</button>
+</div>
+
+<p class="note">
+  Wireframe 10 — lesson screen for one word, folding in the detail-page
+  content (meaning, reading + audio, context, kanji composition) instead of
+  a separate page. Back/Next moves through the 10-word lesson batch.
+  Flagged: what happens after the last "Next" — a quick recognition check
+  before these enter real SRS, or straight into the normal review queue —
+  isn't decided yet. Screenshot + compare, then tell me what's next.
+</p>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!--
+  WIREFRAME SAMPLE 17 of ? — Kanji review/quiz screen, mirroring the Vocab
+  review quiz (wireframe 13) in pink, same live interaction: confetti +
+  auto-advance on correct, shake + lesson-review panel on incorrect.
+  Accepts "りょく" or "ryoku" for this demo (kanji's on'yomi reading).
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 17 — Kanji review quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-page-background:#F4F4F4;
+    --color-pink:#FF00AA; --color-pink-dark:#B9007B;
+    --color-correct:#35A753;
+    --color-incorrect:#E01F14;
+    --border-radius-normal:8px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);color:var(--color-widget-primary-text);min-height:100vh}
+
+  .hero{background:var(--color-pink);color:#fff;padding:16px 20px 40px;text-align:center;transition:background .2s ease}
+  .hero.state-correct{background:var(--color-correct)}
+  .hero.state-incorrect{background:var(--color-incorrect)}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
+  .hero-top .home{opacity:.9}
+  .hero-top .count{font-size:13px;background:rgba(255,255,255,.18);border-radius:var(--border-radius-pill);padding:3px 12px}
+  .session-bar{display:flex;gap:2px;max-width:640px;margin:0 auto}
+  .session-bar span{flex:1;height:6px;border-radius:2px;background:rgba(255,255,255,.3)}
+  .session-bar span.done{background:#fff}
+  .char{font-family:"Noto Sans JP",sans-serif;font-size:64px;margin-top:26px;line-height:1}
+
+  .quiz-card{max-width:520px;margin:-24px auto 0;background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.06);padding:28px 30px 26px;position:relative}
+  .question-label{display:inline-block;background:var(--color-pink);color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-radius:6px;padding:4px 10px;margin-bottom:14px}
+  input.answer{width:100%;border:none;border-bottom:2px solid var(--color-widget-border);font-family:"Noto Sans JP",sans-serif;font-size:22px;padding:8px 2px;outline:none;background:transparent}
+  input.answer:focus{border-bottom-color:var(--color-pink)}
+  input.answer.correct{border-bottom-color:var(--color-correct);color:var(--color-correct)}
+  input.answer.incorrect{border-bottom-color:var(--color-incorrect);color:var(--color-incorrect)}
+
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)}
+    30%,50%,70%{transform:translateX(-8px)} 40%,60%{transform:translateX(8px)}
+  }
+  input.answer.shake{animation:shake .4s}
+
+  .feedback-row{display:flex;align-items:center;justify-content:space-between;margin-top:18px;min-height:40px}
+  .feedback-msg{font-size:14px;font-weight:700}
+  .feedback-msg.correct{color:var(--color-correct)}
+  .feedback-msg.incorrect{color:var(--color-incorrect)}
+  .btn{border:none;border-radius:var(--border-radius-normal);padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer}
+  .btn.check{background:var(--color-pink);color:#fff}
+
+  .hint{font-size:12px;color:var(--color-widget-secondary-text);margin-top:6px}
+
+  .lesson-review{max-width:520px;margin:14px auto 0;background:#fff;border-radius:16px;border:1px solid var(--color-widget-border);padding:22px 30px;display:none}
+  .lesson-review.visible{display:block}
+  .lesson-review .lr-title{font-size:12px;font-weight:700;color:var(--color-incorrect);text-transform:uppercase;letter-spacing:.03em;margin-bottom:12px}
+  .lesson-review h4{font-size:13px;font-weight:700;color:var(--color-pink-dark);text-transform:uppercase;letter-spacing:.03em;margin:14px 0 4px}
+  .lesson-review h4:first-of-type{margin-top:0}
+  .lesson-review p{font-size:14px;line-height:1.6;margin:0}
+  .lesson-review .jp{font-family:"Noto Sans JP",sans-serif;font-size:19px}
+  .lesson-review .hl{background:#FFD4F1;color:var(--color-pink-dark);padding:0 3px;border-radius:3px}
+
+  .confetti-piece{position:fixed;top:0;left:0;width:8px;height:14px;pointer-events:none;z-index:50;animation-name:confetti-pop;animation-timing-function:cubic-bezier(0,.7,.2,1);animation-fill-mode:forwards}
+  @keyframes confetti-pop{
+    0%   { transform:translate(0,0) rotate(0deg) scale(.6); opacity:1; }
+    70%  { opacity:1; }
+    100% { transform:translate(calc(var(--fx) * 1px), calc(var(--fy) * 1px)) rotate(calc(var(--rot) * 1deg)) scale(1); opacity:0; }
+  }
+
+  .note{max-width:640px;margin:26px auto 76px;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+  <div class="hero-top">
+    <div class="home">🏠</div>
+    <div class="count" id="sessionCount">Item 2 of 9</div>
+  </div>
+  <div class="session-bar" id="sessionBar">
+    <span class="done"></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="char">力</div>
+</div>
+
+<div class="quiz-card">
+  <div class="question-label">Reading</div>
+  <input class="answer" id="answerInput" type="text" placeholder="りょく or ryoku" autocomplete="off" autofocus>
+  <div class="hint">Type the on'yomi reading in hiragana or romaji, then press Enter or Check.</div>
+  <div class="feedback-row">
+    <div class="feedback-msg" id="feedbackMsg"></div>
+    <button class="btn check" id="checkBtn">Check</button>
+  </div>
+</div>
+
+<div class="lesson-review" id="lessonReview">
+  <div class="lr-title">⚠ Let's review this one</div>
+  <h4>Meaning</h4>
+  <p><strong>Power</strong> — Strength, Ability</p>
+  <h4>Meaning Mnemonic</h4>
+  <p>This kanji looks like a bent, flexed arm — a simple picture of raw <span class="hl">power</span>.</p>
+  <h4>Reading</h4>
+  <p class="jp">りょく <span style="font-size:13px;color:var(--color-widget-secondary-text)">(also りき)</span></p>
+  <h4>Reading Mnemonic</h4>
+  <p>Who has the most <span class="hl">power</span> of anyone? It's the Power Rangers. They defeat their enemy Ricky (りき) and lock (りょく) him up.</p>
+</div>
+
+<p class="note">
+  Wireframe 17 — Kanji review quiz, same interaction as Vocab (wireframe
+  13) in pink. Type "りょく" or "ryoku" for the correct path (confetti +
+  auto-advance), anything else for the wrong path (shake + lesson review).
+  Screenshot + compare.
+</p>
+
+<script>
+  var input = document.getElementById('answerInput');
+  var checkBtn = document.getElementById('checkBtn');
+  var feedback = document.getElementById('feedbackMsg');
+  var hero = document.getElementById('hero');
+  var lessonReview = document.getElementById('lessonReview');
+  var sessionBar = document.getElementById('sessionBar');
+  var sessionCount = document.getElementById('sessionCount');
+  var accepted = ['りょく', 'ryoku'];
+  var locked = false;
+  var itemNum = 2;
+  var totalItems = 9;
+
+  function normalize(s){ return s.trim().toLowerCase(); }
+
+  var confettiColors = ['#FF00AA','#AA00FF','#00AAFF','#FFC700'];
+  function burstConfetti(){
+    var originX = window.innerWidth / 2;
+    var originY = window.innerHeight * 0.75;
+    for (var i = 0; i < 46; i++){
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = originX + 'px';
+      piece.style.top = originY + 'px';
+      piece.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      var angleDeg = -90 + (Math.random() * 120 - 60);
+      var angleRad = angleDeg * Math.PI / 180;
+      var burstDist = 160 + Math.random() * 260;
+      var fx = Math.cos(angleRad) * burstDist;
+      var fy = Math.sin(angleRad) * burstDist;
+      piece.style.setProperty('--fx', fx.toFixed(1));
+      piece.style.setProperty('--fy', fy.toFixed(1));
+      piece.style.setProperty('--rot', Math.floor(180 + Math.random()*360));
+      piece.style.animationDuration = (0.7 + Math.random()*0.4) + 's';
+      document.body.appendChild(piece);
+      (function(p){ p.addEventListener('animationend', function(){ p.remove(); }); })(piece);
+    }
+  }
+
+  function resetForNextQuestion(){
+    input.value = '';
+    input.classList.remove('correct','incorrect','shake');
+    feedback.textContent = '';
+    feedback.className = 'feedback-msg';
+    hero.classList.remove('state-correct','state-incorrect');
+    lessonReview.classList.remove('visible');
+    locked = false;
+    input.focus();
+  }
+
+  function advanceSession(){
+    itemNum = itemNum < totalItems ? itemNum + 1 : 1;
+    sessionCount.textContent = 'Item ' + itemNum + ' of ' + totalItems;
+    var doneSpans = sessionBar.querySelectorAll('span');
+    doneSpans.forEach(function(s, i){ s.classList.toggle('done', i < itemNum - 1); });
+  }
+
+  function check(){
+    if (locked) return;
+    var val = normalize(input.value);
+    if (!val) return;
+    var isCorrect = accepted.indexOf(val) !== -1;
+    if (isCorrect) {
+      locked = true;
+      input.classList.remove('incorrect','shake');
+      input.classList.add('correct');
+      hero.classList.remove('state-incorrect');
+      hero.classList.add('state-correct');
+      feedback.textContent = 'Correct!';
+      feedback.className = 'feedback-msg correct';
+      lessonReview.classList.remove('visible');
+      burstConfetti();
+      setTimeout(function(){
+        advanceSession();
+        resetForNextQuestion();
+      }, 1100);
+    } else {
+      input.classList.remove('shake');
+      void input.offsetWidth;
+      input.classList.add('incorrect','shake');
+      hero.classList.add('state-incorrect');
+      feedback.textContent = 'Not quite — try again';
+      feedback.className = 'feedback-msg incorrect';
+      lessonReview.classList.add('visible');
+      setTimeout(function(){ hero.classList.remove('state-incorrect'); }, 500);
+    }
+  }
+
+  checkBtn.addEventListener('click', check);
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') check();
+    if (locked) return;
+    input.classList.remove('correct','incorrect');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!--
+  WIREFRAME SAMPLE 3 of ? — dashboard restructured as a section hub.
+
+  Change from wireframe 2: no more single global Lessons/Reviews/Forecast/
+  Mistakes/Progress widgets. Instead, one card per functional section
+  (Vocab, Kana & Katakana, Kanji, Speaking, Photos), each showing that
+  section's OWN lesson/review counts and a button into its full page.
+  Nav tabs stay as before — this is just what "Dashboard" contains now.
+
+  Judgment call flagged for review: Speaking and Photo Translation aren't
+  SRS/flashcard content like Vocab/Kana/Kanji, so forcing a literal
+  "Lessons + Reviews" pair onto them didn't make sense. Their cards instead
+  show one relevant stat + a single CTA. Also gave them plain charcoal icon
+  chips rather than a WK category color, since neither is one of WK's
+  actual radical/kanji/vocabulary subject types — flag if you want them
+  colored differently.
+
+  Still using the literal WK palette/spacing from wireframe 2
+  (wanikani-source-css-variables.css values, #F4F4F4 page bg, white cards).
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 3 — Dashboard hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-background:#FFFFFF;
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-widget-divider:#CAD0D6;
+    --color-page-background:#F4F4F4;
+
+    --color-blue:#00AAFF;    --color-blue-dark:#0069AC;
+    --color-pink:#FF00AA;    --color-pink-dark:#B9007B;
+    --color-purple:#AA00FF;  --color-purple-dark:#8600B9;
+    --color-charcoal:#6B7079;
+
+    --color-study-streak-today-complete-background:#D2EEDA;
+    --color-study-streak-today-complete-text:#317442;
+
+    --border-radius-tight:4px;
+    --border-radius-normal:8px;
+    --border-radius-widget:16px;
+    --border-radius-pill:9999px;
+
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+    --font-weight-regular:350;
+    --font-weight-medium:500;
+    --font-weight-bold:600;
+    --font-weight-heavy:700;
+    --font-size-xxsmall:11px;
+    --font-size-xsmall:14px;
+    --font-size-small:16px;
+    --font-size-medium:18px;
+    --font-size-large:24px;
+    --font-size-xlarge:28px;
+
+    --spacing-xtight:8px;
+    --spacing-tight:12px;
+    --spacing-normal:16px;
+    --spacing-loose:24px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--color-page-background);
+    font-family:var(--font-family-default);
+    font-weight:var(--font-weight-regular);
+    color:var(--color-widget-primary-text);
+    min-height:100vh;
+  }
+
+  .topnav{
+    display:flex;align-items:center;gap:var(--spacing-loose);
+    padding:var(--spacing-tight) var(--spacing-loose);
+    background:#fff;border-bottom:1px solid var(--color-widget-divider);
+  }
+  .wordmark{font-size:var(--font-size-medium);font-weight:var(--font-weight-heavy);display:flex;gap:2px;white-space:nowrap}
+  .wordmark .jp{color:var(--color-pink)} .wordmark .dot{color:var(--color-blue)} .wordmark .en{color:var(--color-purple)}
+  .navlinks{display:flex;gap:var(--spacing-normal);flex:1}
+  .navlinks a{color:var(--color-widget-primary-text);text-decoration:none;font-weight:var(--font-weight-medium);font-size:var(--font-size-xsmall);padding:6px 2px;border-bottom:2px solid transparent}
+  .navlinks a.active{border-bottom-color:var(--color-pink)}
+  .navright{display:flex;align-items:center;gap:var(--spacing-normal)}
+  .icon-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--color-charcoal);font-size:15px}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#EDC8FF}
+
+  .page-header{display:flex;align-items:center;justify-content:space-between;max-width:1000px;margin:0 auto;padding:var(--spacing-loose) var(--spacing-normal) 0}
+  .page-header h1{font-size:var(--font-size-large);font-weight:var(--font-weight-bold);margin:0}
+  .streak-pill{display:flex;align-items:center;gap:5px;background:var(--color-study-streak-today-complete-background);color:var(--color-study-streak-today-complete-text);border-radius:var(--border-radius-pill);padding:4px 11px;font-size:var(--font-size-xxsmall);font-weight:var(--font-weight-bold)}
+
+  main{max-width:1000px;margin:0 auto;padding:var(--spacing-normal) var(--spacing-normal) 60px}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--spacing-normal)}
+  .col-6{grid-column:span 6}
+  .col-4{grid-column:span 4}
+  @media (max-width:760px){ .grid > *{grid-column:span 12 !important} }
+
+  .section-card{
+    background:var(--color-widget-background);
+    border:1px solid var(--color-widget-border);
+    border-radius:var(--border-radius-widget);
+    padding:var(--spacing-normal) var(--spacing-loose);
+  }
+  .section-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .section-chip{
+    width:38px;height:38px;border-radius:var(--border-radius-normal);
+    display:flex;align-items:center;justify-content:center;flex:none;
+    color:#fff;font-family:"Noto Sans JP",sans-serif;font-size:18px;font-weight:var(--font-weight-medium);
+  }
+  .section-chip--kana{background:var(--color-blue)}
+  .section-chip--kanji{background:var(--color-pink)}
+  .section-chip--vocab{background:var(--color-purple)}
+  .section-chip--neutral{background:var(--color-charcoal);font-family:var(--font-family-default);font-size:16px}
+  .section-name{font-size:var(--font-size-medium);font-weight:var(--font-weight-bold)}
+  .section-sub{font-size:var(--font-size-xxsmall);color:var(--color-widget-secondary-text);margin-top:1px}
+
+  /* SRS-style card: two stat rows (lessons/reviews) */
+  .stat-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 0;border-top:1px solid var(--color-widget-divider);
+  }
+  .stat-row:first-of-type{border-top:none}
+  .stat-label{display:flex;align-items:center;gap:8px;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-medium)}
+  .count-bubble{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--color-charcoal);color:#fff;border-radius:var(--border-radius-pill);
+    font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);padding:1px 10px;min-width:22px;
+  }
+  .count-bubble.zero{background:#B5BAC0}
+  .wk-button{
+    border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-normal);
+    padding:6px 13px;font-size:var(--font-size-xxsmall);font-weight:var(--font-weight-bold);
+    color:var(--color-widget-primary-text);cursor:pointer;text-decoration:none;
+  }
+  .wk-button.primary{background:var(--color-widget-primary-text);color:#fff;border-color:var(--color-widget-primary-text)}
+
+  /* Non-SRS card: single stat + one CTA */
+  .single-stat{padding:6px 0 14px}
+  .single-stat .big{font-size:var(--font-size-xlarge);font-weight:var(--font-weight-bold);line-height:1}
+  .single-stat .cap{font-size:var(--font-size-xxsmall);color:var(--color-widget-secondary-text);margin-top:4px}
+  .cta-row{display:flex}
+  .cta-row .wk-button{flex:1;text-align:center}
+
+  .note{max-width:1000px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wordmark"><span class="jp">日本</span><span class="dot">・</span><span class="en">Practice</span></div>
+  <div class="navlinks">
+    <a class="active" href="#">Dashboard</a>
+    <a href="#">Vocab</a>
+    <a href="#">Kana &amp; Katakana</a>
+    <a href="#">Kanji</a>
+    <a href="#">Speaking</a>
+    <a href="#">Photos</a>
+  </div>
+  <div class="navright">
+    <div class="icon-btn">⌕</div>
+    <div class="avatar"></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <div class="streak-pill">🔥 12日 streak</div>
+</div>
+
+<main>
+  <div class="grid">
+
+    <div class="section-card col-6">
+      <div class="section-head">
+        <div class="section-chip section-chip--blue" style="background:var(--color-blue)" lang="ja">あ</div>
+        <div><div class="section-name">Kana &amp; Katakana</div><div class="section-sub">92 of 96 characters solid</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">Lessons <span class="count-bubble zero">0</span></div>
+        <a class="wk-button" href="#">Start lessons</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">Reviews <span class="count-bubble">6</span></div>
+        <a class="wk-button primary" href="#">Start reviews</a>
+      </div>
+    </div>
+
+    <div class="section-card col-6">
+      <div class="section-head">
+        <div class="section-chip section-chip--kanji" lang="ja">力</div>
+        <div><div class="section-name">Kanji</div><div class="section-sub">5 of 30 you're learning solid</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">Lessons <span class="count-bubble">3</span></div>
+        <a class="wk-button" href="#">Start lessons</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">Reviews <span class="count-bubble">9</span></div>
+        <a class="wk-button primary" href="#">Start reviews</a>
+      </div>
+    </div>
+
+    <div class="section-card col-6">
+      <div class="section-head">
+        <div class="section-chip section-chip--vocab" lang="ja">語</div>
+        <div><div class="section-name">Vocabulary</div><div class="section-sub">14 of 73 words solid</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">Lessons <span class="count-bubble">10</span></div>
+        <a class="wk-button" href="#">Start lessons</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">Reviews <span class="count-bubble">18</span></div>
+        <a class="wk-button primary" href="#">Start reviews</a>
+      </div>
+    </div>
+
+    <div class="section-card col-4">
+      <div class="section-head">
+        <div class="section-chip section-chip--neutral">🎤</div>
+        <div><div class="section-name">Speaking</div><div class="section-sub">Pronunciation practice</div></div>
+      </div>
+      <div class="single-stat">
+        <div class="big">4</div>
+        <div class="cap">phrases practiced this week</div>
+      </div>
+      <div class="cta-row"><a class="wk-button primary" href="#">Start speaking</a></div>
+    </div>
+
+    <div class="section-card col-4">
+      <div class="section-head">
+        <div class="section-chip section-chip--neutral">📷</div>
+        <div><div class="section-name">Photos</div><div class="section-sub">Translate Tokyo photos</div></div>
+      </div>
+      <div class="single-stat">
+        <div class="big">3</div>
+        <div class="cap">new photos to translate</div>
+      </div>
+      <div class="cta-row"><a class="wk-button primary" href="#">Start translating</a></div>
+    </div>
+
+  </div>
+</main>
+
+<p class="note">
+  Wireframe 3 — dashboard is now a hub of per-section cards instead of
+  WK's single aggregated Lessons/Reviews/Forecast/Progress widgets.
+  Flagged above: Speaking/Photos got a single-stat card shape (not
+  Lessons+Reviews) since they're not SRS content, and neutral charcoal
+  chips since they're not one of WK's three subject-type colors — let me
+  know if either should change. Screenshot + compare, then tell me what
+  to adjust.
+</p>
+
+</body>
+</html>

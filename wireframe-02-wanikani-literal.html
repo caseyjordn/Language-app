@@ -1,0 +1,352 @@
+<!--
+  WIREFRAME SAMPLE 2 of ? — closer to literal WaniKani.
+  Static markup/CSS, no JS, no real data.
+
+  Change from wireframe 1: dropped the khaki paper background and Palanquin
+  headings for this pass. Using WK's actual --color-widget-gallery-widget-
+  background (#F4F4F4) page bg, white widget cards, and the exact spacing/
+  radius/font values from wanikani-source-css-variables.css. The paper-warm
+  skin comes back as a second pass once this structural base is confirmed
+  correct against the WK reference screenshot.
+
+  Also: nav now lists every planned section (Dashboard / Vocab / Kana &
+  Katakana / Kanji / Speaking / Photos), and Study Streak has been shrunk
+  from a full widget down to a small pill in the page header row.
+
+  Open in Live Preview, screenshot it, and send the screenshot back —
+  I don't have a way to render this myself, so that's how we check it
+  against reference-wanikani-dashboard.png.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 2 — WaniKani-literal shell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- literal values, copied from wanikani-source-css-variables.css ---- */
+    --color-widget-background:#FFFFFF;
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-widget-divider:#CAD0D6;
+    --color-page-background:#F4F4F4;
+    --color-chip-background:#FFFFFF;
+    --color-chip-border:#CAD0D6;
+    --color-chip-hover-background:#CAD0D6;
+    --color-count-bubble-background:#FFFFFF;
+    --color-count-bubble-border:#CAD0D6;
+    --color-count-bubble-text:#333333;
+
+    --color-blue:#00AAFF;      --color-blue-dark:#0069AC;      --color-blue-light:#CBEBFF;
+    --color-pink:#FF00AA;      --color-pink-dark:#B9007B;      --color-pink-light:#FFD4F1;
+    --color-purple:#AA00FF;    --color-purple-dark:#8600B9;    --color-purple-light:#EDC8FF;
+    --color-charcoal:#6B7079;  --color-charcoal-dark:#333333;  --color-charcoal-light:#CAD0D6;
+
+    --color-study-streak-today-complete-background:#D2EEDA;
+    --color-study-streak-today-complete-text:#317442;
+
+    --color-review-forecast-header-background:#E7E9EB;
+    --color-review-forecast-bar-positive:#35A753;
+    --color-review-forecast-bar-positive-border:#317442;
+    --color-review-forecast-bar-zero:#F4F4F4;
+    --color-review-forecast-bar-zero-border:#CAD0D6;
+
+    --color-level-progress-completed-bar:#35A753;
+    --color-level-progress-indicator-background:#CAD0D6;
+
+    --border-radius-tight:4px;
+    --border-radius-normal:8px;
+    --border-radius-widget:16px;
+    --border-radius-pill:9999px;
+
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+    --font-weight-regular:350;
+    --font-weight-medium:500;
+    --font-weight-bold:600;
+    --font-weight-heavy:700;
+    --font-size-xxsmall:11px;
+    --font-size-xsmall:14px;
+    --font-size-small:16px;
+    --font-size-medium:18px;
+    --font-size-large:24px;
+    --font-size-xlarge:28px;
+    --font-size-xxlarge:38px;
+
+    --spacing-xxtight:4px;
+    --spacing-xtight:8px;
+    --spacing-tight:12px;
+    --spacing-normal:16px;
+    --spacing-loose:24px;
+    --spacing-xloose:32px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--color-page-background);
+    font-family:var(--font-family-default);
+    font-weight:var(--font-weight-regular);
+    color:var(--color-widget-primary-text);
+    min-height:100vh;
+  }
+
+  /* ---------- top nav (mirrors WK's white bar, pink/blue wordmark) ---------- */
+  .topnav{
+    display:flex;align-items:center;gap:var(--spacing-loose);
+    padding:var(--spacing-tight) var(--spacing-loose);
+    background:#fff;
+    border-bottom:1px solid var(--color-widget-divider);
+  }
+  .wordmark{
+    font-size:var(--font-size-medium);
+    font-weight:var(--font-weight-heavy);
+    display:flex;align-items:center;gap:2px;white-space:nowrap;
+  }
+  .wordmark .jp{color:var(--color-pink)}
+  .wordmark .dot{color:var(--color-blue)}
+  .wordmark .en{color:var(--color-purple)}
+  .navlinks{display:flex;gap:var(--spacing-normal);flex:1}
+  .navlinks a{
+    color:var(--color-widget-primary-text);
+    text-decoration:none;font-weight:var(--font-weight-medium);
+    font-size:var(--font-size-xsmall);
+    padding:6px 2px;border-bottom:2px solid transparent;
+  }
+  .navlinks a.active{border-bottom-color:var(--color-pink)}
+  .navlinks a:hover{color:var(--color-charcoal-dark)}
+  .navright{display:flex;align-items:center;gap:var(--spacing-normal)}
+  .icon-btn{
+    width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--color-charcoal);font-size:15px;
+  }
+  .avatar{width:32px;height:32px;border-radius:50%;background:var(--color-purple-light)}
+
+  /* small header strip below nav: page title + shrunk streak pill */
+  .page-header{
+    display:flex;align-items:center;justify-content:space-between;
+    max-width:1000px;margin:0 auto;padding:var(--spacing-loose) var(--spacing-normal) 0;
+  }
+  .page-header h1{
+    font-size:var(--font-size-large);font-weight:var(--font-weight-bold);margin:0;
+  }
+  .streak-pill{
+    display:flex;align-items:center;gap:5px;
+    background:var(--color-study-streak-today-complete-background);
+    color:var(--color-study-streak-today-complete-text);
+    border-radius:var(--border-radius-pill);
+    padding:4px 11px;font-size:var(--font-size-xxsmall);font-weight:var(--font-weight-bold);
+  }
+
+  /* ---------- widget grid ---------- */
+  main{max-width:1000px;margin:0 auto;padding:var(--spacing-normal) var(--spacing-normal) 60px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(12, 1fr);
+    gap:var(--spacing-normal);
+  }
+  .widget{
+    background:var(--color-widget-background);
+    border:1px solid var(--color-widget-border);
+    border-radius:var(--border-radius-widget);
+    padding:var(--spacing-normal) var(--spacing-loose);
+  }
+  .col-4{grid-column:span 4}
+  .col-5{grid-column:span 5}
+  .col-6{grid-column:span 6}
+  .col-7{grid-column:span 7}
+  .col-12{grid-column:span 12}
+  @media (max-width:760px){ .grid > *{grid-column:span 12 !important} }
+
+  .widget-title{
+    font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text);
+    font-weight:var(--font-weight-medium);margin:0 0 2px;text-transform:none;
+  }
+  .widget-title-row{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+  .widget-title-row .title{font-size:var(--font-size-medium);font-weight:var(--font-weight-bold);color:var(--color-widget-primary-text)}
+  .wk-text{font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text);margin:0;line-height:1.5}
+
+  .count-bubble{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--color-charcoal);color:#fff;
+    border-radius:var(--border-radius-pill);
+    font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);
+    padding:1px 10px;
+  }
+
+  /* Today's Lessons / Reviews pair */
+  .lr-widget{display:flex;flex-direction:column;gap:4px}
+
+  /* Review forecast */
+  .forecast-header{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin:-16px -24px 12px;padding:10px 24px;
+    background:var(--color-review-forecast-header-background);
+    border-radius:var(--border-radius-widget) var(--border-radius-widget) 0 0;
+    font-size:var(--font-size-xsmall);
+  }
+  .forecast-header b{font-weight:var(--font-weight-bold)}
+  .forecast-row{display:grid;grid-template-columns:40px 1fr 60px;align-items:center;gap:10px;padding:6px 0;font-size:var(--font-size-xsmall)}
+  .forecast-bar-track{background:var(--color-review-forecast-bar-zero);border:1px solid var(--color-review-forecast-bar-zero-border);border-radius:var(--border-radius-tight);height:14px;overflow:hidden}
+  .forecast-bar-fill{background:var(--color-review-forecast-bar-positive);border-right:1px solid var(--color-review-forecast-bar-positive-border);height:100%}
+  .forecast-counts{text-align:right;color:var(--color-widget-secondary-text)}
+  .forecast-counts b{color:var(--color-widget-primary-text)}
+
+  /* Recent mistakes tiles */
+  .tilerow{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .tile{
+    width:44px;height:44px;border-radius:var(--border-radius-normal);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:"Noto Sans JP",sans-serif;font-size:16px;font-weight:var(--font-weight-medium);
+  }
+  .tile--kana{background:var(--color-blue)}
+  .tile--kanji{background:var(--color-pink)}
+  .tile--vocab{background:var(--color-purple);font-size:13px}
+  .btnrow{display:flex;gap:10px;margin-top:4px}
+  .wk-button{
+    border:1px solid var(--color-widget-border);background:#fff;
+    border-radius:var(--border-radius-normal);
+    padding:8px 14px;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);
+    color:var(--color-widget-primary-text);cursor:pointer;text-decoration:none;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .wk-button--primary{background:var(--color-widget-primary-text);color:#fff;border-color:var(--color-widget-primary-text)}
+
+  /* Correct reviews stat */
+  .stat-widget{display:flex;align-items:center;gap:18px}
+  .stat-donut{
+    width:64px;height:64px;border-radius:50%;flex:none;
+    background:conic-gradient(var(--color-blue) 0% 89%, var(--color-widget-border) 89% 100%);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .stat-donut::after{content:"";width:44px;height:44px;border-radius:50%;background:#fff;display:block}
+  .stat-pct{font-size:var(--font-size-xlarge);font-weight:var(--font-weight-bold);line-height:1}
+
+  /* Practice progress (per item-type bars) */
+  .type-stat{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--color-widget-divider)}
+  .type-stat:first-of-type{border-top:none}
+  .type-chip{
+    width:26px;height:26px;border-radius:var(--border-radius-normal);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:13px;font-family:"Noto Sans JP",sans-serif;flex:none;
+  }
+  .type-chip--kana{background:var(--color-blue)}
+  .type-chip--kanji{background:var(--color-pink)}
+  .type-chip--vocab{background:var(--color-purple)}
+  .type-label{width:110px;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-medium);flex:none}
+  .type-bar-track{flex:1;height:10px;background:var(--color-level-progress-indicator-background);border-radius:var(--border-radius-tight);overflow:hidden}
+  .type-bar-fill{height:100%;border-radius:var(--border-radius-tight)}
+  .type-count{width:52px;text-align:right;font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text);flex:none}
+
+  .note{max-width:1000px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wordmark"><span class="jp">日本</span><span class="dot">・</span><span class="en">Practice</span></div>
+  <div class="navlinks">
+    <a class="active" href="#">Dashboard</a>
+    <a href="#">Vocab</a>
+    <a href="#">Kana &amp; Katakana</a>
+    <a href="#">Kanji</a>
+    <a href="#">Speaking</a>
+    <a href="#">Photos</a>
+  </div>
+  <div class="navright">
+    <div class="icon-btn">⌕</div>
+    <div class="avatar"></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <div class="streak-pill">🔥 12日 streak</div>
+</div>
+
+<main>
+  <div class="grid">
+
+    <div class="widget col-4 lr-widget">
+      <div class="widget-title-row"><span class="title">Lessons</span><span class="count-bubble">7</span></div>
+      <p class="wk-text">New vocab and kanji ready to learn.</p>
+      <div class="btnrow"><a class="wk-button wk-button--primary" href="#">Start lessons</a></div>
+    </div>
+
+    <div class="widget col-3 lr-widget" style="grid-column:span 3">
+      <div class="widget-title-row"><span class="title">Reviews</span><span class="count-bubble">18</span></div>
+      <p class="wk-text">Due right now.</p>
+      <div class="btnrow"><a class="wk-button wk-button--primary" href="#">Start reviews</a></div>
+    </div>
+
+    <div class="widget col-5" style="grid-column:span 5">
+      <div class="forecast-header"><span>Next 24 Hours</span><b>+41 items</b></div>
+      <div class="forecast-row"><span>Fri</span><div class="forecast-bar-track"><div class="forecast-bar-fill" style="width:35%"></div></div><span class="forecast-counts">(+9) <b>27</b></span></div>
+      <div class="forecast-row"><span>Sat</span><div class="forecast-bar-track"><div class="forecast-bar-fill" style="width:55%"></div></div><span class="forecast-counts">(+14) <b>41</b></span></div>
+      <div class="forecast-row"><span>Sun</span><div class="forecast-bar-track"><div class="forecast-bar-fill" style="width:22%"></div></div><span class="forecast-counts">(+6) <b>47</b></span></div>
+      <div class="forecast-row"><span>Mon</span><div class="forecast-bar-track"><div class="forecast-bar-fill" style="width:40%"></div></div><span class="forecast-counts">(+12) <b>59</b></span></div>
+    </div>
+
+    <div class="widget col-7">
+      <div class="widget-title-row"><span class="title">Recent Mistakes</span><span class="count-bubble">5</span></div>
+      <p class="wk-text">From the last 24 hours — give these another pass.</p>
+      <div class="tilerow">
+        <div class="tile tile--kana" title="kana">り</div>
+        <div class="tile tile--kanji" title="kanji">力</div>
+        <div class="tile tile--vocab" title="vocab">十六</div>
+        <div class="tile tile--kana" title="kana">ゆ</div>
+        <div class="tile tile--kanji" title="kanji">分</div>
+      </div>
+      <div class="btnrow">
+        <a class="wk-button" href="#">Extra study <span class="count-bubble" style="background:#AAA">5</span></a>
+      </div>
+    </div>
+
+    <div class="widget col-5 stat-widget">
+      <div class="stat-donut"></div>
+      <div>
+        <div class="stat-pct">89%</div>
+        <div class="wk-text">Correct — past 7 days</div>
+      </div>
+    </div>
+
+    <div class="widget col-12">
+      <div class="widget-title-row"><span class="title">Practice Progress</span></div>
+      <p class="wk-text">Items you've gotten to a solid recall stage.</p>
+      <div class="type-stat">
+        <div class="type-chip type-chip--kana" lang="ja">あ</div>
+        <div class="type-label">Kana &amp; Katakana</div>
+        <div class="type-bar-track"><div class="type-bar-fill" style="width:96%;background:var(--color-blue)"></div></div>
+        <div class="type-count">92/96</div>
+      </div>
+      <div class="type-stat">
+        <div class="type-chip type-chip--kanji" lang="ja">力</div>
+        <div class="type-label">Kanji</div>
+        <div class="type-bar-track"><div class="type-bar-fill" style="width:17%;background:var(--color-pink)"></div></div>
+        <div class="type-count">5/30</div>
+      </div>
+      <div class="type-stat">
+        <div class="type-chip type-chip--vocab" lang="ja">語</div>
+        <div class="type-label">Vocabulary</div>
+        <div class="type-bar-track"><div class="type-bar-fill" style="width:19%;background:var(--color-purple)"></div></div>
+        <div class="type-count">14/73</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<p class="note">
+  Wireframe 2 — literal WK palette/spacing pass. Streak shrunk to the small
+  pill next to the "Dashboard" heading. Nav has all six sections. Next:
+  your screenshot vs. reference-wanikani-dashboard.png, then we decide what
+  to fix before any paper-warm styling comes back in.
+</p>
+
+</body>
+</html>

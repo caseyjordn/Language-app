@@ -1,0 +1,1406 @@
+{
+  "うえ": {
+    "female": "1001fdc342759946d4f636b579f196dd-female.wav",
+    "male": "1001fdc342759946d4f636b579f196dd-male.wav"
+  },
+  "おとな": {
+    "female": "3e582b7a4991006d8360afc0e1453fa1-female.wav",
+    "male": "3e582b7a4991006d8360afc0e1453fa1-male.wav"
+  },
+  "ひとり": {
+    "female": "14f3f3549f741c9a7e0049c0d9abdbac-female.wav",
+    "male": "14f3f3549f741c9a7e0049c0d9abdbac-male.wav"
+  },
+  "じんこう": {
+    "female": "28719019a1e5d6a182297946ce281b2a-female.wav",
+    "male": "28719019a1e5d6a182297946ce281b2a-male.wav"
+  },
+  "した": {
+    "female": "6db68e310a91e3d06338fa979cf0401d-female.wav",
+    "male": "6db68e310a91e3d06338fa979cf0401d-male.wav"
+  },
+  "おおきい": {
+    "female": "4045371a1df3c930987693c853f9a03e-female.wav",
+    "male": "4045371a1df3c930987693c853f9a03e-male.wav"
+  },
+  "はち": {
+    "female": "424dde64367f3ae20011e5f5718112de-female.wav",
+    "male": "424dde64367f3ae20011e5f5718112de-male.wav"
+  },
+  "やっつ": {
+    "female": "6d4614511d114588cc80fe7e3a41343a-female.wav",
+    "male": "6d4614511d114588cc80fe7e3a41343a-male.wav"
+  },
+  "いりぐち": {
+    "female": "417f9418755c6a61b5dc4dad93d57a24-female.wav",
+    "male": "417f9418755c6a61b5dc4dad93d57a24-male.wav"
+  },
+  "たいした": {
+    "female": "a829f8bc8ffef47a6b5c8e4eaba726ff-female.wav",
+    "male": "a829f8bc8ffef47a6b5c8e4eaba726ff-male.wav"
+  },
+  "やま": {
+    "female": "50f1003ef7b7c8e7d5fa3e75de43072f-female.wav",
+    "male": "50f1003ef7b7c8e7d5fa3e75de43072f-male.wav"
+  },
+  "くち": {
+    "female": "3ef2efbbe4db7ba235fc6e1b7c14fb09-female.wav",
+    "male": "3ef2efbbe4db7ba235fc6e1b7c14fb09-male.wav"
+  },
+  "ふじさん": {
+    "female": "d3a279a792030151c6172d6b446189a1-female.wav",
+    "male": "d3a279a792030151c6172d6b446189a1-male.wav"
+  },
+  "きゅう": {
+    "female": "e0624fd9ffd8a08083073e6550d0882e-female.wav",
+    "male": "e0624fd9ffd8a08083073e6550d0882e-male.wav"
+  },
+  "ここのつ": {
+    "female": "d4b739b6153b88e81481d70beba53218-female.wav",
+    "male": "d4b739b6153b88e81481d70beba53218-male.wav"
+  },
+  "いち": {
+    "female": "cb1b789d7b6027ef74eb721c70224100-female.wav",
+    "male": "cb1b789d7b6027ef74eb721c70224100-male.wav"
+  },
+  "ひとつ": {
+    "female": "62d4359ab44d1a43fe11531b35015e02-female.wav",
+    "male": "62d4359ab44d1a43fe11531b35015e02-male.wav"
+  },
+  "ひと": {
+    "female": "67fcc09ffc84ff1aec13665a46c6bfc1-female.wav",
+    "male": "67fcc09ffc84ff1aec13665a46c6bfc1-male.wav"
+  },
+  "ください": {
+    "female": "274052ba3075585f0a4d577047157180-female.wav",
+    "male": "274052ba3075585f0a4d577047157180-male.wav"
+  },
+  "ちから": {
+    "female": "0c03f22c411bc667a14687391d758898-female.wav",
+    "male": "0c03f22c411bc667a14687391d758898-male.wav"
+  },
+  "かわ": {
+    "female": "35162d37d8b0cadce889918dbad5cbca-female.wav",
+    "male": "35162d37d8b0cadce889918dbad5cbca-male.wav"
+  },
+  "なな": {
+    "female": "1eb7933c950d2942ba4d17694e431dbf-female.wav",
+    "male": "1eb7933c950d2942ba4d17694e431dbf-male.wav"
+  },
+  "ななつ": {
+    "female": "6a9365f14d891dcbbb6ca3cc86cfc104-female.wav",
+    "male": "6a9365f14d891dcbbb6ca3cc86cfc104-male.wav"
+  },
+  "おおきさ": {
+    "female": "3c0cb4e932623786b5bf0e1083d950ff-female.wav",
+    "male": "3c0cb4e932623786b5bf0e1083d950ff-male.wav"
+  },
+  "じゅう": {
+    "female": "d1cf3c41e2be1b176db86273cb62f7ec-female.wav",
+    "male": "d1cf3c41e2be1b176db86273cb62f7ec-male.wav"
+  },
+  "さん": {
+    "female": "5c8a429e6dd71a208b3d02fadaa86469-female.wav",
+    "male": "5c8a429e6dd71a208b3d02fadaa86469-male.wav"
+  },
+  "さんにん": {
+    "female": "acc0497c6a2c137fe83a13f451739f6f-female.wav",
+    "male": "acc0497c6a2c137fe83a13f451739f6f-male.wav"
+  },
+  "みっつ": {
+    "female": "e4c9213de467e5443f5aaefee463fb4e-female.wav",
+    "male": "e4c9213de467e5443f5aaefee463fb4e-male.wav"
+  },
+  "はいる": {
+    "female": "ffa98111f20201edcd24e95b344175bb-female.wav",
+    "male": "ffa98111f20201edcd24e95b344175bb-male.wav"
+  },
+  "あげる": {
+    "female": "feb367cc5e9f9ef47639ce6958e83fb7-female.wav",
+    "male": "feb367cc5e9f9ef47639ce6958e83fb7-male.wav"
+  },
+  "さげる": {
+    "female": "99b43c9a88e8d943af786701c824e572-female.wav",
+    "male": "99b43c9a88e8d943af786701c824e572-male.wav"
+  },
+  "に": {
+    "female": "8b63626ad336c57674a390c73db6c2cb-female.wav",
+    "male": "8b63626ad336c57674a390c73db6c2cb-male.wav"
+  },
+  "ふたり": {
+    "female": "aaa59d932fe4121db524ae5b33bb604f-female.wav",
+    "male": "aaa59d932fe4121db524ae5b33bb604f-male.wav"
+  },
+  "ふたつ": {
+    "female": "f951e3050436d16a44086898710509d9-female.wav",
+    "male": "f951e3050436d16a44086898710509d9-male.wav"
+  },
+  "ちからいっぱい": {
+    "female": "5c5f26f25005f48221dbb769acdb9cb1-female.wav",
+    "male": "5c5f26f25005f48221dbb769acdb9cb1-male.wav"
+  },
+  "おんな": {
+    "female": "4b970bfa1f1602ffaa9ec9b78ec43bbf-female.wav",
+    "male": "4b970bfa1f1602ffaa9ec9b78ec43bbf-male.wav"
+  },
+  "しがつ": {
+    "female": "ea398e19d44361dee18d16a3763c4be1-female.wav",
+    "male": "ea398e19d44361dee18d16a3763c4be1-male.wav"
+  },
+  "たま": {
+    "female": "490350a6ecd12f97160fd4b3d2da22d3-female.wav",
+    "male": "490350a6ecd12f97160fd4b3d2da22d3-male.wav"
+  },
+  "ほん": {
+    "female": "ee1163b7f6d7c53e4f8033b1134f937c-female.wav",
+    "male": "ee1163b7f6d7c53e4f8033b1134f937c-male.wav"
+  },
+  "こ": {
+    "female": "9b9b7e95c6d37ddb6db9018830f55c0d-female.wav",
+    "male": "9b9b7e95c6d37ddb6db9018830f55c0d-male.wav"
+  },
+  "まる": {
+    "female": "802e88f0180750d7b5a290ecc7cc8d55-female.wav",
+    "male": "802e88f0180750d7b5a290ecc7cc8d55-male.wav"
+  },
+  "まるい": {
+    "female": "f9ef97a92775523c494cde8aa6efdb91-female.wav",
+    "male": "f9ef97a92775523c494cde8aa6efdb91-male.wav"
+  },
+  "ただしい": {
+    "female": "873f06f8d36611a5ab6265855ab1a423-female.wav",
+    "male": "873f06f8d36611a5ab6265855ab1a423-male.wav"
+  },
+  "つち": {
+    "female": "64f46da321d88127c6a15b4505c3934a-female.wav",
+    "male": "64f46da321d88127c6a15b4505c3934a-male.wav"
+  },
+  "いぬ": {
+    "female": "818e2b448192dd6d322e8dc96da193af-female.wav",
+    "male": "818e2b448192dd6d322e8dc96da193af-male.wav"
+  },
+  "ようか": {
+    "female": "12b30ce5d4ef20889974fcb63d6fb33b-female.wav",
+    "male": "12b30ce5d4ef20889974fcb63d6fb33b-male.wav"
+  },
+  "でぐち": {
+    "female": "74d11fb38cb1ad7925c1f5e5063c2a45-female.wav",
+    "male": "74d11fb38cb1ad7925c1f5e5063c2a45-male.wav"
+  },
+  "め": {
+    "female": "9f7031cd04b5f8d8f2ace95ccafae074-female.wav",
+    "male": "9f7031cd04b5f8d8f2ace95ccafae074-male.wav"
+  },
+  "めだま": {
+    "female": "7ae8b90cabec03892ccac9c0c6761414-female.wav",
+    "male": "7ae8b90cabec03892ccac9c0c6761414-male.wav"
+  },
+  "にがつ": {
+    "female": "1a055242715a0830104bcf75fc0466ff-female.wav",
+    "male": "1a055242715a0830104bcf75fc0466ff-male.wav"
+  },
+  "いつか": {
+    "female": "67fa24599dda37ac68ac8a9cda30f0b5-female.wav",
+    "male": "67fa24599dda37ac68ac8a9cda30f0b5-male.wav"
+  },
+  "ごじゅう": {
+    "female": "40b78245f55c27ad67df3dc07ee72fff-female.wav",
+    "male": "40b78245f55c27ad67df3dc07ee72fff-male.wav"
+  },
+  "ひ": {
+    "female": "c89b06a70bca6265ce06e1183606227d-female.wav",
+    "male": "c89b06a70bca6265ce06e1183606227d-male.wav"
+  },
+  "ご": {
+    "female": "e729be1d052dec17202badf9d7d476b3-female.wav",
+    "male": "e729be1d052dec17202badf9d7d476b3-male.wav"
+  },
+  "いつつ": {
+    "female": "2bd1a5cc11c216d9f62abd9e77e1f434-female.wav",
+    "male": "2bd1a5cc11c216d9f62abd9e77e1f434-male.wav"
+  },
+  "よん": {
+    "female": "570f3f2d233066bc9c048464ed5a901b-female.wav",
+    "male": "570f3f2d233066bc9c048464ed5a901b-male.wav"
+  },
+  "てんさい": {
+    "female": "1401a27ea4d9f5950b7e8fd2c47f1ebf-female.wav",
+    "male": "1401a27ea4d9f5950b7e8fd2c47f1ebf-male.wav"
+  },
+  "じょし": {
+    "female": "29f982b47c94c3eea9f8ad8c550b04c0-female.wav",
+    "male": "29f982b47c94c3eea9f8ad8c550b04c0-male.wav"
+  },
+  "おんなのこ": {
+    "female": "24cf8179fba5994c3f2f185576ec4b83-female.wav",
+    "male": "24cf8179fba5994c3f2f185576ec4b83-male.wav"
+  },
+  "じょうず": {
+    "female": "fbeddd9861ef933ecf161a81a544d319-female.wav",
+    "male": "fbeddd9861ef933ecf161a81a544d319-male.wav"
+  },
+  "おはよう": {
+    "female": "896c87c2017e74cf8c7ccf42d339ca66-female.wav",
+    "male": "896c87c2017e74cf8c7ccf42d339ca66-male.wav"
+  },
+  "て": {
+    "female": "66b6491143c9e5636596dead2114de08-female.wav",
+    "male": "66b6491143c9e5636596dead2114de08-male.wav"
+  },
+  "てん": {
+    "female": "9deb1af3f736c3372cf4aa0fb4da810d-female.wav",
+    "male": "9deb1af3f736c3372cf4aa0fb4da810d-male.wav"
+  },
+  "ホテル": {
+    "female": "9d01e3e1384dde236d30bdb621a0a262-female.wav",
+    "male": "9d01e3e1384dde236d30bdb621a0a262-male.wav"
+  },
+  "にゅうりょく": {
+    "female": "9d356f3b61f5a8ecd4578dd02bb59fbf-female.wav",
+    "male": "9d356f3b61f5a8ecd4578dd02bb59fbf-male.wav"
+  },
+  "なか": {
+    "female": "fe79a51bdaeb51d0cba3d7a94434f7ae-female.wav",
+    "male": "fe79a51bdaeb51d0cba3d7a94434f7ae-male.wav"
+  },
+  "いちがつ": {
+    "female": "1f39644b07f7c914ceb26262fa66557f-female.wav",
+    "male": "1f39644b07f7c914ceb26262fa66557f-male.wav"
+  },
+  "にほん": {
+    "female": "1e58f0758dc659fc64ec9145f6b69e72-female.wav",
+    "male": "1e58f0758dc659fc64ec9145f6b69e72-male.wav"
+  },
+  "ろくがつ": {
+    "female": "f5cd58eb5310877453fcd8403b2167f2-female.wav",
+    "male": "f5cd58eb5310877453fcd8403b2167f2-male.wav"
+  },
+  "おう": {
+    "female": "8f8ce6963169c6bb71825db1bb1afcb3-female.wav",
+    "male": "8f8ce6963169c6bb71825db1bb1afcb3-male.wav"
+  },
+  "ゆうべ": {
+    "female": "33aa514b810477b265faf817f789a2b7-female.wav",
+    "male": "33aa514b810477b265faf817f789a2b7-male.wav"
+  },
+  "さゆう": {
+    "female": "b8a68a6240905e274b247c2029ef794c-female.wav",
+    "male": "b8a68a6240905e274b247c2029ef794c-male.wav"
+  },
+  "ひだり": {
+    "female": "ec442a982c8922b70bd713645b22c8e3-female.wav",
+    "male": "ec442a982c8922b70bd713645b22c8e3-male.wav"
+  },
+  "ごがつ": {
+    "female": "37e3df40227169d62a9fbdffa077ce69-female.wav",
+    "male": "37e3df40227169d62a9fbdffa077ce69-male.wav"
+  },
+  "つき": {
+    "female": "b384ae58e4aa2440e0bb412da349342f-female.wav",
+    "male": "b384ae58e4aa2440e0bb412da349342f-male.wav"
+  },
+  "ここのか": {
+    "female": "27c17cfcfb03717e67d044123a6666f5-female.wav",
+    "male": "27c17cfcfb03717e67d044123a6666f5-male.wav"
+  },
+  "じゅうがつ": {
+    "female": "222bc0197bced71329a24f09c0ff8f88-female.wav",
+    "male": "222bc0197bced71329a24f09c0ff8f88-male.wav"
+  },
+  "いちにち": {
+    "female": "38ee51bac5667b80d08d3a2317d787c2-female.wav",
+    "male": "38ee51bac5667b80d08d3a2317d787c2-male.wav"
+  },
+  "せんえん": {
+    "female": "8a41de60ce6a1c6ddeb4682378b8a705-female.wav",
+    "male": "8a41de60ce6a1c6ddeb4682378b8a705-male.wav"
+  },
+  "たまねぎ": {
+    "female": "619272c85360d40c3d0d1444115e7f3b-female.wav",
+    "male": "619272c85360d40c3d0d1444115e7f3b-male.wav"
+  },
+  "ひとびと": {
+    "female": "8933cfdf5169e143de9f38f65ba61fd0-female.wav",
+    "male": "8933cfdf5169e143de9f38f65ba61fd0-male.wav"
+  },
+  "おうじ": {
+    "female": "8873fa0c37a161caed267fd0d9026d20-female.wav",
+    "male": "8873fa0c37a161caed267fd0d9026d20-male.wav"
+  },
+  "おうじょ": {
+    "female": "38dd295a49d83b608558f69cb161686f-female.wav",
+    "male": "38dd295a49d83b608558f69cb161686f-male.wav"
+  },
+  "こいぬ": {
+    "female": "9cd57b95974ea05da2b738f1c563f098-female.wav",
+    "male": "9cd57b95974ea05da2b738f1c563f098-male.wav"
+  },
+  "じょおう": {
+    "female": "a27df19ef34d7267c0e321db7e0cba93-female.wav",
+    "male": "a27df19ef34d7267c0e321db7e0cba93-male.wav"
+  },
+  "なかなか": {
+    "female": "fbb839267ccb01a3464b9a8b23b22328-female.wav",
+    "male": "fbb839267ccb01a3464b9a8b23b22328-male.wav"
+  },
+  "た": {
+    "female": "14cc9288ee620865e7e4fa61973d2442-female.wav",
+    "male": "14cc9288ee620865e7e4fa61973d2442-male.wav"
+  },
+  "たんぼ": {
+    "female": "e01930eb0d60d8115273a57812609271-female.wav",
+    "male": "e01930eb0d60d8115273a57812609271-male.wav"
+  },
+  "みぎ": {
+    "female": "df8376086c41b58412e62aef01855ef9-female.wav",
+    "male": "df8376086c41b58412e62aef01855ef9-male.wav"
+  },
+  "ふつか": {
+    "female": "23dbb0ae34da53a0f30bd0280ffb70e4-female.wav",
+    "male": "23dbb0ae34da53a0f30bd0280ffb70e4-male.wav"
+  },
+  "なのか": {
+    "female": "d237582d8d5bf4e839b1d734aad5c08b-female.wav",
+    "male": "d237582d8d5bf4e839b1d734aad5c08b-male.wav"
+  },
+  "ろく": {
+    "female": "465ec92f719e465404920341143b972d-female.wav",
+    "male": "465ec92f719e465404920341143b972d-male.wav"
+  },
+  "じゅうろく": {
+    "female": "7ac3343a3fd3bd35b031168364551276-female.wav",
+    "male": "7ac3343a3fd3bd35b031168364551276-male.wav"
+  },
+  "むいか": {
+    "female": "c1a62f061b32662aa7879ee8f7e5fe61-female.wav",
+    "male": "c1a62f061b32662aa7879ee8f7e5fe61-male.wav"
+  },
+  "むっつ": {
+    "female": "c1618b70b7c8ae0327b36c7922df1d1b-female.wav",
+    "male": "c1618b70b7c8ae0327b36c7922df1d1b-male.wav"
+  },
+  "ちいさい": {
+    "female": "8978458f1dc34cedbe8bb67571d0be68-female.wav",
+    "male": "8978458f1dc34cedbe8bb67571d0be68-male.wav"
+  },
+  "かたな": {
+    "female": "7fe50f8ab65efda296ca108ff5e309f8-female.wav",
+    "male": "7fe50f8ab65efda296ca108ff5e309f8-male.wav"
+  },
+  "とおか": {
+    "female": "53f354f98f09303340fb6f2826f10cf1-female.wav",
+    "male": "53f354f98f09303340fb6f2826f10cf1-male.wav"
+  },
+  "みっか": {
+    "female": "810c869ab0cb4036fbae7f1fc7b5066e-female.wav",
+    "male": "810c869ab0cb4036fbae7f1fc7b5066e-male.wav"
+  },
+  "せん": {
+    "female": "5f18816374e11b53baaac107f4aa58d1-female.wav",
+    "male": "5f18816374e11b53baaac107f4aa58d1-male.wav"
+  },
+  "のぼる": {
+    "female": "b6d7fa8e7c14c8c740376b3dda24fd21-female.wav",
+    "male": "b6d7fa8e7c14c8c740376b3dda24fd21-male.wav"
+  },
+  "ただす": {
+    "female": "0acfaebec80b11ab14a652023bc94966-female.wav",
+    "male": "0acfaebec80b11ab14a652023bc94966-male.wav"
+  },
+  "でる": {
+    "female": "022a74da649ed76383a0809965b8d053-female.wav",
+    "male": "022a74da649ed76383a0809965b8d053-male.wav"
+  },
+  "たつ": {
+    "female": "bd3dad4cdeb705733a51e5d935ce967a-female.wav",
+    "male": "bd3dad4cdeb705733a51e5d935ce967a-male.wav"
+  },
+  "き": {
+    "female": "02485a52b7c7e4e5230398e628b6247e-female.wav",
+    "male": "02485a52b7c7e4e5230398e628b6247e-male.wav"
+  },
+  "すいちゅう": {
+    "female": "93179d8daef89a2a706ca752bf8ee985-female.wav",
+    "male": "93179d8daef89a2a706ca752bf8ee985-male.wav"
+  },
+  "へた": {
+    "female": "9bba2c76ce46ea2117ae010d56bf9719-female.wav",
+    "male": "9bba2c76ce46ea2117ae010d56bf9719-male.wav"
+  },
+  "かざん": {
+    "female": "2ff52ba51de6792679c33d2979c36dd9-female.wav",
+    "male": "2ff52ba51de6792679c33d2979c36dd9-male.wav"
+  },
+  "みず": {
+    "female": "72f4c40d85d8e313cb61c3f030c6993e-female.wav",
+    "male": "72f4c40d85d8e313cb61c3f030c6993e-male.wav"
+  },
+  "しろ": {
+    "female": "b7bec3c3e523306c7ebaf2005b960916-female.wav",
+    "male": "b7bec3c3e523306c7ebaf2005b960916-male.wav"
+  },
+  "はくじん": {
+    "female": "fe6ab8e3a9ccf0d45b0b08e8f53d28de-female.wav",
+    "male": "fe6ab8e3a9ccf0d45b0b08e8f53d28de-male.wav"
+  },
+  "ぶん": {
+    "female": "50a2d6e88ae22024f7c95e4ab330648d-female.wav",
+    "male": "50a2d6e88ae22024f7c95e4ab330648d-male.wav"
+  },
+  "さい": {
+    "female": "2aaf39a2a4a178a38a3f79cbeb8b87f9-female.wav",
+    "male": "2aaf39a2a4a178a38a3f79cbeb8b87f9-male.wav"
+  },
+  "えん": {
+    "female": "d31ff5f30447699ae447477c82d38086-female.wav",
+    "male": "d31ff5f30447699ae447477c82d38086-male.wav"
+  },
+  "すこし": {
+    "female": "b95b449b7f37f431eb698d39460cf605-female.wav",
+    "male": "b95b449b7f37f431eb698d39460cf605-male.wav"
+  },
+  "あめりかじん": {
+    "female": "27d69d084040ef48320a2200a7c20502-female.wav",
+    "male": "27d69d084040ef48320a2200a7c20502-male.wav"
+  },
+  "リンゴ": {
+    "female": "208aae0fbc4e16611a0f189ff3278fce-female.wav",
+    "male": "208aae0fbc4e16611a0f189ff3278fce-male.wav"
+  },
+  "や": {
+    "female": "3cb21c442c12ac4e680b9b6ec1935ae2-female.wav",
+    "male": "3cb21c442c12ac4e680b9b6ec1935ae2-male.wav"
+  },
+  "だい": {
+    "female": "bb1ba4ed76beff5f724ecd538aa041d0-female.wav",
+    "male": "bb1ba4ed76beff5f724ecd538aa041d0-male.wav"
+  },
+  "いぎりすじん": {
+    "female": "b91e196c0ac61cb3ad52ff2676423139-female.wav",
+    "male": "b91e196c0ac61cb3ad52ff2676423139-male.wav"
+  },
+  "ちゅうし": {
+    "female": "67543a47f095d059b6bf34a20d67cd18-female.wav",
+    "male": "67543a47f095d059b6bf34a20d67cd18-male.wav"
+  },
+  "じ": {
+    "female": "c272e7aa4ed59f6356904c4064481c9c-female.wav",
+    "male": "c272e7aa4ed59f6356904c4064481c9c-male.wav"
+  },
+  "し": {
+    "female": "fc0e89edd8004187b2a858b7e09019e6-female.wav",
+    "male": "fc0e89edd8004187b2a858b7e09019e6-male.wav"
+  },
+  "コーヒー": {
+    "female": "2eebd23884f737c016a7e1145451d5fb-female.wav",
+    "male": "2eebd23884f737c016a7e1145451d5fb-male.wav"
+  },
+  "うし": {
+    "female": "e3dadfe37cd381dfa3ad9c07bce828a6-female.wav",
+    "male": "e3dadfe37cd381dfa3ad9c07bce828a6-male.wav"
+  },
+  "ほう": {
+    "female": "97fd28b971eddc93fe5e4a12d0c08931-female.wav",
+    "male": "97fd28b971eddc93fe5e4a12d0c08931-male.wav"
+  },
+  "と": {
+    "female": "a5401f0cb2567f32278a53d28087a50e-female.wav",
+    "male": "a5401f0cb2567f32278a53d28087a50e-male.wav"
+  },
+  "とぐち": {
+    "female": "aef1cc81fa67549d5d6c16ca665df72c-female.wav",
+    "male": "aef1cc81fa67549d5d6c16ca665df72c-male.wav"
+  },
+  "なまびーる": {
+    "female": "c162af38de8962efd0fa7b17002e0633-female.wav",
+    "male": "c162af38de8962efd0fa7b17002e0633-male.wav"
+  },
+  "やまびこ": {
+    "female": "2563427b23588b564ddca63a09bd9c9d-female.wav",
+    "male": "2563427b23588b564ddca63a09bd9c9d-male.wav"
+  },
+  "ふとい": {
+    "female": "d256463568843ff522a8af8b934bd9de-female.wav",
+    "male": "d256463568843ff522a8af8b934bd9de-male.wav"
+  },
+  "ちち": {
+    "female": "daa554aa717ad19516c16e6ed2cfcfed-female.wav",
+    "male": "daa554aa717ad19516c16e6ed2cfcfed-male.wav"
+  },
+  "おとうさん": {
+    "female": "a3d3e7a87ba73a50e3f48820d5329e08-female.wav",
+    "male": "a3d3e7a87ba73a50e3f48820d5329e08-male.wav"
+  },
+  "すくない": {
+    "female": "951569183d231132de84751e56451386-female.wav",
+    "male": "951569183d231132de84751e56451386-male.wav"
+  },
+  "ごだい": {
+    "female": "277860b86ac7ec720ee3f59744ad7505-female.wav",
+    "male": "277860b86ac7ec720ee3f59744ad7505-male.wav"
+  },
+  "がいじん": {
+    "female": "26f60c995b3d43ad0974044f1e751719-female.wav",
+    "male": "26f60c995b3d43ad0974044f1e751719-male.wav"
+  },
+  "ふらんすじん": {
+    "female": "ff009aef04fa2216165413286716e188-female.wav",
+    "male": "ff009aef04fa2216165413286716e188-male.wav"
+  },
+  "なま": {
+    "female": "6090b914090843d6145564a4aaed7f35-female.wav",
+    "male": "6090b914090843d6145564a4aaed7f35-male.wav"
+  },
+  "ゆうじん": {
+    "female": "a44e620f0169a97fd7e3327e6a76eaf4-female.wav",
+    "male": "a44e620f0169a97fd7e3327e6a76eaf4-male.wav"
+  },
+  "け": {
+    "female": "fbd0909bdc603dc71ceaaf4f4be6a7dc-female.wav",
+    "male": "fbd0909bdc603dc71ceaaf4f4be6a7dc-male.wav"
+  },
+  "しょうじょ": {
+    "female": "42bd077c444a0c40e9bf952976616274-female.wav",
+    "male": "42bd077c444a0c40e9bf952976616274-male.wav"
+  },
+  "はん": {
+    "female": "012bdc404dce9fe0e1661c3593b73168-female.wav",
+    "male": "012bdc404dce9fe0e1661c3593b73168-male.wav"
+  },
+  "はんぶん": {
+    "female": "6885985c4e674d805549e572c8ff8edb-female.wav",
+    "male": "6885985c4e674d805549e572c8ff8edb-male.wav"
+  },
+  "こころ": {
+    "female": "e4902b26587acf8653445c88451e2ebe-female.wav",
+    "male": "e4902b26587acf8653445c88451e2ebe-male.wav"
+  },
+  "こんにちは": {
+    "female": "c0e89a293bd36c7a768e4e9d2c5475a8-female.wav",
+    "male": "c0e89a293bd36c7a768e4e9d2c5475a8-male.wav"
+  },
+  "たいせつ": {
+    "female": "8902f8a3499d4663b473ebd43110d6c8-female.wav",
+    "male": "8902f8a3499d4663b473ebd43110d6c8-male.wav"
+  },
+  "あかり": {
+    "female": "c23c1dbec4421d1497c988130b9ee441-female.wav",
+    "male": "c23c1dbec4421d1497c988130b9ee441-male.wav"
+  },
+  "びーだま": {
+    "female": "a9c5936097ba16d82e619a053248dae1-female.wav",
+    "male": "a9c5936097ba16d82e619a053248dae1-male.wav"
+  },
+  "はは": {
+    "female": "9706ca7186cf1db2071c273c203b9a86-female.wav",
+    "male": "9706ca7186cf1db2071c273c203b9a86-male.wav"
+  },
+  "おかあさん": {
+    "female": "f295765e2ba3265fb09016fea12b86b7-female.wav",
+    "male": "f295765e2ba3265fb09016fea12b86b7-male.wav"
+  },
+  "しりつ": {
+    "female": "d68c4ee6112896601bf608db9d0a9d47-female.wav",
+    "male": "d68c4ee6112896601bf608db9d0a9d47-male.wav"
+  },
+  "きた": {
+    "female": "186930ebd7146d4e741c6fe0180dd46f-female.wav",
+    "male": "186930ebd7146d4e741c6fe0180dd46f-male.wav"
+  },
+  "きたぐち": {
+    "female": "efe968abfb3eb1ef0f702764310a4d97-female.wav",
+    "male": "efe968abfb3eb1ef0f702764310a4d97-male.wav"
+  },
+  "いま": {
+    "female": "34fab81a7f5c4c0a71e7fa63c0c3a2ef-female.wav",
+    "male": "34fab81a7f5c4c0a71e7fa63c0c3a2ef-male.wav"
+  },
+  "にん": {
+    "female": "aa9343c4dc00abc89f7968c75aadf267-female.wav",
+    "male": "aa9343c4dc00abc89f7968c75aadf267-male.wav"
+  },
+  "おとなしい": {
+    "female": "57a339351ba97537b5311d5551c4df72-female.wav",
+    "male": "57a339351ba97537b5311d5551c4df72-male.wav"
+  },
+  "ふるい": {
+    "female": "34fcf1d316bca5837bfc333d23d40df1-female.wav",
+    "male": "34fcf1d316bca5837bfc333d23d40df1-male.wav"
+  },
+  "じゅうまん": {
+    "female": "b548381b08a3b9a4066e35162fc44e2a-female.wav",
+    "male": "b548381b08a3b9a4066e35162fc44e2a-male.wav"
+  },
+  "いちだい": {
+    "female": "ecdd0bba5b5178ae160aa8a0e15d17bb-female.wav",
+    "male": "ecdd0bba5b5178ae160aa8a0e15d17bb-male.wav"
+  },
+  "じんせい": {
+    "female": "b58d89442c299c19ac172742c216a55c-female.wav",
+    "male": "b58d89442c299c19ac172742c216a55c-male.wav"
+  },
+  "てーぶるのうえ": {
+    "female": "140572df152f369a63e3182cc2e556a9-female.wav",
+    "male": "140572df152f369a63e3182cc2e556a9-male.wav"
+  },
+  "そと": {
+    "female": "ee3fcd54d7feb6edc74b4dc808d2395e-female.wav",
+    "male": "ee3fcd54d7feb6edc74b4dc808d2395e-male.wav"
+  },
+  "しあとるし": {
+    "female": "7872663bc021de3ba1b4d12dc0312793-female.wav",
+    "male": "7872663bc021de3ba1b4d12dc0312793-male.wav"
+  },
+  "ちゅうこ": {
+    "female": "751d90c38c46368a88293e058a7af1e7-female.wav",
+    "male": "751d90c38c46368a88293e058a7af1e7-male.wav"
+  },
+  "ひので": {
+    "female": "e93d6d4ecac8d2dd5bd961224d1c03e1-female.wav",
+    "male": "e93d6d4ecac8d2dd5bd961224d1c03e1-male.wav"
+  },
+  "よう": {
+    "female": "5191e05c917a33080795df4e0fb14a2b-female.wav",
+    "male": "5191e05c917a33080795df4e0fb14a2b-male.wav"
+  },
+  "じゅうだい": {
+    "female": "5a5023c962203ef37ec9962716c1f1e8-female.wav",
+    "male": "5a5023c962203ef37ec9962716c1f1e8-male.wav"
+  },
+  "いちまん": {
+    "female": "55ef4a6aed1be6709f7c4faa24f8dddb-female.wav",
+    "male": "55ef4a6aed1be6709f7c4faa24f8dddb-male.wav"
+  },
+  "まん": {
+    "female": "d9f97548d2a8ca4a1c135a8f1722a88e-female.wav",
+    "male": "d9f97548d2a8ca4a1c135a8f1722a88e-male.wav"
+  },
+  "こんげつ": {
+    "female": "a36057281bf182b68b966b638ab5c881-female.wav",
+    "male": "a36057281bf182b68b966b638ab5c881-male.wav"
+  },
+  "これ": {
+    "female": "782acde178e442da27c0a9f96fd3cf71-female.wav",
+    "male": "782acde178e442da27c0a9f96fd3cf71-male.wav"
+  },
+  "うまれる": {
+    "female": "cdf7568435cac2382bff7fa1606d2ae4-female.wav",
+    "male": "cdf7568435cac2382bff7fa1606d2ae4-male.wav"
+  },
+  "きる": {
+    "female": "1466ca6479af9f281b57494e8b177198-female.wav",
+    "male": "1466ca6479af9f281b57494e8b177198-male.wav"
+  },
+  "きょう": {
+    "female": "adfefaa4589bf2387454c6b34e609693-female.wav",
+    "male": "adfefaa4589bf2387454c6b34e609693-male.wav"
+  },
+  "する": {
+    "female": "fdb567ffcf4f222de5a0a7c7adc5af0e-female.wav",
+    "male": "fdb567ffcf4f222de5a0a7c7adc5af0e-male.wav"
+  },
+  "ひく": {
+    "female": "354a88007cddc727b5a8fd802881af28-female.wav",
+    "male": "354a88007cddc727b5a8fd802881af28-male.wav"
+  },
+  "ひろげる": {
+    "female": "11be9175171915d4da3d73b630bab7e5-female.wav",
+    "male": "11be9175171915d4da3d73b630bab7e5-male.wav"
+  },
+  "とめる": {
+    "female": "2df7e41f6aa5f3b161ed68252355b087-female.wav",
+    "male": "2df7e41f6aa5f3b161ed68252355b087-male.wav"
+  },
+  "もちいる": {
+    "female": "85c181069baf4504b924a1d30fe1b25d-female.wav",
+    "male": "85c181069baf4504b924a1d30fe1b25d-male.wav"
+  },
+  "にまん": {
+    "female": "68e940546723315d96d0ac2934e103e5-female.wav",
+    "male": "68e940546723315d96d0ac2934e103e5-male.wav"
+  },
+  "にだい": {
+    "female": "2e9d002b6be886eb47ee611ec38623fb-female.wav",
+    "male": "2e9d002b6be886eb47ee611ec38623fb-male.wav"
+  },
+  "べっどのした": {
+    "female": "e5e1baed02654a09a60b5ffa8d4a84e1-female.wav",
+    "male": "e5e1baed02654a09a60b5ffa8d4a84e1-male.wav"
+  },
+  "いつ": {
+    "female": "c36f889c171fdf3159806d79734a462c-female.wav",
+    "male": "c36f889c171fdf3159806d79734a462c-male.wav"
+  },
+  "ひろい": {
+    "female": "27c8daaf11fb8423881c46300f3973fb-female.wav",
+    "male": "27c8daaf11fb8423881c46300f3973fb-male.wav"
+  },
+  "ふゆ": {
+    "female": "2029cd1dca99d1d45157832ae3f81956-female.wav",
+    "male": "2029cd1dca99d1d45157832ae3f81956-male.wav"
+  },
+  "おんなのひと": {
+    "female": "156f630c94fc123f04c7a9a5878f84c6-female.wav",
+    "male": "156f630c94fc123f04c7a9a5878f84c6-male.wav"
+  },
+  "さいふ": {
+    "female": "eb04c1853c36b2f907e6bea0df35b5bb-female.wav",
+    "male": "eb04c1853c36b2f907e6bea0df35b5bb-male.wav"
+  },
+  "ふく": {
+    "female": "4bcf130172d7bdaca8f01531faa3cf09-female.wav",
+    "male": "4bcf130172d7bdaca8f01531faa3cf09-male.wav"
+  },
+  "この": {
+    "female": "ecbdf113409aa01687a6828214131cee-female.wav",
+    "male": "ecbdf113409aa01687a6828214131cee-male.wav"
+  },
+  "はちょっと": {
+    "female": "37a72ff50c66f8c46fa83e30fffadef8-female.wav",
+    "male": "37a72ff50c66f8c46fa83e30fffadef8-male.wav"
+  },
+  "カレー": {
+    "female": "de30e540993c1ad7cfadb67d8e7b0501-female.wav",
+    "male": "de30e540993c1ad7cfadb67d8e7b0501-male.wav"
+  },
+  "ばんごはん": {
+    "female": "5bf5b923b4acba4dfbe069378232bdef-female.wav",
+    "male": "5bf5b923b4acba4dfbe069378232bdef-male.wav"
+  },
+  "まいばん": {
+    "female": "95132c369a436fa0a52a77ac7e3b1a01-female.wav",
+    "male": "95132c369a436fa0a52a77ac7e3b1a01-male.wav"
+  },
+  "ひるごはん": {
+    "female": "e24da35b1a95decdf8651a568b9101c1-female.wav",
+    "male": "e24da35b1a95decdf8651a568b9101c1-male.wav"
+  },
+  "パスタ": {
+    "female": "59fcc8c91d65e8f4a9b64b6c97640498-female.wav",
+    "male": "59fcc8c91d65e8f4a9b64b6c97640498-male.wav"
+  },
+  "よじ": {
+    "female": "9faa6b1b7c39049057da97f51ae97b52-female.wav",
+    "male": "9faa6b1b7c39049057da97f51ae97b52-male.wav"
+  },
+  "べんとう": {
+    "female": "5329b69073db0f91a77363d2f76a1318-female.wav",
+    "male": "5329b69073db0f91a77363d2f76a1318-male.wav"
+  },
+  "しちじ": {
+    "female": "e00b32912b1a3456abc18a3030aa5e26-female.wav",
+    "male": "e00b32912b1a3456abc18a3030aa5e26-male.wav"
+  },
+  "ジュース": {
+    "female": "e88c47a2195748ccbad8377f7307ac25-female.wav",
+    "male": "e88c47a2195748ccbad8377f7307ac25-male.wav"
+  },
+  "のみます": {
+    "female": "accd5ec788b93ee848acb4e31b21169c-female.wav",
+    "male": "accd5ec788b93ee848acb4e31b21169c-male.wav"
+  },
+  "まいあさ": {
+    "female": "cd9e0f3054b8feb8e6fb3b92b195fa0e-female.wav",
+    "male": "cd9e0f3054b8feb8e6fb3b92b195fa0e-male.wav"
+  },
+  "とき": {
+    "female": "a1d536b014102be49a82852bd1935eae-female.wav",
+    "male": "a1d536b014102be49a82852bd1935eae-male.wav"
+  },
+  "あさごはん": {
+    "female": "bad9092ebfba665386d8ad94ff9dedf9-female.wav",
+    "male": "bad9092ebfba665386d8ad94ff9dedf9-male.wav"
+  },
+  "サンドイッチ": {
+    "female": "85ac6e686ba9e622ad55d102724c558e-female.wav",
+    "male": "85ac6e686ba9e622ad55d102724c558e-male.wav"
+  },
+  "まいにち": {
+    "female": "58512210c5b4897fbd8cf2397f8c1850-female.wav",
+    "male": "58512210c5b4897fbd8cf2397f8c1850-male.wav"
+  },
+  "パン": {
+    "female": "b5ea90ef10d3ac9f5cbb3f310c88d064-female.wav",
+    "male": "b5ea90ef10d3ac9f5cbb3f310c88d064-male.wav"
+  },
+  "たべます": {
+    "female": "9619f30eca76a9e63aa888be77b7d90f-female.wav",
+    "male": "9619f30eca76a9e63aa888be77b7d90f-male.wav"
+  },
+  "まんが": {
+    "female": "924c064d41497852bf559bc8b0f29ef6-female.wav",
+    "male": "924c064d41497852bf559bc8b0f29ef6-male.wav"
+  },
+  "やきゅう": {
+    "female": "b696ba2193736a15739becaed5ea3ca2-female.wav",
+    "male": "b696ba2193736a15739becaed5ea3ca2-male.wav"
+  },
+  "ジェイポップ": {
+    "female": "c975ee1c6a2e2e4b85b4994fdceb4bc4-female.wav",
+    "male": "c975ee1c6a2e2e4b85b4994fdceb4bc4-male.wav"
+  },
+  "アニメ": {
+    "female": "c0af3a12644bf8d464fd2cfc3ce6125d-female.wav",
+    "male": "c0af3a12644bf8d464fd2cfc3ce6125d-male.wav"
+  },
+  "ニュース": {
+    "female": "96b86e2f2f506d280673178a6112f79e-female.wav",
+    "male": "96b86e2f2f506d280673178a6112f79e-male.wav"
+  },
+  "ときどき": {
+    "female": "f961b10f66ee103107e3921c09235f83-female.wav",
+    "male": "f961b10f66ee103107e3921c09235f83-male.wav"
+  },
+  "ざっし": {
+    "female": "c2cf1ae7658679e43e76338d7f10a051-female.wav",
+    "male": "c2cf1ae7658679e43e76338d7f10a051-male.wav"
+  },
+  "よみます": {
+    "female": "81eb83758cb7a795ddac19864d859730-female.wav",
+    "male": "81eb83758cb7a795ddac19864d859730-male.wav"
+  },
+  "おんがく": {
+    "female": "d949470af69afe94537f4cb0b8a54654-female.wav",
+    "male": "d949470af69afe94537f4cb0b8a54654-male.wav"
+  },
+  "よく": {
+    "female": "a7fb6500eccacda55c68259685443278-female.wav",
+    "male": "a7fb6500eccacda55c68259685443278-male.wav"
+  },
+  "ジャズ": {
+    "female": "bf034c1a0c243fde5be6fc6b4ad5fe06-female.wav",
+    "male": "bf034c1a0c243fde5be6fc6b4ad5fe06-male.wav"
+  },
+  "ロック": {
+    "female": "675cdf10e1d66dca1319792b870ba784-female.wav",
+    "male": "675cdf10e1d66dca1319792b870ba784-male.wav"
+  },
+  "ききます": {
+    "female": "c099a464f9fe7fc8fd4d02c30a30bdc4-female.wav",
+    "male": "c099a464f9fe7fc8fd4d02c30a30bdc4-male.wav"
+  },
+  "サッカー": {
+    "female": "1c070157b0b66a78f439aa0b163cfcd7-female.wav",
+    "male": "1c070157b0b66a78f439aa0b163cfcd7-male.wav"
+  },
+  "バスケットボール": {
+    "female": "b72392498760a71d54b2bf78cd427c82-female.wav",
+    "male": "b72392498760a71d54b2bf78cd427c82-male.wav"
+  },
+  "します": {
+    "female": "eed3cdb322f02629d3da53b5c9c2dab1-female.wav",
+    "male": "eed3cdb322f02629d3da53b5c9c2dab1-male.wav"
+  },
+  "テレビ": {
+    "female": "fd7fcaf96c38cf6707c723c8ad1b87e2-female.wav",
+    "male": "fd7fcaf96c38cf6707c723c8ad1b87e2-male.wav"
+  },
+  "を": {
+    "female": "96ac23a7525c5fbfca8aa68dbb774e18-female.wav",
+    "male": "96ac23a7525c5fbfca8aa68dbb774e18-male.wav"
+  },
+  "えいが": {
+    "female": "c25a7169530d9e84a96522bd42e89f82-female.wav",
+    "male": "c25a7169530d9e84a96522bd42e89f82-male.wav"
+  },
+  "みます": {
+    "female": "1b3eed16f9ac73be4ed13355fff3e985-female.wav",
+    "male": "1b3eed16f9ac73be4ed13355fff3e985-male.wav"
+  },
+  "しずか": {
+    "female": "02ac11a111c81e81c996182f22778a1f-female.wav",
+    "male": "02ac11a111c81e81c996182f22778a1f-male.wav"
+  },
+  "きれい": {
+    "female": "eae8268e17d5809b863f9d51a390d00d-female.wav",
+    "male": "eae8268e17d5809b863f9d51a390d00d-male.wav"
+  },
+  "まち": {
+    "female": "decb1d665d076d98b2d0bd2d9ef9d171-female.wav",
+    "male": "decb1d665d076d98b2d0bd2d9ef9d171-male.wav"
+  },
+  "とても": {
+    "female": "c109d6f526ce2deca125e576b536ed4c-female.wav",
+    "male": "c109d6f526ce2deca125e576b536ed4c-male.wav"
+  },
+  "とし": {
+    "female": "11e2e1d2a4c100b9ccb601c9c254da9d-female.wav",
+    "male": "11e2e1d2a4c100b9ccb601c9c254da9d-male.wav"
+  },
+  "にぎやか": {
+    "female": "bd4e18e0ffaf93a01b5d1e1b5d458dda-female.wav",
+    "male": "bd4e18e0ffaf93a01b5d1e1b5d458dda-male.wav"
+  },
+  "どう": {
+    "female": "25f0978b7dac68f8ea15ff515c8c4347-female.wav",
+    "male": "25f0978b7dac68f8ea15ff515c8c4347-male.wav"
+  },
+  "おおさか": {
+    "female": "c410044fd65c928cdc2419e7aa5d3955-female.wav",
+    "male": "c410044fd65c928cdc2419e7aa5d3955-male.wav"
+  },
+  "も": {
+    "female": "ac50f83054ad82e6dd5e2f3e9e5ab7d7-female.wav",
+    "male": "ac50f83054ad82e6dd5e2f3e9e5ab7d7-male.wav"
+  },
+  "にすんでいます": {
+    "female": "e32b9daace0956aa5238f8b066b4e4c7-female.wav",
+    "male": "e32b9daace0956aa5238f8b066b4e4c7-male.wav"
+  },
+  "わたし": {
+    "female": "df551410e7c3f199fb095b83bfbf9da6-female.wav",
+    "male": "df551410e7c3f199fb095b83bfbf9da6-male.wav"
+  },
+  "トロント": {
+    "female": "16d657b38e3ae0613d3bf766d90f2080-female.wav",
+    "male": "16d657b38e3ae0613d3bf766d90f2080-male.wav"
+  },
+  "きょうと": {
+    "female": "99bfa2ff10f4dbaf7e532231c51a44dc-female.wav",
+    "male": "99bfa2ff10f4dbaf7e532231c51a44dc-male.wav"
+  },
+  "ニューヨーク": {
+    "female": "1a0c6e75254d704778f05f3cd4a0a42c-female.wav",
+    "male": "1a0c6e75254d704778f05f3cd4a0a42c-male.wav"
+  },
+  "しゅっしん": {
+    "female": "f0d79938ec882b015b2d5e639681485b-female.wav",
+    "male": "f0d79938ec882b015b2d5e639681485b-male.wav"
+  },
+  "はじめまして": {
+    "female": "9527cdc3ed24e5d71e24703757bbc70d-female.wav",
+    "male": "9527cdc3ed24e5d71e24703757bbc70d-male.wav"
+  },
+  "とうきょう": {
+    "female": "76012c71bae68e92bae32f1600204c47-female.wav",
+    "male": "76012c71bae68e92bae32f1600204c47-male.wav"
+  },
+  "おなまえは": {
+    "female": "26574f017d686557a0af4a37af995458-female.wav",
+    "male": "26574f017d686557a0af4a37af995458-male.wav"
+  },
+  "それ": {
+    "female": "ced72bba3a01cef854696825e634eb64-female.wav",
+    "male": "ced72bba3a01cef854696825e634eb64-male.wav"
+  },
+  "なかやま": {
+    "female": "db1e35839ef0707e686788cd5c570557-female.wav",
+    "male": "db1e35839ef0707e686788cd5c570557-male.wav"
+  },
+  "パスポート": {
+    "female": "07e973527ab7d5c08be85cdafc5ec349-female.wav",
+    "male": "07e973527ab7d5c08be85cdafc5ec349-male.wav"
+  },
+  "ぼうし": {
+    "female": "018699cc8b2365d1151acdecc24886ec-female.wav",
+    "male": "018699cc8b2365d1151acdecc24886ec-male.wav"
+  },
+  "スマホ": {
+    "female": "ebb0ec38c18399d424d38225d50022dd-female.wav",
+    "male": "ebb0ec38c18399d424d38225d50022dd-male.wav"
+  },
+  "たなか": {
+    "female": "6c57ad6c436f84df174b146c0d576d0b-female.wav",
+    "male": "6c57ad6c436f84df174b146c0d576d0b-male.wav"
+  },
+  "ちず": {
+    "female": "5bb2e4bb77157382b144e209dd4a28c7-female.wav",
+    "male": "5bb2e4bb77157382b144e209dd4a28c7-male.wav"
+  },
+  "やまぐち": {
+    "female": "eec1ea11329ebd5f0c82f60a02de53ff-female.wav",
+    "male": "eec1ea11329ebd5f0c82f60a02de53ff-male.wav"
+  },
+  "きっぷ": {
+    "female": "a69e520db066e303e06a0f9779e08a55-female.wav",
+    "male": "a69e520db066e303e06a0f9779e08a55-male.wav"
+  },
+  "かさ": {
+    "female": "4078635d95f3d249d6001247af6f2701-female.wav",
+    "male": "4078635d95f3d249d6001247af6f2701-male.wav"
+  },
+  "あそこ": {
+    "female": "ebfc3d2fe39154210be3ae0bea96e2a4-female.wav",
+    "male": "ebfc3d2fe39154210be3ae0bea96e2a4-male.wav"
+  },
+  "ちかてつ": {
+    "female": "b9dbaff02f844b54ce1f58b19c874b6e-female.wav",
+    "male": "b9dbaff02f844b54ce1f58b19c874b6e-male.wav"
+  },
+  "くうこう": {
+    "female": "b46f72cc4e20af3b56c33e1d4dec840f-female.wav",
+    "male": "b46f72cc4e20af3b56c33e1d4dec840f-male.wav"
+  },
+  "すみません": {
+    "female": "27eeedab973c031163413912fa03183e-female.wav",
+    "male": "27eeedab973c031163413912fa03183e-male.wav"
+  },
+  "なんじ": {
+    "female": "997957d9f5effe7b67b9593db4c8758b-female.wav",
+    "male": "997957d9f5effe7b67b9593db4c8758b-male.wav"
+  },
+  "おもしろい": {
+    "female": "969a40f7e89ef94b57659a27afabfe88-female.wav",
+    "male": "969a40f7e89ef94b57659a27afabfe88-male.wav"
+  },
+  "ともだち": {
+    "female": "d8a95a29b81f40890d84e68606f52bd0-female.wav",
+    "male": "d8a95a29b81f40890d84e68606f52bd0-male.wav"
+  },
+  "あかるい": {
+    "female": "31a628489535d0fa873dc0f0708bb518-female.wav",
+    "male": "31a628489535d0fa873dc0f0708bb518-male.wav"
+  },
+  "くつ": {
+    "female": "9810fae563721473a85c2b531cc8610e-female.wav",
+    "male": "9810fae563721473a85c2b531cc8610e-male.wav"
+  },
+  "の": {
+    "female": "359ebee169e24b368d456ed0940b6b3a-female.wav",
+    "male": "359ebee169e24b368d456ed0940b6b3a-male.wav"
+  },
+  "てぶくろ": {
+    "female": "f0651aff68561006587d2c45c802a8c1-female.wav",
+    "male": "f0651aff68561006587d2c45c802a8c1-male.wav"
+  },
+  "しろい": {
+    "female": "c52cbcb9a8628f915d2e398357bbb1d7-female.wav",
+    "male": "c52cbcb9a8628f915d2e398357bbb1d7-male.wav"
+  },
+  "かばん": {
+    "female": "9c2ea2560e2d04495cbbd7e2426840de-female.wav",
+    "male": "9c2ea2560e2d04495cbbd7e2426840de-male.wav"
+  },
+  "わたしの": {
+    "female": "711bc2a441c744581c55ba15ec44a174-female.wav",
+    "male": "711bc2a441c744581c55ba15ec44a174-male.wav"
+  },
+  "コート": {
+    "female": "029ed237abe2f3aebb0d3fd20f62ea52-female.wav",
+    "male": "029ed237abe2f3aebb0d3fd20f62ea52-male.wav"
+  },
+  "あかい": {
+    "female": "b18e4953d800379db9fc50fa6450307a-female.wav",
+    "male": "b18e4953d800379db9fc50fa6450307a-male.wav"
+  },
+  "いいえ": {
+    "female": "5c7c39d0fd174b2b5ff66699c0d90065-female.wav",
+    "male": "5c7c39d0fd174b2b5ff66699c0d90065-male.wav"
+  },
+  "だいがく": {
+    "female": "b29a82441b388aaa1e1e65eef3b99fab-female.wav",
+    "male": "b29a82441b388aaa1e1e65eef3b99fab-male.wav"
+  },
+  "えき": {
+    "female": "47546dc177c6d2a7322f650291360272-female.wav",
+    "male": "47546dc177c6d2a7322f650291360272-male.wav"
+  },
+  "デパート": {
+    "female": "0e294d6b52edf10007f7b09094611801-female.wav",
+    "male": "0e294d6b52edf10007f7b09094611801-male.wav"
+  },
+  "じゃない": {
+    "female": "d8a16bd628d7fe3b1658391b09863dae-female.wav",
+    "male": "d8a16bd628d7fe3b1658391b09863dae-male.wav"
+  },
+  "ここ": {
+    "female": "844d12f0e6ca9faebb5ae92f0e5e24a0-female.wav",
+    "male": "844d12f0e6ca9faebb5ae92f0e5e24a0-male.wav"
+  },
+  "バスてい": {
+    "female": "3dc8d9def1727758319db67a62a2ca33-female.wav",
+    "male": "3dc8d9def1727758319db67a62a2ca33-male.wav"
+  },
+  "コンビニ": {
+    "female": "82bfc76940fb006b7a8d2521daa9aa47-female.wav",
+    "male": "82bfc76940fb006b7a8d2521daa9aa47-male.wav"
+  },
+  "どこ": {
+    "female": "3e2f1f32a50743186de798d7bbd5241a-female.wav",
+    "male": "3e2f1f32a50743186de798d7bbd5241a-male.wav"
+  },
+  "ブラジルじん": {
+    "female": "f3bbd31c6c61fa1923278476d82f1615-female.wav",
+    "male": "f3bbd31c6c61fa1923278476d82f1615-male.wav"
+  },
+  "ブラジル": {
+    "female": "2b9ee25f39772e1d9cdd028057076437-female.wav",
+    "male": "2b9ee25f39772e1d9cdd028057076437-male.wav"
+  },
+  "ベトナム": {
+    "female": "83e8cc26cb1c85423633a729408a67ad-female.wav",
+    "male": "83e8cc26cb1c85423633a729408a67ad-male.wav"
+  },
+  "ベトナムじん": {
+    "female": "b61e59221b309ce39a24bddd57918f1c-female.wav",
+    "male": "b61e59221b309ce39a24bddd57918f1c-male.wav"
+  },
+  "アメリカじん": {
+    "female": "95faa8476224fd7267eae8fc75ecdf4c-female.wav",
+    "male": "95faa8476224fd7267eae8fc75ecdf4c-male.wav"
+  },
+  "カナダ": {
+    "female": "c4a6bad3e3489d3fd5c4e41324241b53-female.wav",
+    "male": "c4a6bad3e3489d3fd5c4e41324241b53-male.wav"
+  },
+  "カナダじん": {
+    "female": "b2d70175d03294b9ae80be9f66a532f6-female.wav",
+    "male": "b2d70175d03294b9ae80be9f66a532f6-male.wav"
+  },
+  "にほんじん": {
+    "female": "4b28b0639c5668a1d499fd794c6f782a-female.wav",
+    "male": "4b28b0639c5668a1d499fd794c6f782a-male.wav"
+  },
+  "アメリカ": {
+    "female": "5897b1bbd8800c968f7e467d8d0d3fc4-female.wav",
+    "male": "5897b1bbd8800c968f7e467d8d0d3fc4-male.wav"
+  },
+  "ケーキ": {
+    "female": "0182b4d3f6baeaaddc27d582b273b891-female.wav",
+    "male": "0182b4d3f6baeaaddc27d582b273b891-male.wav"
+  },
+  "か": {
+    "female": "b19ca85e627a381c23a7d2c466f82b93-female.wav",
+    "male": "b19ca85e627a381c23a7d2c466f82b93-male.wav"
+  },
+  "ピザ": {
+    "female": "17a89ce604dac81eb09f4f46c4f761fc-female.wav",
+    "male": "17a89ce604dac81eb09f4f46c4f761fc-male.wav"
+  },
+  "はい": {
+    "female": "c4836ea5ab623315c893c08dddb9dfd8-female.wav",
+    "male": "c4836ea5ab623315c893c08dddb9dfd8-male.wav"
+  },
+  "おいしい": {
+    "female": "e577ae2f49252bf26ac9b579ac90224e-female.wav",
+    "male": "e577ae2f49252bf26ac9b579ac90224e-male.wav"
+  },
+  "サラダ": {
+    "female": "c0ca816c9b873815238b09e5be0a3176-female.wav",
+    "male": "c0ca816c9b873815238b09e5be0a3176-male.wav"
+  },
+  "ラーメン": {
+    "female": "34067f74cf380a318be4e98d03cb1fd8-female.wav",
+    "male": "34067f74cf380a318be4e98d03cb1fd8-male.wav"
+  },
+  "は": {
+    "female": "b7a83b3be2f3bc388bd7e03a38cd67a1-female.wav",
+    "male": "b7a83b3be2f3bc388bd7e03a38cd67a1-male.wav"
+  },
+  "またあした": {
+    "female": "39fe2f617a182b5b43caf0a03df53518-female.wav",
+    "male": "39fe2f617a182b5b43caf0a03df53518-male.wav"
+  },
+  "なおみ": {
+    "female": "5561fa27cb3e9cc30976834282f76a62-female.wav",
+    "male": "5561fa27cb3e9cc30976834282f76a62-male.wav"
+  },
+  "こんばんは": {
+    "female": "73c9cdc2c87a450424374452e0a28f2b-female.wav",
+    "male": "73c9cdc2c87a450424374452e0a28f2b-male.wav"
+  },
+  "はな": {
+    "female": "3d212e44a67c4755b8c079cca4dad8de-female.wav",
+    "male": "3d212e44a67c4755b8c079cca4dad8de-male.wav"
+  },
+  "けん": {
+    "female": "642b48da7b408aa20a1784311fa055b8-female.wav",
+    "male": "642b48da7b408aa20a1784311fa055b8-male.wav"
+  },
+  "がくせい": {
+    "female": "b07adf2e943c3d30f555d67a6c773b0f-female.wav",
+    "male": "b07adf2e943c3d30f555d67a6c773b0f-male.wav"
+  },
+  "べんごし": {
+    "female": "0d4090f4c8d260fcece2c33b028be8d5-female.wav",
+    "male": "0d4090f4c8d260fcece2c33b028be8d5-male.wav"
+  },
+  "せんせい": {
+    "female": "d470678511bb79610e9352fa2310990e-female.wav",
+    "male": "d470678511bb79610e9352fa2310990e-male.wav"
+  },
+  "かっこいい": {
+    "female": "175b7f18fafff5fbee4fde5a0eaec89d-female.wav",
+    "male": "175b7f18fafff5fbee4fde5a0eaec89d-male.wav"
+  },
+  "いしゃ": {
+    "female": "9a2c91c60a3ceb524342cd826fa79903-female.wav",
+    "male": "9a2c91c60a3ceb524342cd826fa79903-male.wav"
+  },
+  "やさしい": {
+    "female": "0ca26fbf4949a3f41d456bf2dc8aa97f-female.wav",
+    "male": "0ca26fbf4949a3f41d456bf2dc8aa97f-male.wav"
+  },
+  "です": {
+    "female": "584d65e5c5edb6eb0d573b1e5235d495-female.wav",
+    "male": "584d65e5c5edb6eb0d573b1e5235d495-male.wav"
+  },
+  "ごはん": {
+    "female": "e33be668415f3d030a8b986a73a9f351-female.wav",
+    "male": "e33be668415f3d030a8b986a73a9f351-male.wav"
+  },
+  "おちゃ": {
+    "female": "81aeb0a37e507eccfb8fa4fd72ab7198-female.wav",
+    "male": "81aeb0a37e507eccfb8fa4fd72ab7198-male.wav"
+  },
+  "すし": {
+    "female": "306edc235f533352b952a650c0980c71-female.wav",
+    "male": "306edc235f533352b952a650c0980c71-male.wav"
+  },
+  "じょう": {
+    "female": "a500248af8d74b1f7134cd99c29b8d54-female.wav",
+    "male": "a500248af8d74b1f7134cd99c29b8d54-male.wav"
+  },
+  "たい": {
+    "female": "530d347b235d042d0364261e8c1144e6-female.wav",
+    "male": "530d347b235d042d0364261e8c1144e6-male.wav"
+  },
+  "こう": {
+    "female": "bfe4a79c42cf0ca5e374f50a5c4fbee5-female.wav",
+    "male": "bfe4a79c42cf0ca5e374f50a5c4fbee5-male.wav"
+  },
+  "にゅう": {
+    "female": "872434a73189eff5773b608690cae8e3-female.wav",
+    "male": "872434a73189eff5773b608690cae8e3-male.wav"
+  },
+  "く": {
+    "female": "d9d3327f0d6b4789578781260e874827-female.wav",
+    "male": "d9d3327f0d6b4789578781260e874827-male.wav"
+  },
+  "りょく": {
+    "female": "37efc1ab682704be61fe5fe7ab1284ce-female.wav",
+    "male": "37efc1ab682704be61fe5fe7ab1284ce-male.wav"
+  },
+  "しち": {
+    "female": "ec1f10795b3b76a47cd9571055b41043-female.wav",
+    "male": "ec1f10795b3b76a47cd9571055b41043-male.wav"
+  },
+  "じょ": {
+    "female": "655b67570e1b76633879a7ce1751ca44-female.wav",
+    "male": "655b67570e1b76633879a7ce1751ca44-male.wav"
+  },
+  "せい": {
+    "female": "14562629dc5ebb7663ec081aac68ad47-female.wav",
+    "male": "14562629dc5ebb7663ec081aac68ad47-male.wav"
+  },
+  "ど": {
+    "female": "d46f7300d3b9a6cdabc9abe1858de547-female.wav",
+    "male": "d46f7300d3b9a6cdabc9abe1858de547-male.wav"
+  },
+  "ゆう": {
+    "female": "cec45435c04eb09266751b13f6a6a986-female.wav",
+    "male": "cec45435c04eb09266751b13f6a6a986-male.wav"
+  },
+  "しゅつ": {
+    "female": "58eebe9bfbfb77c46a3b307f768fc9ca-female.wav",
+    "male": "58eebe9bfbfb77c46a3b307f768fc9ca-male.wav"
+  },
+  "さ": {
+    "female": "880beff92bcec2fcd3c44cd06b6d0367-female.wav",
+    "male": "880beff92bcec2fcd3c44cd06b6d0367-male.wav"
+  },
+  "ちゅう": {
+    "female": "f046c26a3497fedcccd39b83605e345f-female.wav",
+    "male": "f046c26a3497fedcccd39b83605e345f-male.wav"
+  },
+  "げつ": {
+    "female": "7c284f650cdc04d947e3bfea21929390-female.wav",
+    "male": "7c284f650cdc04d947e3bfea21929390-male.wav"
+  },
+  "のま": {
+    "female": "91d79563f5a9310cb9287560eaaeae94-female.wav",
+    "male": "91d79563f5a9310cb9287560eaaeae94-male.wav"
+  },
+  "しょう": {
+    "female": "d21b8387527da01f73e35a6924155bd7-female.wav",
+    "male": "d21b8387527da01f73e35a6924155bd7-male.wav"
+  },
+  "りつ": {
+    "female": "0431915f2ae525b1929ac32187578edf-female.wav",
+    "male": "0431915f2ae525b1929ac32187578edf-male.wav"
+  },
+  "ちょう": {
+    "female": "5563cd495cca01f5a145153fa7665032-female.wav",
+    "male": "5563cd495cca01f5a145153fa7665032-male.wav"
+  },
+  "にち": {
+    "female": "c17081da205053d395aca699ccee7dc2-female.wav",
+    "male": "c17081da205053d395aca699ccee7dc2-male.wav"
+  },
+  "とう": {
+    "female": "f00d00f286ee0040c749d72da479ce8a-female.wav",
+    "male": "f00d00f286ee0040c749d72da479ce8a-male.wav"
+  },
+  "もく": {
+    "female": "428336adc9b34dceca3f58b47c4796cc-female.wav",
+    "male": "428336adc9b34dceca3f58b47c4796cc-male.wav"
+  },
+  "すい": {
+    "female": "8d1c24fde9a9c4a91dad66c44f62a0ac-female.wav",
+    "male": "8d1c24fde9a9c4a91dad66c44f62a0ac-male.wav"
+  },
+  "はく": {
+    "female": "ed0921d26d96d065140558264959ceb3-female.wav",
+    "male": "ed0921d26d96d065140558264959ceb3-male.wav"
+  },
+  "あ": {
+    "female": "8c0c3027e3cfc3d644caab3847a505b0-female.wav",
+    "male": "8c0c3027e3cfc3d644caab3847a505b0-male.wav"
+  },
+  "ぎゅう": {
+    "female": "59e78b18bfaaca6e7a242bd964183e19-female.wav",
+    "male": "59e78b18bfaaca6e7a242bd964183e19-male.wav"
+  },
+  "せつ": {
+    "female": "48201add4075abfc288d64bd3f10cd8e-female.wav",
+    "male": "48201add4075abfc288d64bd3f10cd8e-male.wav"
+  },
+  "ふと": {
+    "female": "f03f6f5a28e531fdb15cec5ebbd81e3e-female.wav",
+    "male": "f03f6f5a28e531fdb15cec5ebbd81e3e-male.wav"
+  },
+  "もう": {
+    "female": "d10ff269519d2095c2fdf411d65c7cdf-female.wav",
+    "male": "d10ff269519d2095c2fdf411d65c7cdf-male.wav"
+  },
+  "しん": {
+    "female": "20e469be708cd6800be5725e0ca41b9d-female.wav",
+    "male": "20e469be708cd6800be5725e0ca41b9d-male.wav"
+  },
+  "こん": {
+    "female": "ccf8fc3c0b657cf29818f2ab44bdaa6a-female.wav",
+    "male": "ccf8fc3c0b657cf29818f2ab44bdaa6a-male.wav"
+  },
+  "がい": {
+    "female": "006dc5b0b3ec00fe18d00021f62c074b-female.wav",
+    "male": "006dc5b0b3ec00fe18d00021f62c074b-male.wav"
+  },
+  "ひろ": {
+    "female": "8155d1ef6638c4b5c677ef4486ab0862-female.wav",
+    "male": "8155d1ef6638c4b5c677ef4486ab0862-male.wav"
+  },
+  "山は大きいです": {
+    "female": "9a05f0aee8de678fafb3094125e21290-female.wav",
+    "male": "9a05f0aee8de678fafb3094125e21290-male.wav"
+  },
+  "女の子は小さいです": {
+    "female": "45c29a43cf91de204f5eda963175b9f1-female.wav",
+    "male": "45c29a43cf91de204f5eda963175b9f1-male.wav"
+  },
+  "手が大きいです": {
+    "female": "464f207d4bc60e5b9f3ddd0c0edd9ce0-female.wav",
+    "male": "464f207d4bc60e5b9f3ddd0c0edd9ce0-male.wav"
+  },
+  "力があります": {
+    "female": "58ff4b3a21507e4a071bfe28e4c32240-female.wav",
+    "male": "58ff4b3a21507e4a071bfe28e4c32240-male.wav"
+  },
+  "火は大きいです": {
+    "female": "0c18ed97f1258af7e767d9707ba471a3-female.wav",
+    "male": "0c18ed97f1258af7e767d9707ba471a3-male.wav"
+  },
+  "玉は丸いです": {
+    "female": "430072c3256b9ac20c86e1b94b71619a-female.wav",
+    "male": "430072c3256b9ac20c86e1b94b71619a-male.wav"
+  }
+}

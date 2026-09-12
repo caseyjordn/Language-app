@@ -1,0 +1,182 @@
+<!--
+  WIREFRAME SAMPLE 11 of ? — Lesson screen, rebuilt to match the real WK
+  lesson shell from the screenshots you sent (not from your own account,
+  but the actual WK lesson UI). This replaces wireframe 10's single-scroll
+  approach entirely.
+
+  Real WK lesson shell, reproduced here:
+  - Full-bleed color hero band (category color) with the character large
+    and centered, English meaning below it.
+  - Home icon top-left (or "SKIP >" on the first step, per your Kanji
+    Composition screenshot — reproduced on the vocab example below).
+  - Top-right: remaining lesson counts per type (R/K/V) + a checkmark
+    count of items completed this session.
+  - Dark step-tab bar directly under the hero, one tab per step
+    (Kanji Composition / Meaning / Reading / Context for vocab;
+    Radicals / Meaning / Readings / Examples for kanji), active tab bold
+    with a small triangle pointer down into the content card.
+  - White content card below, with left/right chevrons on its outer edges
+    for paging through multi-part content within a step (e.g. multiple
+    context sentences, or multiple readings).
+
+  Two step-states are mocked below, stacked, to show the shell adapting to
+  both a category color (pink kanji) and a step layout (two-column
+  meaning/mnemonic vs. single-column examples). In the real build these
+  would be one screen with the tabs actually switching, not two stacked
+  static pages — stacked here only so both are visible at once for review.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 11 — Lesson steps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-page-background:#F4F4F4;
+    --color-blue:#00AAFF;
+    --color-pink:#FF00AA; --color-pink-dark:#B9007B; --color-pink-light:#FFD4F1;
+    --color-purple:#AA00FF; --color-purple-dark:#8600B9; --color-purple-light:#EDC8FF;
+    --color-tabbar:#2C2E35;
+    --border-radius-normal:8px;
+    --border-radius-widget:16px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);color:var(--color-widget-primary-text)}
+
+  .screen-label{max-width:900px;margin:28px auto 8px;padding:0 16px;font-size:13px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.04em}
+  .lesson-screen{max-width:900px;margin:0 auto 40px;border-radius:var(--border-radius-widget);overflow:hidden;box-shadow:0 0 0 1px var(--color-widget-border)}
+
+  .hero{position:relative;padding:20px 24px 34px;text-align:center;color:#fff}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600}
+  .hero-top .home,.hero-top .skip{display:flex;align-items:center;gap:6px;color:#fff;opacity:.9}
+  .hero-top .counts{display:flex;gap:10px;font-size:12px}
+  .hero-top .counts span{background:rgba(255,255,255,.18);border-radius:var(--border-radius-pill);padding:2px 9px}
+  .hero .char{font-family:"Noto Sans JP",sans-serif;font-size:80px;line-height:1;margin:18px 0 6px}
+  .hero .meaning{font-size:24px;font-weight:500}
+
+  .tabbar{background:var(--color-tabbar);display:flex;justify-content:center;gap:36px;padding:14px 0;position:relative}
+  .tabbar .tab{color:#8A8D97;font-size:14px;font-weight:600;cursor:pointer;position:relative}
+  .tabbar .tab.active{color:#fff}
+  .tabbar .tab.active::after{
+    content:"";position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);
+    border:7px solid transparent;border-top-color:#fff;
+  }
+
+  .content-card{background:#fff;padding:34px 60px;position:relative;min-height:260px}
+  .chevron{
+    position:absolute;top:50%;transform:translateY(-50%);
+    color:var(--color-widget-secondary-text);font-size:20px;cursor:pointer;
+  }
+  .chevron.left{left:18px} .chevron.right{right:18px}
+
+  .two-col{display:grid;grid-template-columns:220px 1fr;gap:36px}
+  .two-col h3{font-size:22px;font-weight:400;margin:0 0 10px}
+  .two-col .jp{font-family:"Noto Sans JP",sans-serif;font-size:22px}
+  h4{font-size:22px;font-weight:400;margin:0 0 10px;border-bottom:1px solid #eee;padding-bottom:12px}
+  .prose{font-size:16px;line-height:1.7}
+  .prose .hl-pink{background:var(--color-pink-light);color:var(--color-pink-dark);padding:0 4px;border-radius:3px}
+  .prose .hl-gray{background:#E7E9EB;color:#555;padding:0 4px;border-radius:3px}
+  .hint-box{background:#F2F2F2;border-radius:var(--border-radius-normal);padding:16px 20px;margin-top:16px}
+  .hint-box .lbl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#555;margin-bottom:8px}
+  .notes-heading{font-size:22px;font-weight:400;margin:28px 0 10px;border-bottom:1px solid #eee;padding-bottom:12px}
+  .add-note{color:var(--color-widget-secondary-text);font-size:15px}
+
+  .examples-tiles{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap}
+  .examples-tiles .tile{background:var(--color-purple);color:#fff;border-radius:var(--border-radius-normal);padding:12px 18px;display:flex;align-items:center;gap:10px;font-size:15px}
+  .examples-tiles .tile .jp{font-family:"Noto Sans JP",sans-serif;font-size:19px;font-weight:500}
+
+  .composition-row{display:flex;gap:16px;margin:20px 0}
+  .composition-row .ktile{background:var(--color-pink);color:#fff;border-radius:var(--border-radius-normal);padding:16px 20px;text-align:center}
+  .composition-row .ktile .k{font-family:"Noto Sans JP",sans-serif;font-size:26px}
+  .composition-row .ktile .m{font-size:13px;margin-top:6px}
+
+  .note{max-width:900px;margin:0 auto 40px;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<p class="screen-label">Step: Reading — Kanji lesson (梅 / Ume), pink category color</p>
+<div class="lesson-screen">
+  <div class="hero" style="background:var(--color-pink)">
+    <div class="hero-top">
+      <div class="home">🏠</div>
+      <div class="counts"><span>R 0</span><span>K 1</span><span>V 0</span></div>
+    </div>
+    <div class="char">梅</div>
+    <div class="meaning">Ume</div>
+  </div>
+  <div class="tabbar">
+    <div class="tab">Radicals</div>
+    <div class="tab">Meaning</div>
+    <div class="tab active">Readings</div>
+    <div class="tab">Examples</div>
+  </div>
+  <div class="content-card">
+    <span class="chevron left">‹</span>
+    <div class="two-col">
+      <h3>Readings<br>(kun'yomi)</h3>
+      <div>
+        <h4>Reading Mnemonic</h4>
+        <p class="prose">You've probably heard of <span class="hl-pink">ume</span> before, but an ume (<span class="jp">うめ</span>) is a <span class="hl-pink">Japanese plum</span>.</p>
+        <div class="hint-box">
+          <div class="lbl">❓ HINT</div>
+          Imagine eating your harvest of ume. Taste the ripe fruity flesh of these Japanese plums as you stuff your gluttonous face.
+        </div>
+        <div class="notes-heading">Reading Notes</div>
+        <div class="add-note">+ Add Note</div>
+      </div>
+    </div>
+    <span class="chevron right">›</span>
+  </div>
+</div>
+
+<p class="screen-label">Step: Kanji Composition — Vocab lesson (車内 / Inside The Car), purple category color</p>
+<div class="lesson-screen">
+  <div class="hero" style="background:var(--color-purple)">
+    <div class="hero-top">
+      <div class="skip">🏠 SKIP ›</div>
+      <div class="counts"><span>R 26</span><span>K 0</span><span>V 0</span><span>✓ 0</span></div>
+    </div>
+    <div class="char">車内</div>
+    <div class="meaning">Inside The Car</div>
+  </div>
+  <div class="tabbar">
+    <div class="tab active">Kanji Composition</div>
+    <div class="tab">Meaning</div>
+    <div class="tab">Reading</div>
+    <div class="tab">Context</div>
+  </div>
+  <div class="content-card">
+    <span class="chevron left">‹</span>
+    <h4>Kanji Composition</h4>
+    <p class="prose">The vocabulary is composed of two kanji:</p>
+    <div class="composition-row">
+      <div class="ktile"><div class="k">車</div><div class="m">Car</div></div>
+      <div class="ktile"><div class="k">内</div><div class="m">Inside</div></div>
+    </div>
+    <p class="prose">Does the combination of the kanji meanings somewhat relate to the vocabulary meaning?</p>
+    <p class="prose">Based on the kanji composition, can you guess the reading of the vocabulary?</p>
+    <span class="chevron right">›</span>
+  </div>
+</div>
+
+<p class="note">
+  Wireframe 11 — real WK lesson shell: hero band + step tabs + paged
+  content card. Two states shown (kanji "Readings" step, vocab "Kanji
+  Composition" step) to confirm the shell holds up across both category
+  colors and layouts before I build the remaining steps (Meaning, Context/
+  Examples) and wire the tabs to actually switch. Screenshot + compare,
+  then tell me what's next.
+</p>
+
+</body>
+</html>

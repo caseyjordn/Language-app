@@ -1,0 +1,159 @@
+<!--
+  WIREFRAME SAMPLE 16 of ? — Kanji lesson screen, mirroring the Vocab
+  lesson shell (wireframe 12) in pink, with content adapted for kanji:
+
+  - Tabs are Meaning / Reading / Examples only — no Kanji Composition
+    (that's vocab-specific, since vocab is built from kanji) and no
+    Radicals (omitted per your instruction).
+  - Meaning Mnemonic is reworded to not depend on a radical explanation,
+    since we're not teaching radicals as their own thing.
+  - Reading section teaches ON'YOMI only, per your own writeup: "the
+    shorter on'yomi reading comes with the kanji itself, while the
+    kun'yomi reading gets introduced later, through vocabulary." The
+    mnemonic here is adapted from your real WK reference screenshot,
+    which is itself an on'yomi mnemonic (Power Rangers / Ricky / lock).
+  - Examples section previews upcoming vocabulary that uses this kanji —
+    tiles are purple (vocab's category color) since they represent vocab
+    items, not kanji itself, matching WK's own convention of using the
+    target item's own color even inside another item's page.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 16 — Kanji lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-page-background:#F4F4F4;
+    --color-pink:#FF00AA; --color-pink-dark:#B9007B; --color-pink-light:#FFD4F1;
+    --color-purple:#AA00FF;
+    --color-tabbar:#2C2E35;
+    --border-radius-normal:8px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);color:var(--color-widget-primary-text)}
+
+  .hero{position:relative;padding:18px 24px 30px;text-align:center;color:#fff;background:var(--color-pink)}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;max-width:900px;margin:0 auto}
+  .hero-top .home{display:flex;align-items:center;gap:6px;color:#fff;opacity:.9}
+  .hero-top .counts{display:flex;gap:10px;font-size:12px}
+  .hero-top .counts span{background:rgba(255,255,255,.18);border-radius:var(--border-radius-pill);padding:2px 9px}
+  .hero .char{font-family:"Noto Sans JP",sans-serif;font-size:64px;line-height:1;margin:14px 0 4px}
+  .hero .meaning{font-size:20px;font-weight:500}
+
+  .tabbar{background:var(--color-tabbar);display:flex;justify-content:center;gap:32px;padding:12px 0;position:sticky;top:0;z-index:10}
+  .tabbar a{color:#8A8D97;font-size:14px;font-weight:600;text-decoration:none}
+  .tabbar a:hover{color:#fff}
+
+  main{max-width:820px;margin:0 auto;padding:0 24px 60px}
+  section{background:#fff;margin-top:20px;padding:26px 40px;border-radius:12px;scroll-margin-top:56px}
+  h2{font-size:22px;font-weight:400;margin:0 0 14px;border-bottom:1px solid #eee;padding-bottom:12px}
+  h3.mnemonic-label{font-size:14px;font-weight:700;color:var(--color-pink-dark);text-transform:uppercase;letter-spacing:.03em;margin:22px 0 8px}
+
+  .field-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:10px}
+  .field .k{font-size:12px;color:var(--color-widget-secondary-text);margin-bottom:2px}
+  .field .v{font-size:16px}
+  .field .v.primary{font-weight:700}
+
+  .prose{font-size:15px;line-height:1.7}
+  .prose .hl{background:var(--color-pink-light);color:var(--color-pink-dark);padding:0 4px;border-radius:3px}
+  .hint-box{background:#F2F2F2;border-radius:var(--border-radius-normal);padding:14px 18px;margin-top:10px}
+  .hint-box .lbl{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#555;margin-bottom:6px}
+
+  .reading-row{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  .reading-jp{font-family:"Noto Sans JP",sans-serif;font-size:24px}
+  .reading-alt{font-size:13px;color:var(--color-widget-secondary-text)}
+  .audio-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-pill);padding:5px 12px;font-size:12px;font-weight:700;color:var(--color-widget-primary-text);cursor:pointer}
+
+  .examples-tiles{display:flex;gap:14px;margin-top:16px;flex-wrap:wrap}
+  .examples-tiles .tile{background:var(--color-purple);color:#fff;border-radius:var(--border-radius-normal);padding:10px 16px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;min-width:88px}
+  .examples-tiles .tile .jp{font-family:"Noto Sans JP",sans-serif;font-size:18px;font-weight:500}
+  .examples-tiles .tile .m{font-size:11px;color:#EDC8FF}
+
+  .session-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--color-widget-border);padding:14px 24px;display:flex;justify-content:space-between}
+  .wk-button{border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-normal);padding:10px 20px;font-size:14px;font-weight:700;color:var(--color-widget-primary-text);cursor:pointer}
+  .wk-button.primary{background:var(--color-pink);color:#fff;border-color:var(--color-pink)}
+
+  .note{max-width:820px;margin:20px auto 76px;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-top">
+    <div class="home">🏠</div>
+    <div class="counts"><span>K 5</span><span>V 0</span><span>✓ 1</span></div>
+  </div>
+  <div class="char">力</div>
+  <div class="meaning">Power</div>
+</div>
+
+<div class="tabbar">
+  <a href="#meaning">Meaning</a>
+  <a href="#reading">Reading</a>
+  <a href="#examples">Examples</a>
+</div>
+
+<main>
+
+  <section id="meaning">
+    <h2>Meaning</h2>
+    <div class="field-row">
+      <div class="field"><div class="k">Primary</div><div class="v primary">Power</div></div>
+      <div class="field"><div class="k">Alternatives</div><div class="v">Strength, Ability</div></div>
+    </div>
+    <h3 class="mnemonic-label">Meaning Mnemonic</h3>
+    <p class="prose">This kanji looks like a bent, flexed arm — a simple picture of raw <span class="hl">power</span>.</p>
+  </section>
+
+  <section id="reading">
+    <h2>Reading</h2>
+    <div class="reading-row">
+      <div class="reading-jp">りょく</div>
+      <div class="reading-alt">also: りき</div>
+      <button class="audio-btn">▶ Play</button>
+    </div>
+    <h3 class="mnemonic-label">Reading Mnemonic</h3>
+    <p class="prose">Who has the most <span class="hl">power</span> of anyone? It's the Power Rangers. They are battling their arch enemy Ricky (りき). They defeat him and lock (りょく) him up, so that he can't hurt anyone ever again.</p>
+    <div class="hint-box">
+      <div class="lbl">❓ HINT</div>
+      Know anyone named Ricky (りき)? Imagine that person's face on the monster the Power Rangers are fighting. Now imagine them lock-ing (りょく) him up. He looks much less scary once he's locked up.
+    </div>
+  </section>
+
+  <section id="examples">
+    <h2>Examples</h2>
+    <p class="prose">A glimpse of vocabulary you'll be learning later that uses this kanji:</p>
+    <div class="examples-tiles">
+      <div class="tile"><div class="jp">入力</div><div class="m">Input</div></div>
+      <div class="tile"><div class="jp">全力</div><div class="m">Full effort</div></div>
+      <div class="tile"><div class="jp">強力</div><div class="m">Strong</div></div>
+      <div class="tile"><div class="jp">電力</div><div class="m">Electric power</div></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="session-footer">
+  <button class="wk-button" disabled>‹ Back</button>
+  <button class="wk-button primary">Next ›</button>
+</div>
+
+<p class="note">
+  Wireframe 16 — Kanji lesson, same scroll+anchor-tab shell as Vocab
+  (wireframe 12) in pink, three tabs instead of four (no Kanji
+  Composition), reading limited to on'yomi. Screenshot + compare.
+</p>
+
+</body>
+</html>

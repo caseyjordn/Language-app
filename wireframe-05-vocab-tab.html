@@ -1,0 +1,198 @@
+<!--
+  WIREFRAME SAMPLE 5 of ? — Vocab tab overview (landing page for the tab).
+
+  Per the last two rounds of decisions: Lessons/Reviews now live inside each
+  section's own page (not the dashboard), so this page owns its own
+  Lessons/Reviews pair at the top. Below that, a grid of vocab tiles styled
+  directly off the "Found In Vocabulary" tile pattern in
+  screencapture-wanikani-kanji-...-vocab ref 1.png:
+    - solid purple fill = word already in your review queue (has reached
+      some SRS stage)
+    - dashed purple outline = word not learned yet (still locked, waiting
+      in the lesson queue)
+  Each tile shows word / reading / English meaning, matching that
+  screenshot's 3-line tile content.
+
+  Added a lightweight filter row (All / Learning / Not Started) since WK's
+  real vocabulary index has state filtering too — flag if this is more than
+  you want right now, easy to strip back to just "All."
+
+  Clicking a tile would go to the word detail page (meaning/reading/context/
+  audio/progression, styled like the two reference screenshots) — that's
+  the next wireframe if you want it, not built here yet.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 5 — Vocab tab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-background:#FFFFFF;
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-widget-divider:#CAD0D6;
+    --color-page-background:#F4F4F4;
+
+    --color-blue:#00AAFF;
+    --color-pink:#FF00AA;
+    --color-purple:#AA00FF;
+    --color-purple-dark:#8600B9;
+    --color-charcoal:#6B7079;
+
+    --border-radius-tight:4px;
+    --border-radius-normal:8px;
+    --border-radius-widget:16px;
+    --border-radius-pill:9999px;
+
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+    --font-weight-regular:350;
+    --font-weight-medium:500;
+    --font-weight-bold:600;
+    --font-weight-heavy:700;
+    --font-size-xxsmall:11px;
+    --font-size-xsmall:14px;
+    --font-size-small:16px;
+    --font-size-medium:18px;
+    --font-size-large:24px;
+
+    --spacing-xtight:8px;
+    --spacing-tight:12px;
+    --spacing-normal:16px;
+    --spacing-loose:24px;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);font-weight:var(--font-weight-regular);color:var(--color-widget-primary-text);min-height:100vh}
+
+  .topnav{display:flex;align-items:center;gap:var(--spacing-loose);padding:var(--spacing-tight) var(--spacing-loose);background:#fff;border-bottom:1px solid var(--color-widget-divider)}
+  .wordmark{font-size:var(--font-size-medium);font-weight:var(--font-weight-heavy);display:flex;gap:2px;white-space:nowrap}
+  .wordmark .jp{color:var(--color-pink)} .wordmark .dot{color:var(--color-blue)} .wordmark .en{color:var(--color-purple)}
+  .navlinks{display:flex;gap:var(--spacing-normal);flex:1}
+  .navlinks a{color:var(--color-widget-primary-text);text-decoration:none;font-weight:var(--font-weight-medium);font-size:var(--font-size-xsmall);padding:6px 2px;border-bottom:2px solid transparent}
+  .navlinks a.active{border-bottom-color:var(--color-purple)}
+  .navright{display:flex;align-items:center;gap:var(--spacing-normal)}
+  .icon-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--color-charcoal);font-size:15px}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#EDC8FF}
+
+  .page-header{max-width:1000px;margin:0 auto;padding:var(--spacing-loose) var(--spacing-normal) 0}
+  .page-header h1{font-size:var(--font-size-large);font-weight:var(--font-weight-bold);margin:0;display:flex;align-items:center;gap:10px}
+  .page-header h1 .chip{width:30px;height:30px;border-radius:var(--border-radius-normal);background:var(--color-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Noto Sans JP",sans-serif;font-size:15px}
+
+  main{max-width:1000px;margin:0 auto;padding:var(--spacing-normal) var(--spacing-normal) 60px}
+
+  /* lessons/reviews pair, scoped to this section only */
+  .lr-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-normal);margin-bottom:var(--spacing-loose)}
+  .lr-widget{background:#fff;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-widget);padding:var(--spacing-normal) var(--spacing-loose)}
+  .widget-title-row{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+  .widget-title-row .title{font-size:var(--font-size-medium);font-weight:var(--font-weight-bold)}
+  .wk-text{font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text);margin:0 0 12px}
+  .count-bubble{display:inline-flex;align-items:center;justify-content:center;background:var(--color-charcoal);color:#fff;border-radius:var(--border-radius-pill);font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);padding:1px 10px;min-width:22px}
+  .count-bubble.zero{background:#B5BAC0}
+  .wk-button{border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-normal);padding:8px 14px;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);color:var(--color-widget-primary-text);cursor:pointer;text-decoration:none;display:inline-block}
+  .wk-button.primary{background:var(--color-widget-primary-text);color:#fff;border-color:var(--color-widget-primary-text)}
+
+  /* filter pills */
+  .filters{display:flex;gap:8px;margin-bottom:var(--spacing-normal)}
+  .filter-pill{border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-pill);padding:6px 14px;font-size:var(--font-size-xxsmall);font-weight:var(--font-weight-bold);color:var(--color-widget-secondary-text)}
+  .filter-pill.active{background:var(--color-widget-primary-text);color:#fff;border-color:var(--color-widget-primary-text)}
+
+  /* vocab tile grid */
+  .tile-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));gap:10px}
+  .vtile{
+    border-radius:var(--border-radius-normal);
+    padding:10px 6px 9px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+    text-decoration:none;
+  }
+  .vtile .word{font-family:"Noto Sans JP",sans-serif;font-size:20px;font-weight:var(--font-weight-medium);line-height:1.2}
+  .vtile .reading{font-family:"Noto Sans JP",sans-serif;font-size:12px}
+  .vtile .meaning{font-size:11px}
+
+  .vtile--learned{background:var(--color-purple)}
+  .vtile--learned .word,.vtile--learned .reading{color:#fff}
+  .vtile--learned .meaning{color:#EDC8FF}
+
+  .vtile--locked{background:#fff;border:1.5px dashed var(--color-purple)}
+  .vtile--locked .word,.vtile--locked .reading{color:var(--color-purple-dark)}
+  .vtile--locked .meaning{color:var(--color-widget-secondary-text)}
+
+  .note{max-width:1000px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wordmark"><span class="jp">日本</span><span class="dot">・</span><span class="en">Practice</span></div>
+  <div class="navlinks">
+    <a href="#">Dashboard</a>
+    <a class="active" href="#">Vocab</a>
+    <a href="#">Kana &amp; Katakana</a>
+    <a href="#">Kanji</a>
+    <a href="#">Speaking</a>
+    <a href="#">Photos</a>
+  </div>
+  <div class="navright">
+    <div class="icon-btn">⌕</div>
+    <div class="avatar"></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1><span class="chip" lang="ja">語</span>Vocabulary</h1>
+</div>
+
+<main>
+
+  <div class="lr-row">
+    <div class="lr-widget">
+      <div class="widget-title-row"><span class="title">Lessons</span><span class="count-bubble">10</span></div>
+      <p class="wk-text">New words ready to learn.</p>
+      <a class="wk-button primary" href="#">Start lessons</a>
+    </div>
+    <div class="lr-widget">
+      <div class="widget-title-row"><span class="title">Reviews</span><span class="count-bubble">18</span></div>
+      <p class="wk-text">Due right now.</p>
+      <a class="wk-button primary" href="#">Start reviews</a>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-pill active">All (24)</div>
+    <div class="filter-pill">Learning (14)</div>
+    <div class="filter-pill">Not started (10)</div>
+  </div>
+
+  <div class="tile-grid">
+    <a class="vtile vtile--learned" href="#"><div class="word">力</div><div class="reading">ちから</div><div class="meaning">Power</div></a>
+    <a class="vtile vtile--learned" href="#"><div class="word">十六</div><div class="reading">じゅうろく</div><div class="meaning">Sixteen</div></a>
+    <a class="vtile vtile--learned" href="#"><div class="word">女子</div><div class="reading">じょし</div><div class="meaning">Girl</div></a>
+    <a class="vtile vtile--learned" href="#"><div class="word">入力</div><div class="reading">にゅうりょく</div><div class="meaning">Input</div></a>
+    <a class="vtile vtile--learned" href="#"><div class="word">全力</div><div class="reading">ぜんりょく</div><div class="meaning">Full effort</div></a>
+    <a class="vtile vtile--learned" href="#"><div class="word">強力</div><div class="reading">きょうりょく</div><div class="meaning">Strong</div></a>
+    <a class="vtile vtile--locked" href="#"><div class="word">体力</div><div class="reading">たいりょく</div><div class="meaning">Physical strength</div></a>
+    <a class="vtile vtile--locked" href="#"><div class="word">電力</div><div class="reading">でんりょく</div><div class="meaning">Electric power</div></a>
+    <a class="vtile vtile--locked" href="#"><div class="word">馬力</div><div class="reading">ばりき</div><div class="meaning">Horsepower</div></a>
+    <a class="vtile vtile--locked" href="#"><div class="word">努力</div><div class="reading">どりょく</div><div class="meaning">Great effort</div></a>
+    <a class="vtile vtile--locked" href="#"><div class="word">協力</div><div class="reading">きょうりょく</div><div class="meaning">Cooperation</div></a>
+    <a class="vtile vtile--locked" href="#"><div class="word">魅力</div><div class="reading">みりょく</div><div class="meaning">Allure</div></a>
+  </div>
+
+</main>
+
+<p class="note">
+  Wireframe 5 — Vocab tab overview. Tile fill/outline mirrors the "Found In
+  Vocabulary" pattern from your kanji reference screenshot (solid = in your
+  review queue, dashed = not learned yet). Lessons/Reviews are scoped to
+  Vocab only now. Screenshot + compare, then tell me: keep going on this
+  page (e.g. add a search box, level grouping), or move to the word detail
+  page / the actual review quiz screen next?
+</p>
+
+</body>
+</html>

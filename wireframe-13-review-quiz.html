@@ -1,0 +1,283 @@
+<!--
+  WIREFRAME SAMPLE 13 of ? — Review/quiz screen (the actual SRS test).
+
+  This is the daily-use screen: per your own WaniKani writeup, an item gets
+  quizzed on meaning, then reading, as separate questions, and a missed
+  question re-appears later in the same session until answered correctly.
+  This wireframe shows the Reading question for one vocab word (力/Power,
+  purple) and is actually wired up (real typed input + check), not just a
+  static mock, since typing and getting feedback IS the interaction being
+  designed here.
+
+  Accepts either the hiragana reading or a romaji spelling for this demo
+  (ちから / chikara), matching the old app's "alternate romaji spellings"
+  behavior mentioned in the project brief. Wrong answers let you retry
+  (typo tolerance) rather than instantly failing — real SRS demotion logic
+  isn't wired to anything here, this is just the input/feedback loop.
+
+  Not decided yet, flagging rather than guessing: whether a wrong first
+  attempt should count as a miss toward SRS demotion even if a retry gets
+  it right, or only a genuine "give up" counts — this matters once real
+  scoring is built, not for this screen's layout.
+
+  UPDATE per your feedback:
+  - Wrong answer now reveals a compact "lesson review" panel below the quiz
+    card — the meaning/reading/mnemonic info from the lesson screen
+    (wireframe 12), so you can re-study the item right there instead of
+    just being told you're wrong.
+  - Correct answer now triggers a small confetti burst and auto-advances
+    to the next question after a beat — no "Next" click required.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 13 — Review quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-page-background:#F4F4F4;
+    --color-purple:#AA00FF; --color-purple-dark:#8600B9;
+    --color-correct:#35A753; --color-correct-bg:#D2EEDA;
+    --color-incorrect:#E01F14; --color-incorrect-bg:#FFE4E6;
+    --border-radius-normal:8px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);color:var(--color-widget-primary-text);min-height:100vh}
+
+  .hero{background:var(--color-purple);color:#fff;padding:16px 20px 40px;text-align:center;transition:background .2s ease}
+  .hero.state-correct{background:var(--color-correct)}
+  .hero.state-incorrect{background:var(--color-incorrect)}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
+  .hero-top .home{opacity:.9}
+  .hero-top .count{font-size:13px;background:rgba(255,255,255,.18);border-radius:var(--border-radius-pill);padding:3px 12px}
+  .session-bar{display:flex;gap:2px;max-width:640px;margin:0 auto}
+  .session-bar span{flex:1;height:6px;border-radius:2px;background:rgba(255,255,255,.3)}
+  .session-bar span.done{background:#fff}
+  .char{font-family:"Noto Sans JP",sans-serif;font-size:64px;margin-top:26px;line-height:1}
+
+  .quiz-card{
+    max-width:520px;margin:-24px auto 0;background:#fff;border-radius:16px;
+    box-shadow:0 4px 18px rgba(0,0,0,.06);padding:28px 30px 26px;position:relative;
+  }
+  .question-label{
+    display:inline-block;background:var(--color-purple);color:#fff;
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+    border-radius:6px;padding:4px 10px;margin-bottom:14px;
+  }
+  input.answer{
+    width:100%;border:none;border-bottom:2px solid var(--color-widget-border);
+    font-family:"Noto Sans JP",sans-serif;font-size:22px;padding:8px 2px;outline:none;
+    background:transparent;
+  }
+  input.answer:focus{border-bottom-color:var(--color-purple)}
+  input.answer.correct{border-bottom-color:var(--color-correct);color:var(--color-correct)}
+  input.answer.incorrect{border-bottom-color:var(--color-incorrect);color:var(--color-incorrect)}
+
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)}
+    30%,50%,70%{transform:translateX(-8px)} 40%,60%{transform:translateX(8px)}
+  }
+  input.answer.shake{animation:shake .4s}
+
+  .feedback-row{display:flex;align-items:center;justify-content:space-between;margin-top:18px;min-height:40px}
+  .feedback-msg{font-size:14px;font-weight:700}
+  .feedback-msg.correct{color:var(--color-correct)}
+  .feedback-msg.incorrect{color:var(--color-incorrect)}
+  .btn{border:none;border-radius:var(--border-radius-normal);padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer}
+  .btn.check{background:var(--color-purple);color:#fff}
+  .btn.check:disabled{background:#D9BEEE;cursor:default}
+  .btn.next{background:var(--color-correct);color:#fff}
+
+  .hint{font-size:12px;color:var(--color-widget-secondary-text);margin-top:6px}
+
+  /* lesson review panel — revealed on a wrong answer */
+  .lesson-review{
+    max-width:520px;margin:14px auto 0;background:#fff;border-radius:16px;
+    border:1px solid var(--color-widget-border);padding:22px 30px;
+    display:none;
+  }
+  .lesson-review.visible{display:block}
+  .lesson-review .lr-title{font-size:12px;font-weight:700;color:var(--color-incorrect);text-transform:uppercase;letter-spacing:.03em;margin-bottom:12px}
+  .lesson-review h4{font-size:13px;font-weight:700;color:var(--color-purple-dark);text-transform:uppercase;letter-spacing:.03em;margin:14px 0 4px}
+  .lesson-review h4:first-of-type{margin-top:0}
+  .lesson-review p{font-size:14px;line-height:1.6;margin:0}
+  .lesson-review .jp{font-family:"Noto Sans JP",sans-serif;font-size:19px}
+  .lesson-review .hl{background:#EDC8FF;color:var(--color-purple-dark);padding:0 3px;border-radius:3px}
+
+  /* confetti — pops out from a point like a popper and fades, no fall-back */
+  .confetti-piece{
+    position:fixed;top:0;left:0;width:8px;height:14px;pointer-events:none;z-index:50;
+    animation-name:confetti-pop;
+    animation-timing-function:cubic-bezier(0,.7,.2,1); /* fast burst, easing out to a stop */
+    animation-fill-mode:forwards;
+  }
+  @keyframes confetti-pop{
+    0%   { transform:translate(0,0) rotate(0deg) scale(.6); opacity:1; }
+    70%  { opacity:1; }
+    100% { transform:translate(calc(var(--fx) * 1px), calc(var(--fy) * 1px)) rotate(calc(var(--rot) * 1deg)) scale(1); opacity:0; }
+  }
+
+  .note{max-width:640px;margin:26px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+  <div class="hero-top">
+    <div class="home">🏠</div>
+    <div class="count" id="sessionCount">Item 4 of 18</div>
+  </div>
+  <div class="session-bar" id="sessionBar">
+    <span class="done"></span><span class="done"></span><span class="done"></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="char">力</div>
+</div>
+
+<div class="quiz-card">
+  <div class="question-label">Reading</div>
+  <input class="answer" id="answerInput" type="text" placeholder="ちから or chikara" autocomplete="off" autofocus>
+  <div class="hint">Type in hiragana or romaji, then press Enter or Check.</div>
+  <div class="feedback-row">
+    <div class="feedback-msg" id="feedbackMsg"></div>
+    <button class="btn check" id="checkBtn">Check</button>
+  </div>
+</div>
+
+<div class="lesson-review" id="lessonReview">
+  <div class="lr-title">⚠ Let's review this one</div>
+  <h4>Meaning</h4>
+  <p><strong>Power</strong> — Strength, Ability</p>
+  <h4>Meaning Mnemonic</h4>
+  <p>When a vocab word is made up of a single kanji and that's it, it almost always takes the meaning from its parent kanji. So this word also means <span class="hl">power</span>.</p>
+  <h4>Reading</h4>
+  <p class="jp">ちから</p>
+  <h4>Reading Mnemonic</h4>
+  <p>The martial art that requires the most <span class="hl">power</span> is chee-se kara-te (ちから). Practitioners channel all their power into karate-chopping blocks of cheese.</p>
+</div>
+
+<p class="note">
+  Wireframe 13 — type "ちから" or "chikara" and hit Enter/Check for the
+  correct path (confetti + auto-advance, no click needed). Type anything
+  else to see the wrong path (shake + the lesson review panel appears
+  below so you can re-study before trying again). Real build would pull
+  accepted answers, SRS stage, and the actual lesson content for whatever
+  item is showing — this is just the interaction shape. Try both, then
+  tell me what's next.
+</p>
+
+<script>
+  var input = document.getElementById('answerInput');
+  var checkBtn = document.getElementById('checkBtn');
+  var feedback = document.getElementById('feedbackMsg');
+  var hero = document.getElementById('hero');
+  var lessonReview = document.getElementById('lessonReview');
+  var sessionBar = document.getElementById('sessionBar');
+  var sessionCount = document.getElementById('sessionCount');
+  var accepted = ['ちから', 'chikara'];
+  var locked = false;
+  var itemNum = 4;
+  var totalItems = 18;
+
+  function normalize(s){ return s.trim().toLowerCase(); }
+
+  var confettiColors = ['#AA00FF','#FF00AA','#00AAFF','#FFC700'];
+  function burstConfetti(){
+    // origin sits low-center of the viewport, like a popper firing upward
+    var originX = window.innerWidth / 2;
+    var originY = window.innerHeight * 0.75;
+    var pieceCount = 46;
+    for (var i = 0; i < pieceCount; i++){
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = originX + 'px';
+      piece.style.top = originY + 'px';
+      piece.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+
+      // fan out mostly upward (-60 to -120 degrees, 0 = right, 90 = down), no fall-back
+      var angleDeg = -90 + (Math.random() * 120 - 60);
+      var angleRad = angleDeg * Math.PI / 180;
+      var burstDist = 160 + Math.random() * 260;
+      var fx = Math.cos(angleRad) * burstDist;
+      var fy = Math.sin(angleRad) * burstDist;
+
+      piece.style.setProperty('--fx', fx.toFixed(1));
+      piece.style.setProperty('--fy', fy.toFixed(1));
+      piece.style.setProperty('--rot', Math.floor(180 + Math.random()*360));
+      piece.style.animationDuration = (0.7 + Math.random()*0.4) + 's';
+
+      document.body.appendChild(piece);
+      (function(p){ p.addEventListener('animationend', function(){ p.remove(); }); })(piece);
+    }
+  }
+
+  function resetForNextQuestion(){
+    input.value = '';
+    input.classList.remove('correct','incorrect','shake');
+    feedback.textContent = '';
+    feedback.className = 'feedback-msg';
+    hero.classList.remove('state-correct','state-incorrect');
+    lessonReview.classList.remove('visible');
+    locked = false;
+    input.focus();
+  }
+
+  function advanceSession(){
+    itemNum = itemNum < totalItems ? itemNum + 1 : 1;
+    sessionCount.textContent = 'Item ' + itemNum + ' of ' + totalItems;
+    var doneSpans = sessionBar.querySelectorAll('span');
+    doneSpans.forEach(function(s, i){ s.classList.toggle('done', i < itemNum - 1); });
+  }
+
+  function check(){
+    if (locked) return;
+    var val = normalize(input.value);
+    if (!val) return;
+    var isCorrect = accepted.indexOf(val) !== -1;
+    if (isCorrect) {
+      locked = true;
+      input.classList.remove('incorrect','shake');
+      input.classList.add('correct');
+      hero.classList.remove('state-incorrect');
+      hero.classList.add('state-correct');
+      feedback.textContent = 'Correct!';
+      feedback.className = 'feedback-msg correct';
+      lessonReview.classList.remove('visible');
+      burstConfetti();
+      setTimeout(function(){
+        advanceSession();
+        resetForNextQuestion();
+      }, 1100);
+    } else {
+      input.classList.remove('shake');
+      void input.offsetWidth;
+      input.classList.add('incorrect','shake');
+      hero.classList.add('state-incorrect');
+      feedback.textContent = 'Not quite — try again';
+      feedback.className = 'feedback-msg incorrect';
+      lessonReview.classList.add('visible');
+      setTimeout(function(){ hero.classList.remove('state-incorrect'); }, 500);
+    }
+  }
+
+  checkBtn.addEventListener('click', check);
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') check();
+    if (locked) return;
+    input.classList.remove('correct','incorrect');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!--
+  WIREFRAME SAMPLE 6 of ? — per-section Progress / SRS stage-breakdown page.
+  Shown here for Vocabulary; same layout would be reused for Kana & Katakana
+  (blue) and Kanji (pink) — single category color per page, since sections
+  are independent and there's no radicals column to show alongside.
+
+  Adapted from your WaniKani screenshots:
+  - Stage list: Apprentice I-IV, Guru V-VI, Master, Enlightened, Burned,
+    each with a count bubble (single color here, not three side by side
+    like WK's radicals/kanji/vocab columns) and a running total.
+  - Tile grid below with a per-item mini progress bar underneath, showing
+    how far through the 8-stage ladder that word currently is.
+
+  Simplification flagged: WK's real stage icons are a visual egg-to-turtle
+  progression (plain egg / cracked egg / hatching / chick / turtle). I used
+  plain small circle-fill indicators instead of trying to fake that
+  illustration style — real icon assets (or an equivalent motif you like
+  better) can replace these once we're past layout. The reference tile bar
+  showed 5 segments (looked like it maxes at Guru); I used 8 segments here
+  to represent the full Apprentice I -> Enlightened ladder before Burned
+  removes an item from review — flag if you'd rather match the 5-segment
+  version exactly.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 6 — Vocab Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-background:#FFFFFF;
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-widget-divider:#CAD0D6;
+    --color-page-background:#F4F4F4;
+
+    --color-purple:#AA00FF;
+    --color-purple-dark:#8600B9;
+    --color-charcoal:#6B7079;
+    --color-complete-bar:#35A753;
+
+    --border-radius-tight:4px;
+    --border-radius-normal:8px;
+    --border-radius-widget:16px;
+    --border-radius-pill:9999px;
+
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+    --font-weight-regular:350;
+    --font-weight-medium:500;
+    --font-weight-bold:600;
+    --font-weight-heavy:700;
+    --font-size-xxsmall:11px;
+    --font-size-xsmall:14px;
+    --font-size-small:16px;
+    --font-size-medium:18px;
+    --font-size-large:24px;
+
+    --spacing-xtight:8px;
+    --spacing-tight:12px;
+    --spacing-normal:16px;
+    --spacing-loose:24px;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);font-weight:var(--font-weight-regular);color:var(--color-widget-primary-text);min-height:100vh}
+
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:var(--spacing-tight) var(--spacing-loose);
+    background:#fff;border-bottom:1px solid var(--color-widget-divider);
+  }
+  .back-link{display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--color-widget-primary-text);font-weight:var(--font-weight-medium);font-size:var(--font-size-xsmall)}
+  .section-title{display:flex;align-items:center;gap:8px;font-size:var(--font-size-medium);font-weight:var(--font-weight-bold)}
+  .section-title .chip{width:26px;height:26px;border-radius:var(--border-radius-tight);background:var(--color-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Noto Sans JP",sans-serif;font-size:13px}
+
+  main{max-width:900px;margin:0 auto;padding:var(--spacing-loose) var(--spacing-normal) 60px}
+
+  .headline{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--spacing-normal)}
+  .headline h1{font-size:var(--font-size-large);margin:0}
+  .headline .sub{font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text)}
+
+  /* stage breakdown list */
+  .stage-list{background:#fff;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-widget);overflow:hidden;margin-bottom:var(--spacing-loose)}
+  .stage-row{display:flex;align-items:center;gap:14px;padding:12px 20px;border-top:1px solid var(--color-widget-divider)}
+  .stage-row:first-child{border-top:none}
+  .stage-icon{width:22px;height:22px;border-radius:50%;border:2px solid var(--color-widget-border);flex:none}
+  .stage-icon.filled{background:var(--color-purple-dark);border-color:var(--color-purple-dark)}
+  .stage-icon.half{background:linear-gradient(90deg, var(--color-purple-dark) 50%, transparent 50%)}
+  .stage-name{flex:1;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-medium)}
+  .stage-count{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--color-purple);color:#fff;border-radius:var(--border-radius-pill);
+    font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);
+    min-width:34px;padding:2px 10px;
+  }
+  .stage-count.zero{background:#D9BEEE}
+  .stage-total{width:44px;text-align:right;font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text)}
+
+  /* tile grid with mini progress bars */
+  .grid-title{font-size:var(--font-size-small);font-weight:var(--font-weight-bold);margin:0 0 10px}
+  .tile-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(96px,1fr));gap:12px}
+  .vtile{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .vtile .swatch{
+    width:100%;aspect-ratio:1;border-radius:var(--border-radius-normal);
+    background:var(--color-purple);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Noto Sans JP",sans-serif;font-size:18px;font-weight:var(--font-weight-medium);
+  }
+  .mini-bar{display:flex;gap:2px;width:100%}
+  .mini-bar span{flex:1;height:4px;border-radius:2px;background:#E7E9EB}
+  .mini-bar span.done{background:var(--color-complete-bar)}
+
+  .note{max-width:900px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="#">‹ Back to Vocabulary</a>
+  <div class="section-title"><span class="chip" lang="ja">語</span>Vocabulary Progress</div>
+</div>
+
+<main>
+
+  <div class="headline">
+    <h1>Stage Breakdown</h1>
+    <div class="sub">14 of 24 words in the review queue</div>
+  </div>
+
+  <div class="stage-list">
+    <div class="stage-row"><div class="stage-icon"></div><div class="stage-name">Apprentice I</div><div class="stage-count zero">0</div><div class="stage-total">0</div></div>
+    <div class="stage-row"><div class="stage-icon"></div><div class="stage-name">Apprentice II</div><div class="stage-count">4</div><div class="stage-total">4</div></div>
+    <div class="stage-row"><div class="stage-icon half"></div><div class="stage-name">Apprentice III</div><div class="stage-count">3</div><div class="stage-total">7</div></div>
+    <div class="stage-row"><div class="stage-icon half"></div><div class="stage-name">Apprentice IV</div><div class="stage-count">2</div><div class="stage-total">9</div></div>
+    <div class="stage-row"><div class="stage-icon filled"></div><div class="stage-name">Guru V</div><div class="stage-count">3</div><div class="stage-total">12</div></div>
+    <div class="stage-row"><div class="stage-icon filled"></div><div class="stage-name">Guru VI</div><div class="stage-count">1</div><div class="stage-total">13</div></div>
+    <div class="stage-row"><div class="stage-icon filled"></div><div class="stage-name">Master</div><div class="stage-count">1</div><div class="stage-total">14</div></div>
+    <div class="stage-row"><div class="stage-icon filled"></div><div class="stage-name">Enlightened</div><div class="stage-count zero">0</div><div class="stage-total">14</div></div>
+    <div class="stage-row"><div class="stage-icon filled"></div><div class="stage-name">Burned</div><div class="stage-count zero">0</div><div class="stage-total">14</div></div>
+  </div>
+
+  <p class="grid-title">Words in your queue</p>
+  <div class="tile-grid">
+    <div class="vtile"><div class="swatch">力</div><div class="mini-bar"><span class="done"></span><span class="done"></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="vtile"><div class="swatch">十六</div><div class="mini-bar"><span class="done"></span><span class="done"></span><span class="done"></span><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="vtile"><div class="swatch">女子</div><div class="mini-bar"><span class="done"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="vtile"><div class="swatch">入力</div><div class="mini-bar"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span></span><span></span><span></span></div></div>
+    <div class="vtile"><div class="swatch">全力</div><div class="mini-bar"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span></span><span></span></div></div>
+    <div class="vtile"><div class="swatch">強力</div><div class="mini-bar"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span></span></div></div>
+  </div>
+
+</main>
+
+<p class="note">
+  Wireframe 6 — Vocabulary Progress page, single-color stage breakdown +
+  per-item mini bars. Same layout reused for Kana &amp; Katakana (blue) and
+  Kanji (pink). Two things flagged above for your call: the plain-circle
+  stage icons (placeholder for WK's egg-to-turtle art) and 8 vs. 5 segments
+  on the mini bar. Screenshot + compare, then let me know what's next.
+</p>
+
+</body>
+</html>

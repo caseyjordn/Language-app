@@ -1,0 +1,243 @@
+<!--
+  WIREFRAME SAMPLE 7 of ? — Vocab page with the tiered leveling mechanic
+  from your WaniKani writeup, scoped to this one section (no cross-section
+  radical/kanji/vocab gating, per what we already agreed).
+
+  How this adapts WK's mechanic to a section with a user-supplied word list
+  instead of WK's official curriculum:
+  - Your vocab list gets split into ordered batches ("levels"), defaulted
+    here to 15 words per level — arbitrary placeholder, easy to change once
+    you tell me a real number or let it vary per level.
+  - Only the current level's words are open for lessons. Once you Guru most
+    of them (WK's own threshold is fuzzy/"most, not all" — I used 80% here
+    as a concrete placeholder), the section levels up and the next batch
+    unlocks.
+  - Level-up triggers a celebration banner (adapted from the
+    "レベルアップおめでとう！" banner in your first WK dashboard screenshot,
+    simplified — no mascot illustration, just the moment itself).
+
+  Also folded in from your last message: the stage-breakdown page from
+  wireframe 6 is now a compact inline widget (the "Level Progress" style
+  block below), not a standalone page. Full stage-by-stage counts are
+  still one click away in this widget, but they no longer own their own
+  full page.
+
+  Tile grid now distinguishes THREE states instead of two:
+  - solid purple = in review queue (this level, started)
+  - dashed purple = this level, not started yet
+  - gray with lock icon = next level, not unlocked yet
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 7 — Vocab leveling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-background:#FFFFFF;
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-widget-divider:#CAD0D6;
+    --color-page-background:#F4F4F4;
+
+    --color-blue:#00AAFF; --color-pink:#FF00AA;
+    --color-purple:#AA00FF; --color-purple-dark:#8600B9;
+    --color-charcoal:#6B7079;
+    --color-complete-bar:#35A753;
+    --color-locked-bg:#E7E9EB;
+    --color-locked-icon:#AEB4BA;
+
+    --border-radius-tight:4px;
+    --border-radius-normal:8px;
+    --border-radius-widget:16px;
+    --border-radius-pill:9999px;
+
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+    --font-weight-regular:350;
+    --font-weight-medium:500;
+    --font-weight-bold:600;
+    --font-weight-heavy:700;
+    --font-size-xxsmall:11px;
+    --font-size-xsmall:14px;
+    --font-size-small:16px;
+    --font-size-medium:18px;
+    --font-size-large:24px;
+    --font-size-xlarge:28px;
+
+    --spacing-xtight:8px;
+    --spacing-tight:12px;
+    --spacing-normal:16px;
+    --spacing-loose:24px;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);font-weight:var(--font-weight-regular);color:var(--color-widget-primary-text);min-height:100vh}
+
+  .topnav{display:flex;align-items:center;gap:var(--spacing-loose);padding:var(--spacing-tight) var(--spacing-loose);background:#fff;border-bottom:1px solid var(--color-widget-divider)}
+  .wordmark{font-size:var(--font-size-medium);font-weight:var(--font-weight-heavy);display:flex;gap:2px;white-space:nowrap}
+  .wordmark .jp{color:var(--color-pink)} .wordmark .dot{color:var(--color-blue)} .wordmark .en{color:var(--color-purple)}
+  .navlinks{display:flex;gap:var(--spacing-normal);flex:1}
+  .navlinks a{color:var(--color-widget-primary-text);text-decoration:none;font-weight:var(--font-weight-medium);font-size:var(--font-size-xsmall);padding:6px 2px;border-bottom:2px solid transparent}
+  .navlinks a.active{border-bottom-color:var(--color-purple)}
+  .navright{display:flex;align-items:center;gap:var(--spacing-normal)}
+  .icon-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--color-charcoal);font-size:15px}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#EDC8FF}
+
+  main{max-width:1000px;margin:0 auto;padding:var(--spacing-normal) var(--spacing-normal) 60px}
+
+  /* level-up celebration banner */
+  .levelup-banner{
+    background:var(--color-purple);color:#fff;
+    border-radius:var(--border-radius-widget);
+    padding:18px 24px;margin-top:var(--spacing-loose);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .levelup-banner .msg{font-size:var(--font-size-medium);font-weight:var(--font-weight-bold)}
+  .levelup-banner .sub{font-size:var(--font-size-xxsmall);opacity:.85;margin-top:2px;font-weight:var(--font-weight-regular)}
+  .levelup-banner .dismiss{background:rgba(255,255,255,.2);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer}
+
+  .page-header{display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-loose) 0 0}
+  .page-header h1{font-size:var(--font-size-large);font-weight:var(--font-weight-bold);margin:0;display:flex;align-items:center;gap:10px}
+  .page-header h1 .chip{width:30px;height:30px;border-radius:var(--border-radius-normal);background:var(--color-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Noto Sans JP",sans-serif;font-size:15px}
+
+  /* level progress widget (compact, replaces the old standalone page) */
+  .level-widget{background:#fff;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-widget);padding:var(--spacing-normal) var(--spacing-loose);margin:var(--spacing-normal) 0}
+  .level-widget-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .level-widget-head .title{font-size:var(--font-size-medium);font-weight:var(--font-weight-bold)}
+  .level-nav{display:flex;align-items:center;gap:10px;font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text)}
+  .level-nav a{color:var(--color-widget-secondary-text);text-decoration:none}
+  .wk-text{font-size:var(--font-size-xsmall);color:var(--color-widget-secondary-text);margin:0 0 10px}
+  .progress-track{height:10px;background:#E7E9EB;border-radius:var(--border-radius-tight);overflow:hidden;margin-bottom:8px}
+  .progress-fill{height:100%;background:var(--color-purple);border-radius:var(--border-radius-tight)}
+  .level-pips{display:flex;gap:3px;margin-bottom:4px}
+  .level-pips span{flex:1;height:6px;border-radius:2px;background:var(--color-locked-bg)}
+  .level-pips span.done{background:var(--color-purple)}
+  .level-footnote{font-size:var(--font-size-xxsmall);color:var(--color-widget-secondary-text)}
+  .stage-link{display:inline-block;margin-top:10px;font-size:var(--font-size-xxsmall);font-weight:var(--font-weight-bold);color:var(--color-purple-dark);text-decoration:none}
+
+  /* lessons/reviews pair */
+  .lr-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-normal);margin-bottom:var(--spacing-loose)}
+  .lr-widget{background:#fff;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-widget);padding:var(--spacing-normal) var(--spacing-loose)}
+  .widget-title-row{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+  .widget-title-row .title{font-size:var(--font-size-medium);font-weight:var(--font-weight-bold)}
+  .count-bubble{display:inline-flex;align-items:center;justify-content:center;background:var(--color-charcoal);color:#fff;border-radius:var(--border-radius-pill);font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);padding:1px 10px;min-width:22px}
+  .wk-button{border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-normal);padding:8px 14px;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-bold);color:var(--color-widget-primary-text);cursor:pointer;text-decoration:none;display:inline-block}
+  .wk-button.primary{background:var(--color-widget-primary-text);color:#fff;border-color:var(--color-widget-primary-text)}
+
+  .grid-title{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+  .grid-title .label{font-size:var(--font-size-small);font-weight:var(--font-weight-bold)}
+  .grid-title .count{font-size:var(--font-size-xxsmall);color:var(--color-widget-secondary-text)}
+  .tile-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));gap:10px;margin-bottom:var(--spacing-loose)}
+  .vtile{border-radius:var(--border-radius-normal);padding:10px 6px 9px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;position:relative}
+  .vtile .word{font-family:"Noto Sans JP",sans-serif;font-size:20px;font-weight:var(--font-weight-medium);line-height:1.2}
+  .vtile .reading{font-family:"Noto Sans JP",sans-serif;font-size:12px}
+  .vtile .meaning{font-size:11px}
+  .vtile--learned{background:var(--color-purple)}
+  .vtile--learned .word,.vtile--learned .reading{color:#fff}
+  .vtile--learned .meaning{color:#EDC8FF}
+  .vtile--locked-level{background:var(--color-purple)}
+  .vtile--not-started{background:#fff;border:1.5px dashed var(--color-purple)}
+  .vtile--not-started .word,.vtile--not-started .reading{color:var(--color-purple-dark)}
+  .vtile--not-started .meaning{color:var(--color-widget-secondary-text)}
+  .vtile--next-level{background:var(--color-locked-bg);border:1.5px solid var(--color-locked-bg)}
+  .vtile--next-level .word,.vtile--next-level .reading,.vtile--next-level .meaning{color:var(--color-locked-icon)}
+  .lock-badge{position:absolute;top:6px;right:6px;font-size:12px;color:var(--color-locked-icon)}
+
+  .note{max-width:1000px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wordmark"><span class="jp">日本</span><span class="dot">・</span><span class="en">Practice</span></div>
+  <div class="navlinks">
+    <a href="#">Dashboard</a>
+    <a class="active" href="#">Vocab</a>
+    <a href="#">Kana &amp; Katakana</a>
+    <a href="#">Kanji</a>
+    <a href="#">Speaking</a>
+    <a href="#">Photos</a>
+  </div>
+  <div class="navright"><div class="icon-btn">⌕</div><div class="avatar"></div></div>
+</nav>
+
+<main>
+
+  <div class="levelup-banner">
+    <div>
+      <div class="msg">🎉 Vocab Level 3 → 4!</div>
+      <div class="sub">You Guru'd 12 of 15 Level 3 words. Level 4's words just unlocked.</div>
+    </div>
+    <button class="dismiss">×</button>
+  </div>
+
+  <div class="page-header">
+    <h1><span class="chip" lang="ja">語</span>Vocabulary</h1>
+  </div>
+
+  <div class="level-widget">
+    <div class="level-widget-head">
+      <span class="title">Level Progress</span>
+      <div class="level-nav"><a href="#">‹</a><span>Vocab Level 4</span><a href="#">›</a></div>
+    </div>
+    <p class="wk-text">Guru most of this level's words to unlock Level 5.</p>
+    <div class="progress-track"><div class="progress-fill" style="width:13%"></div></div>
+    <div class="level-pips">
+      <span class="done"></span><span class="done"></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="level-footnote">2 of 15 words Guru'd this level</div>
+    <a class="stage-link" href="#">See full stage breakdown ›</a>
+  </div>
+
+  <div class="lr-row">
+    <div class="lr-widget">
+      <div class="widget-title-row"><span class="title">Lessons</span><span class="count-bubble">10</span></div>
+      <p class="wk-text">From your current level only.</p>
+      <a class="wk-button primary" href="#">Start lessons</a>
+    </div>
+    <div class="lr-widget">
+      <div class="widget-title-row"><span class="title">Reviews</span><span class="count-bubble">6</span></div>
+      <p class="wk-text">Due right now.</p>
+      <a class="wk-button primary" href="#">Start reviews</a>
+    </div>
+  </div>
+
+  <div class="grid-title"><span class="label">Level 4 words</span><span class="count">2 of 15 started</span></div>
+  <div class="tile-grid">
+    <a class="vtile vtile--learned" href="#"><div class="word">力</div><div class="reading">ちから</div><div class="meaning">Power</div></a>
+    <a class="vtile vtile--learned" href="#"><div class="word">十六</div><div class="reading">じゅうろく</div><div class="meaning">Sixteen</div></a>
+    <a class="vtile vtile--not-started" href="#"><div class="word">女子</div><div class="reading">じょし</div><div class="meaning">Girl</div></a>
+    <a class="vtile vtile--not-started" href="#"><div class="word">入力</div><div class="reading">にゅうりょく</div><div class="meaning">Input</div></a>
+    <a class="vtile vtile--not-started" href="#"><div class="word">全力</div><div class="reading">ぜんりょく</div><div class="meaning">Full effort</div></a>
+    <a class="vtile vtile--not-started" href="#"><div class="word">強力</div><div class="reading">きょうりょく</div><div class="meaning">Strong</div></a>
+  </div>
+
+  <div class="grid-title"><span class="label">Level 5 words</span><span class="count">locked</span></div>
+  <div class="tile-grid">
+    <div class="vtile vtile--next-level"><span class="lock-badge">🔒</span><div class="word">体力</div><div class="reading">たいりょく</div><div class="meaning">Physical strength</div></div>
+    <div class="vtile vtile--next-level"><span class="lock-badge">🔒</span><div class="word">電力</div><div class="reading">でんりょく</div><div class="meaning">Electric power</div></div>
+    <div class="vtile vtile--next-level"><span class="lock-badge">🔒</span><div class="word">馬力</div><div class="reading">ばりき</div><div class="meaning">Horsepower</div></div>
+    <div class="vtile vtile--next-level"><span class="lock-badge">🔒</span><div class="word">努力</div><div class="reading">どりょく</div><div class="meaning">Great effort</div></div>
+  </div>
+
+</main>
+
+<p class="note">
+  Wireframe 7 — the leveling mechanic itself. Defaults used here that need
+  your input once you're ready: batch size per level (15 words, arbitrary),
+  and the level-up threshold (80% Guru'd, a concrete stand-in for WK's own
+  fuzzy "most, not all" rule). Same Level Progress widget + locked-tile
+  pattern would apply to Kanji with its own count/threshold. Screenshot +
+  compare, then tell me if the leveling shape feels right before I lock in
+  real numbers.
+</p>
+
+</body>
+</html>

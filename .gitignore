@@ -1,0 +1,12 @@
+# Reference material (source docs, screenshots, the old app) — not needed
+# to run the deployed app, since all that content is already transcribed
+# into index.html's data arrays. Stays on your local disk, just not pushed.
+files/
+
+# Editor-specific, not part of the app
+.vscode/
+
+# Scratch files from development/build scripts, if ever left behind
+_tmp_check.js
+vocab-array-output.txt
+vocab-body-only.txt

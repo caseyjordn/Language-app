@@ -1,0 +1,306 @@
+<!--
+  WIREFRAME SAMPLE 22 of ? — Speaking practice screen.
+
+  Actually wired to the real browser Web Speech API (SpeechRecognition,
+  ja-JP), not just a mock — click the mic and it will genuinely listen and
+  transcribe, same as it would in the shipped app. Two things flagged
+  rather than silently worked around:
+
+  1. Browser/environment support varies. SpeechRecognition is Chrome/Edge
+     (webkit-prefixed) only — no Firefox, and VS Code's embedded Live
+     Preview browser may not expose mic permissions at all. This screen
+     detects support and falls back to a manual text-input field with the
+     same message "not quite/correct" logic if the mic API isn't
+     available, so the screen still works, just without voice input. Test
+     this one in a real Chrome tab, not just the embedded preview, to see
+     the mic path.
+  2. This only proves you SAID something matching the target words (via
+     transcription-accuracy, same tolerant/fuzzy matching as Translate
+     mode) — it has no way to judge pitch-accent or intonation. That's the
+     real limitation called out in the project brief, not something this
+     screen works around.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 22 — Speaking practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-page-background:#F4F4F4;
+    --color-teal:#00B39F; --color-teal-dark:#017F70; --color-teal-light:#CFF3EE;
+    --color-correct:#35A753;
+    --color-incorrect:#E01F14;
+    --border-radius-normal:8px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);color:var(--color-widget-primary-text);min-height:100vh}
+
+  .hero{background:var(--color-teal);color:#fff;padding:16px 20px 34px;text-align:center;transition:background .2s ease}
+  .hero.state-correct{background:var(--color-correct)}
+  .hero.state-incorrect{background:var(--color-incorrect)}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
+  .hero-top .home{opacity:.9}
+  .hero-top .count{font-size:13px;background:rgba(255,255,255,.18);border-radius:var(--border-radius-pill);padding:3px 12px}
+  .session-bar{display:flex;gap:2px;max-width:640px;margin:0 auto}
+  .session-bar span{flex:1;height:6px;border-radius:2px;background:rgba(255,255,255,.3)}
+  .session-bar span.done{background:#fff}
+
+  .prompt-jp{font-family:"Noto Sans JP",sans-serif;font-size:32px;margin-top:22px;line-height:1.3}
+  .prompt-romaji{font-size:15px;opacity:.85;margin-top:4px}
+  .prompt-en{font-size:13px;opacity:.7;margin-top:2px}
+
+  .mic-card{max-width:520px;margin:-24px auto 0;background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.06);padding:30px 30px 24px;text-align:center}
+  .mic-btn{
+    width:88px;height:88px;border-radius:50%;border:none;background:var(--color-teal);color:#fff;
+    font-size:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .mic-btn.listening{background:var(--color-incorrect);animation:pulse 1.1s ease-in-out infinite}
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(224,31,20,.35); }
+    50%{ box-shadow:0 0 0 14px rgba(224,31,20,0); }
+  }
+  .mic-status{margin-top:14px;font-size:13px;color:var(--color-widget-secondary-text);min-height:18px}
+  .transcript{
+    margin-top:14px;min-height:28px;font-family:"Noto Sans JP",sans-serif;font-size:19px;
+    color:var(--color-widget-primary-text);
+  }
+  .transcript.correct{color:var(--color-correct)}
+  .transcript.incorrect{color:var(--color-incorrect)}
+
+  .fallback{margin-top:18px;padding-top:16px;border-top:1px solid var(--color-widget-border)}
+  .fallback.hidden{display:none}
+  .fallback label{font-size:12px;color:var(--color-widget-secondary-text);display:block;margin-bottom:6px}
+  .fallback-row{display:flex;gap:8px}
+  input.fallback-input{flex:1;border:1px solid var(--color-widget-border);border-radius:8px;font-family:"Noto Sans JP",sans-serif;font-size:15px;padding:8px 10px}
+  .btn{border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;background:var(--color-teal);color:#fff}
+
+  .unsupported-note{
+    max-width:520px;margin:14px auto 0;background:#FFF7E6;border:1px solid #F0D48A;color:#8A6D1F;
+    border-radius:10px;padding:12px 16px;font-size:12.5px;display:none;
+  }
+  .unsupported-note.visible{display:block}
+
+  .feedback-row{margin-top:16px;font-size:14px;font-weight:700;min-height:20px}
+  .feedback-row.correct{color:var(--color-correct)}
+  .feedback-row.incorrect{color:var(--color-incorrect)}
+
+  .confetti-piece{position:fixed;top:0;left:0;width:8px;height:14px;pointer-events:none;z-index:50;animation-name:confetti-pop;animation-timing-function:cubic-bezier(0,.7,.2,1);animation-fill-mode:forwards}
+  @keyframes confetti-pop{
+    0%   { transform:translate(0,0) rotate(0deg) scale(.6); opacity:1; }
+    70%  { opacity:1; }
+    100% { transform:translate(calc(var(--fx) * 1px), calc(var(--fy) * 1px)) rotate(calc(var(--rot) * 1deg)) scale(1); opacity:0; }
+  }
+
+  .note{max-width:640px;margin:26px auto 76px;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+  <div class="hero-top">
+    <div class="home">🏠</div>
+    <div class="count" id="sessionCount">Phrase 2 of 8</div>
+  </div>
+  <div class="session-bar" id="sessionBar">
+    <span class="done"></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="prompt-jp">今日は友だちと勉強します。</div>
+  <div class="prompt-romaji">kyou wa tomodachi to benkyou shimasu</div>
+  <div class="prompt-en">Today I'll study with a friend.</div>
+</div>
+
+<div class="mic-card">
+  <button class="mic-btn" id="micBtn">🎤</button>
+  <div class="mic-status" id="micStatus">Tap the mic and say the phrase above</div>
+  <div class="transcript" id="transcript"></div>
+  <div class="feedback-row" id="feedbackRow"></div>
+
+  <div class="unsupported-note" id="unsupportedNote">
+    Speech recognition isn't available in this browser/preview — try a real
+    Chrome or Edge tab for the mic. Using the text fallback below instead.
+  </div>
+
+  <div class="fallback" id="fallback">
+    <label>Or type what you said:</label>
+    <div class="fallback-row">
+      <input class="fallback-input" id="fallbackInput" type="text" placeholder="kyou wa tomodachi to benkyou shimasu" autocomplete="off">
+      <button class="btn" id="fallbackCheck">Check</button>
+    </div>
+  </div>
+</div>
+
+<p class="note">
+  Wireframe 22 — Speaking practice, real Web Speech API wired up (Chrome/
+  Edge, needs mic permission). Say "kyou wa tomodachi to benkyou shimasu"
+  (or close to it) for the correct path, or the text fallback works
+  identically if your browser/preview doesn't support the mic. Screenshot
+  + compare, then tell me what's next.
+</p>
+
+<script>
+  var hero = document.getElementById('hero');
+  var micBtn = document.getElementById('micBtn');
+  var micStatus = document.getElementById('micStatus');
+  var transcriptEl = document.getElementById('transcript');
+  var feedbackRow = document.getElementById('feedbackRow');
+  var unsupportedNote = document.getElementById('unsupportedNote');
+  var fallbackInput = document.getElementById('fallbackInput');
+  var fallbackCheck = document.getElementById('fallbackCheck');
+  var sessionBar = document.getElementById('sessionBar');
+  var sessionCount = document.getElementById('sessionCount');
+  var itemNum = 2, totalItems = 8;
+  var locked = false;
+
+  function normalize(s){ return s.trim().toLowerCase().replace(/[.,、。\s!！]/g, ''); }
+  var accepted = ['きょうはともだちとべんきょうします', 'kyou wa tomodachi to benkyou shimasu', 'kyowatomodachitobenkyoshimasu'].map(normalize);
+
+  function levenshtein(a, b){
+    var m = a.length, n = b.length;
+    var dp = new Array(n + 1);
+    for (var j = 0; j <= n; j++) dp[j] = j;
+    for (var i = 1; i <= m; i++){
+      var prev = dp[0]; dp[0] = i;
+      for (j = 1; j <= n; j++){
+        var tmp = dp[j];
+        dp[j] = a[i-1] === b[j-1] ? prev : 1 + Math.min(prev, dp[j], dp[j-1]);
+        prev = tmp;
+      }
+    }
+    return dp[n];
+  }
+  function isCloseEnough(val){
+    for (var i = 0; i < accepted.length; i++){
+      var target = accepted[i];
+      if (val === target) return true;
+      var tolerance = Math.max(1, Math.floor(target.length * 0.15));
+      if (levenshtein(val, target) <= tolerance) return true;
+    }
+    return false;
+  }
+
+  var confettiColors = ['#00B39F','#FF00AA','#00AAFF','#FFC700'];
+  function burstConfetti(){
+    var originX = window.innerWidth / 2, originY = window.innerHeight * 0.75;
+    for (var i = 0; i < 46; i++){
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = originX + 'px'; piece.style.top = originY + 'px';
+      piece.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      var angleRad = (-90 + (Math.random()*120-60)) * Math.PI / 180;
+      var dist = 160 + Math.random()*260;
+      piece.style.setProperty('--fx', (Math.cos(angleRad)*dist).toFixed(1));
+      piece.style.setProperty('--fy', (Math.sin(angleRad)*dist).toFixed(1));
+      piece.style.setProperty('--rot', Math.floor(180+Math.random()*360));
+      piece.style.animationDuration = (0.7+Math.random()*0.4)+'s';
+      document.body.appendChild(piece);
+      (function(p){ p.addEventListener('animationend', function(){ p.remove(); }); })(piece);
+    }
+  }
+
+  function advanceSession(){
+    itemNum = itemNum < totalItems ? itemNum + 1 : 1;
+    sessionCount.textContent = 'Phrase ' + itemNum + ' of ' + totalItems;
+    sessionBar.querySelectorAll('span').forEach(function(s,i){ s.classList.toggle('done', i < itemNum-1); });
+  }
+
+  function resetForNext(){
+    locked = false;
+    transcriptEl.textContent = '';
+    transcriptEl.className = 'transcript';
+    feedbackRow.textContent = '';
+    feedbackRow.className = 'feedback-row';
+    hero.classList.remove('state-correct','state-incorrect');
+    micStatus.textContent = 'Tap the mic and say the phrase above';
+    fallbackInput.value = '';
+  }
+
+  function handleResult(heard){
+    if (locked) return;
+    var val = normalize(heard);
+    transcriptEl.textContent = heard;
+    if (isCloseEnough(val)) {
+      locked = true;
+      transcriptEl.classList.add('correct');
+      hero.classList.add('state-correct');
+      feedbackRow.textContent = 'Matched!';
+      feedbackRow.classList.add('correct');
+      burstConfetti();
+      setTimeout(function(){ advanceSession(); resetForNext(); }, 1100);
+    } else {
+      transcriptEl.classList.add('incorrect');
+      hero.classList.add('state-incorrect');
+      feedbackRow.textContent = "Didn't quite match — try again";
+      feedbackRow.classList.add('incorrect');
+      setTimeout(function(){ hero.classList.remove('state-incorrect'); }, 500);
+    }
+  }
+
+  var SpeechRecognitionImpl = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var recognition = null;
+  var listening = false;
+
+  if (SpeechRecognitionImpl) {
+    recognition = new SpeechRecognitionImpl();
+    recognition.lang = 'ja-JP';
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = function(){
+      listening = true;
+      micBtn.classList.add('listening');
+      micStatus.textContent = 'Listening…';
+    };
+    recognition.onresult = function(e){
+      var text = '';
+      for (var i = 0; i < e.results.length; i++) text += e.results[i][0].transcript;
+      transcriptEl.textContent = text;
+      if (e.results[e.results.length - 1].isFinal) handleResult(text);
+    };
+    recognition.onerror = function(e){
+      micStatus.textContent = 'Mic error (' + e.error + ') — try the text field below';
+      unsupportedNote.classList.add('visible');
+    };
+    recognition.onend = function(){
+      listening = false;
+      micBtn.classList.remove('listening');
+      if (!locked) micStatus.textContent = 'Tap the mic and say the phrase above';
+    };
+
+    micBtn.addEventListener('click', function(){
+      if (locked) return;
+      if (listening) { recognition.stop(); return; }
+      transcriptEl.textContent = '';
+      feedbackRow.textContent = '';
+      feedbackRow.className = 'feedback-row';
+      try { recognition.start(); } catch (err) { /* already started */ }
+    });
+  } else {
+    unsupportedNote.classList.add('visible');
+    micBtn.disabled = true;
+    micBtn.style.opacity = '.4';
+    micStatus.textContent = 'Mic not available — use the text field below';
+  }
+
+  fallbackCheck.addEventListener('click', function(){
+    if (!fallbackInput.value.trim()) return;
+    handleResult(fallbackInput.value);
+  });
+  fallbackInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') fallbackCheck.click();
+  });
+</script>
+
+</body>
+</html>

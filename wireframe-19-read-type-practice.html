@@ -1,0 +1,342 @@
+<!--
+  WIREFRAME SAMPLE 19 of ? — "Read & Type" practice screen (Sentences tab).
+
+  Judgment call, flagging rather than guessing silently: the old app's
+  Sentence Reader tutor mechanic (found in japanese-practice_OLDAPP.html)
+  already does exactly this — show a hiragana-only sentence, have the
+  learner transcribe it into romaji, with an audio play button. "Read &
+  Type" reuses that proven mechanic rather than inventing a new one, so
+  this is reading/transcription practice (prove you can read it), not
+  translation — Translate mode (not built yet) is where meaning comes in.
+
+  Same interaction shell as the review quiz (wireframes 13/17): colored
+  hero + progress, typed input, confetti + auto-advance on correct, shake +
+  a review/help panel on incorrect. Blue for this tab, per the Sentences
+  hub. Audio button reused from the old app's per-sentence "Hear sentence"
+  pattern.
+
+  Accepts romaji with or without spaces/punctuation, plus small typos
+  (Levenshtein edit-distance tolerance, same mechanism now used in
+  Translate mode per your feedback there) for this demo.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 19 — Read &amp; Type practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-page-background:#F4F4F4;
+    --color-blue:#00AAFF; --color-blue-dark:#0069AC;
+    --color-correct:#35A753;
+    --color-incorrect:#E01F14;
+    --border-radius-normal:8px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);color:var(--color-widget-primary-text);min-height:100vh}
+
+  .hero{background:var(--color-blue);color:#fff;padding:16px 20px 34px;text-align:center;transition:background .2s ease}
+  .hero.state-correct{background:var(--color-correct)}
+  .hero.state-incorrect{background:var(--color-incorrect)}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
+  .hero-top .home{opacity:.9}
+  .hero-top .count{font-size:13px;background:rgba(255,255,255,.18);border-radius:var(--border-radius-pill);padding:3px 12px}
+  .session-bar{display:flex;gap:2px;max-width:640px;margin:0 auto}
+  .session-bar span{flex:1;height:6px;border-radius:2px;background:rgba(255,255,255,.3)}
+  .session-bar span.done{background:#fff}
+
+  .sentence-jp{font-family:"Noto Sans JP",sans-serif;font-size:30px;margin-top:22px;line-height:1.5}
+  .hear-btn{
+    margin-top:10px;display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.18);border:none;color:#fff;border-radius:var(--border-radius-pill);
+    padding:6px 16px;font-size:13px;font-weight:700;cursor:pointer;
+  }
+
+  .quiz-card{max-width:560px;margin:-20px auto 0;background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.06);padding:26px 30px 24px;position:relative}
+  .question-label{display:inline-block;background:var(--color-blue);color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-radius:6px;padding:4px 10px;margin-bottom:14px}
+  input.answer{width:100%;border:none;border-bottom:2px solid var(--color-widget-border);font-size:20px;padding:8px 2px;outline:none;background:transparent}
+  input.answer:focus{border-bottom-color:var(--color-blue)}
+  input.answer.correct{border-bottom-color:var(--color-correct);color:var(--color-correct)}
+  input.answer.incorrect{border-bottom-color:var(--color-incorrect);color:var(--color-incorrect)}
+
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)}
+    30%,50%,70%{transform:translateX(-8px)} 40%,60%{transform:translateX(8px)}
+  }
+  input.answer.shake{animation:shake .4s}
+
+  .feedback-row{display:flex;align-items:center;justify-content:space-between;margin-top:18px;min-height:40px}
+  .feedback-msg{font-size:14px;font-weight:700}
+  .feedback-msg.correct{color:var(--color-correct)}
+  .feedback-msg.incorrect{color:var(--color-incorrect)}
+  .btn{border:none;border-radius:var(--border-radius-normal);padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer}
+  .btn.check{background:var(--color-blue);color:#fff}
+  .hint{font-size:12px;color:var(--color-widget-secondary-text);margin-top:6px}
+
+  .review-panel{max-width:560px;margin:14px auto 0;background:#fff;border-radius:16px;border:1px solid var(--color-widget-border);padding:20px 30px;display:none}
+  .review-panel.visible{display:block}
+  .review-panel .rp-title{font-size:12px;font-weight:700;color:var(--color-incorrect);text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
+  .word-breakdown{display:flex;gap:10px;flex-wrap:wrap}
+  .word-breakdown .w{
+    background:#F4F4F4;border-radius:var(--border-radius-normal);padding:8px 12px;text-align:center;
+    cursor:pointer;border:2px solid transparent;transition:background .15s ease,border-color .15s ease;
+  }
+  .word-breakdown .w:hover{background:#EAECEE}
+  .word-breakdown .w.active{background:var(--color-blue,#00AAFF);border-color:var(--color-blue-dark,#0069AC)}
+  .word-breakdown .w.active .jp,.word-breakdown .w.active .romaji{color:#fff}
+  .word-breakdown .w .jp{font-family:"Noto Sans JP",sans-serif;font-size:16px}
+  .word-breakdown .w .romaji{font-size:11px;color:var(--color-widget-secondary-text)}
+  .word-detail{
+    display:none;margin-top:14px;background:#EFF7FF;border:1px solid var(--color-blue-light,#CBEBFF);
+    border-radius:var(--border-radius-normal);padding:14px 16px;
+  }
+  .word-detail.visible{display:block}
+  .word-detail .wd-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+  .word-detail .wd-head .jp{font-family:"Noto Sans JP",sans-serif;font-size:20px}
+  .word-detail .wd-head .romaji{font-size:13px;color:var(--color-widget-secondary-text)}
+  .word-detail .wd-tag{
+    display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;
+    background:var(--color-blue-dark,#0069AC);color:#fff;border-radius:4px;padding:2px 7px;margin-bottom:6px;
+  }
+  .word-detail .wd-explain{font-size:13px;line-height:1.55;color:var(--color-widget-primary-text)}
+  .correct-answer{margin-top:14px;font-size:14px}
+  .correct-answer b{color:var(--color-correct)}
+
+  .confetti-piece{position:fixed;top:0;left:0;width:8px;height:14px;pointer-events:none;z-index:50;animation-name:confetti-pop;animation-timing-function:cubic-bezier(0,.7,.2,1);animation-fill-mode:forwards}
+  @keyframes confetti-pop{
+    0%   { transform:translate(0,0) rotate(0deg) scale(.6); opacity:1; }
+    70%  { opacity:1; }
+    100% { transform:translate(calc(var(--fx) * 1px), calc(var(--fy) * 1px)) rotate(calc(var(--rot) * 1deg)) scale(1); opacity:0; }
+  }
+
+  .note{max-width:640px;margin:26px auto 76px;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+  <div class="hero-top">
+    <div class="home">🏠</div>
+    <div class="count" id="sessionCount">Sentence 3 of 10</div>
+  </div>
+  <div class="session-bar" id="sessionBar">
+    <span class="done"></span><span class="done"></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="sentence-jp">力の大きさが、ちがう。</div>
+  <button class="hear-btn" id="hearBtn">▶ Hear sentence</button>
+</div>
+
+<div class="quiz-card">
+  <div class="question-label">Type the reading (romaji)</div>
+  <input class="answer" id="answerInput" type="text" placeholder="chikara no ookisa ga, chigau" autocomplete="off" autofocus>
+  <div class="hint">Read the sentence above, then type its reading in romaji.</div>
+  <div class="feedback-row">
+    <div class="feedback-msg" id="feedbackMsg"></div>
+    <button class="btn check" id="checkBtn">Check</button>
+  </div>
+</div>
+
+<div class="review-panel" id="reviewPanel">
+  <div class="rp-title">⚠ Not quite — here's the breakdown</div>
+  <div class="word-breakdown" id="wordBreakdown">
+    <div class="w" data-jp="力" data-romaji="chikara" data-tag="Noun" data-explain="The noun you already know from Vocab/Kanji — 'power, strength.' Here it's the thing being described as different.">
+      <div class="jp">力</div><div class="romaji">chikara</div>
+    </div>
+    <div class="w" data-jp="の" data-romaji="no" data-tag="Particle" data-explain="Possessive/attributive particle — links two nouns like English 's or 'of.' Here it connects 力 to 大きさ: '力の大きさ' = 'the size of [the] power.'">
+      <div class="jp">の</div><div class="romaji">no</div>
+    </div>
+    <div class="w" data-jp="大きさ" data-romaji="ookisa" data-tag="Noun" data-explain="'Size' — formed from the adjective 大きい (big) plus the ending さ, which turns an adjective into a noun (bigness → size).">
+      <div class="jp">大きさ</div><div class="romaji">ookisa</div>
+    </div>
+    <div class="w" data-jp="が" data-romaji="ga" data-tag="Particle" data-explain="Subject marker — flags '力の大きさ' (the size of the power) as the grammatical subject of the sentence: what's being said to differ.">
+      <div class="jp">が</div><div class="romaji">ga</div>
+    </div>
+    <div class="w" data-jp="ちがう" data-romaji="chigau" data-tag="Verb" data-explain="'To differ / be different' — the main verb of the sentence, describing what the subject (力の大きさ) does.">
+      <div class="jp">ちがう</div><div class="romaji">chigau</div>
+    </div>
+  </div>
+
+  <div class="word-detail" id="wordDetail">
+    <div class="wd-tag" id="wdTag"></div>
+    <div class="wd-head"><span class="jp" id="wdJp"></span><span class="romaji" id="wdRomaji"></span></div>
+    <div class="wd-explain" id="wdExplain"></div>
+  </div>
+
+  <div class="correct-answer">Full reading: <b>chikara no ookisa ga, chigau</b></div>
+</div>
+
+<p class="note">
+  Wireframe 19 — Read &amp; Type practice. Try it: type "chikara no ookisa
+  ga chigau" (spacing/punctuation don't matter) for the correct path
+  (confetti + auto-advance), or anything else for the wrong path (shake +
+  word-by-word breakdown panel, instead of the lesson-content review panel
+  from Kanji/Vocab reviews, since there's no "lesson" behind a sentence —
+  just the words that make it up). Screenshot + compare, then tell me
+  what's next — the Translate mode, or refining this one.
+</p>
+
+<script>
+  var input = document.getElementById('answerInput');
+  var checkBtn = document.getElementById('checkBtn');
+  var feedback = document.getElementById('feedbackMsg');
+  var hero = document.getElementById('hero');
+  var reviewPanel = document.getElementById('reviewPanel');
+  var sessionBar = document.getElementById('sessionBar');
+  var sessionCount = document.getElementById('sessionCount');
+  var hearBtn = document.getElementById('hearBtn');
+  var locked = false;
+  var itemNum = 3;
+  var totalItems = 10;
+
+  function normalize(s){
+    return s.trim().toLowerCase().replace(/[.,、。\s]/g, '');
+  }
+  var accepted = [normalize('chikara no ookisa ga chigau')];
+
+  // small Levenshtein edit-distance check, so a minor typo doesn't get
+  // marked wrong — same tolerant-matching approach used in Translate mode
+  function levenshtein(a, b){
+    var m = a.length, n = b.length;
+    var dp = new Array(n + 1);
+    for (var j = 0; j <= n; j++) dp[j] = j;
+    for (var i = 1; i <= m; i++){
+      var prev = dp[0];
+      dp[0] = i;
+      for (j = 1; j <= n; j++){
+        var tmp = dp[j];
+        dp[j] = a[i-1] === b[j-1] ? prev : 1 + Math.min(prev, dp[j], dp[j-1]);
+        prev = tmp;
+      }
+    }
+    return dp[n];
+  }
+  function isCloseEnough(val){
+    for (var i = 0; i < accepted.length; i++){
+      var target = accepted[i];
+      if (val === target) return true;
+      var tolerance = Math.max(1, Math.floor(target.length * 0.12));
+      if (levenshtein(val, target) <= tolerance) return true;
+    }
+    return false;
+  }
+
+  var confettiColors = ['#00AAFF','#FF00AA','#AA00FF','#FFC700'];
+  function burstConfetti(){
+    var originX = window.innerWidth / 2;
+    var originY = window.innerHeight * 0.75;
+    for (var i = 0; i < 46; i++){
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = originX + 'px';
+      piece.style.top = originY + 'px';
+      piece.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      var angleDeg = -90 + (Math.random() * 120 - 60);
+      var angleRad = angleDeg * Math.PI / 180;
+      var burstDist = 160 + Math.random() * 260;
+      piece.style.setProperty('--fx', (Math.cos(angleRad) * burstDist).toFixed(1));
+      piece.style.setProperty('--fy', (Math.sin(angleRad) * burstDist).toFixed(1));
+      piece.style.setProperty('--rot', Math.floor(180 + Math.random()*360));
+      piece.style.animationDuration = (0.7 + Math.random()*0.4) + 's';
+      document.body.appendChild(piece);
+      (function(p){ p.addEventListener('animationend', function(){ p.remove(); }); })(piece);
+    }
+  }
+
+  function resetForNextQuestion(){
+    input.value = '';
+    input.classList.remove('correct','incorrect','shake');
+    feedback.textContent = '';
+    feedback.className = 'feedback-msg';
+    hero.classList.remove('state-correct','state-incorrect');
+    reviewPanel.classList.remove('visible');
+    locked = false;
+    input.focus();
+  }
+
+  function advanceSession(){
+    itemNum = itemNum < totalItems ? itemNum + 1 : 1;
+    sessionCount.textContent = 'Sentence ' + itemNum + ' of ' + totalItems;
+    var doneSpans = sessionBar.querySelectorAll('span');
+    doneSpans.forEach(function(s, i){ s.classList.toggle('done', i < itemNum - 1); });
+  }
+
+  function check(){
+    if (locked) return;
+    var val = normalize(input.value);
+    if (!val) return;
+    var isCorrect = isCloseEnough(val);
+    if (isCorrect) {
+      locked = true;
+      input.classList.remove('incorrect','shake');
+      input.classList.add('correct');
+      hero.classList.remove('state-incorrect');
+      hero.classList.add('state-correct');
+      feedback.textContent = 'Correct!';
+      feedback.className = 'feedback-msg correct';
+      reviewPanel.classList.remove('visible');
+      burstConfetti();
+      setTimeout(function(){
+        advanceSession();
+        resetForNextQuestion();
+      }, 1100);
+    } else {
+      input.classList.remove('shake');
+      void input.offsetWidth;
+      input.classList.add('incorrect','shake');
+      hero.classList.add('state-incorrect');
+      feedback.textContent = 'Not quite — try again';
+      feedback.className = 'feedback-msg incorrect';
+      reviewPanel.classList.add('visible');
+      setTimeout(function(){ hero.classList.remove('state-incorrect'); }, 500);
+    }
+  }
+
+  checkBtn.addEventListener('click', check);
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') check();
+    if (locked) return;
+    input.classList.remove('correct','incorrect');
+  });
+  hearBtn.addEventListener('click', function(){
+    hearBtn.textContent = '🔊 Playing…';
+    setTimeout(function(){ hearBtn.textContent = '▶ Hear sentence'; }, 800);
+  });
+
+  // word-breakdown click-to-explain
+  var wordBreakdown = document.getElementById('wordBreakdown');
+  var wordDetail = document.getElementById('wordDetail');
+  var wdTag = document.getElementById('wdTag');
+  var wdJp = document.getElementById('wdJp');
+  var wdRomaji = document.getElementById('wdRomaji');
+  var wdExplain = document.getElementById('wdExplain');
+
+  wordBreakdown.addEventListener('click', function(e){
+    var tile = e.target.closest('.w');
+    if (!tile) return;
+    var alreadyActive = tile.classList.contains('active');
+    wordBreakdown.querySelectorAll('.w').forEach(function(w){ w.classList.remove('active'); });
+    if (alreadyActive) {
+      wordDetail.classList.remove('visible');
+      return;
+    }
+    tile.classList.add('active');
+    wdTag.textContent = tile.dataset.tag;
+    wdJp.textContent = tile.dataset.jp;
+    wdRomaji.textContent = tile.dataset.romaji;
+    wdExplain.textContent = tile.dataset.explain;
+    wordDetail.classList.add('visible');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!--
+  WIREFRAME SAMPLE 12 of ? — Lesson screen, merged approach per your latest
+  feedback: keep it one continuous scrolling page (like wireframe 10) but
+  keep the hero band + tab bar from wireframe 11 — hero shown once at the
+  top (not repeated per step), and the tab bar becomes anchor navigation:
+  clicking a tab scrolls down to that section on the same page instead of
+  swapping out the content entirely.
+
+  Changes from wireframe 11:
+  - No "Radicals" tab/section anywhere — omitted per your instruction,
+    consistent with skipping the radicals tier entirely.
+  - Added a dedicated Mnemonic subsection under BOTH Meaning and Reading
+    (WK has one under each, not just Reading) — wireframe 10 only had a
+    loose explanation paragraph under Meaning; this makes it an explicit
+    labeled block matching the Reading Mnemonic + Hint pattern.
+  - Tab bar is now sticky under the hero and its links are anchors (#kanji,
+    #meaning, #reading, #context) rather than separate screens.
+
+  Shown here: a Vocab lesson (力 / Power, purple). Kanji lessons would
+  reuse this exact shell in pink, with tabs Meaning / Reading / Examples
+  only (no Kanji Composition tab — that's specific to vocab being built
+  from kanji, and no Radicals either).
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 12 — Lesson (single scroll + anchor tabs)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-widget-border:#CAD0D6;
+    --color-widget-primary-text:#333333;
+    --color-widget-secondary-text:#6B7079;
+    --color-page-background:#F4F4F4;
+    --color-purple:#AA00FF; --color-purple-dark:#8600B9; --color-purple-light:#EDC8FF;
+    --color-tabbar:#2C2E35;
+    --border-radius-normal:8px;
+    --border-radius-pill:9999px;
+    --font-family-default:"Noto Sans","Noto Sans JP","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--color-page-background);font-family:var(--font-family-default);color:var(--color-widget-primary-text)}
+
+  .hero{position:relative;padding:18px 24px 30px;text-align:center;color:#fff;background:var(--color-purple)}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;max-width:900px;margin:0 auto}
+  .hero-top .home{display:flex;align-items:center;gap:6px;color:#fff;opacity:.9}
+  .hero-top .counts{display:flex;gap:10px;font-size:12px}
+  .hero-top .counts span{background:rgba(255,255,255,.18);border-radius:var(--border-radius-pill);padding:2px 9px}
+  .hero .char{font-family:"Noto Sans JP",sans-serif;font-size:64px;line-height:1;margin:14px 0 4px}
+  .hero .meaning{font-size:20px;font-weight:500}
+
+  .tabbar{
+    background:var(--color-tabbar);display:flex;justify-content:center;gap:32px;
+    padding:12px 0;position:sticky;top:0;z-index:10;
+  }
+  .tabbar a{color:#8A8D97;font-size:14px;font-weight:600;text-decoration:none}
+  .tabbar a:hover{color:#fff}
+
+  main{max-width:820px;margin:0 auto;padding:0 24px 140px}
+  section{background:#fff;margin-top:20px;padding:26px 40px;border-radius:12px;scroll-margin-top:56px}
+  h2{font-size:22px;font-weight:400;margin:0 0 14px;border-bottom:1px solid #eee;padding-bottom:12px}
+  h3.mnemonic-label{font-size:14px;font-weight:700;color:var(--color-purple-dark);text-transform:uppercase;letter-spacing:.03em;margin:22px 0 8px}
+
+  .field-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:10px}
+  .field .k{font-size:12px;color:var(--color-widget-secondary-text);margin-bottom:2px}
+  .field .v{font-size:16px}
+  .field .v.primary{font-weight:700}
+
+  .prose{font-size:15px;line-height:1.7}
+  .prose .hl{background:var(--color-purple-light);color:var(--color-purple-dark);padding:0 4px;border-radius:3px}
+  .hint-box{background:#F2F2F2;border-radius:var(--border-radius-normal);padding:14px 18px;margin-top:10px}
+  .hint-box .lbl{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#555;margin-bottom:6px}
+
+  .reading-row{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .reading-jp{font-family:"Noto Sans JP",sans-serif;font-size:24px}
+  .audio-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-pill);padding:5px 12px;font-size:12px;font-weight:700;color:var(--color-widget-primary-text);cursor:pointer}
+
+  .composition-row{display:flex;gap:14px;margin:14px 0}
+  .ktile{background:var(--color-purple);color:#fff;border-radius:var(--border-radius-normal);padding:14px 18px;text-align:center}
+  .ktile .k{font-family:"Noto Sans JP",sans-serif;font-size:22px}
+  .ktile .m{font-size:11px;margin-top:4px}
+
+  .combo-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:12px}
+  .combo-list .item{padding:8px 12px;border-radius:var(--border-radius-normal);background:#F4F4F4;font-family:"Noto Sans JP",sans-serif;font-size:15px;margin-bottom:6px}
+  .sentence{margin-bottom:10px}
+  .sentence .jp{font-family:"Noto Sans JP",sans-serif;font-size:15px}
+  .sentence .en{
+    font-size:13px;color:var(--color-widget-secondary-text);
+    cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  }
+  /* blur lives on an inner span, not the row itself — filter on a parent
+     would blur the "tap to reveal" label too, since CSS filter composites
+     the whole subtree regardless of a child's own filter:none */
+  .sentence .en .en-text{filter:blur(5px);transition:filter .15s ease;user-select:none}
+  .sentence .en:hover .en-text{filter:blur(3px)}
+  .sentence .en.revealed .en-text{filter:none;user-select:text}
+  .sentence .en .reveal-hint{font-size:10px;font-weight:700;color:var(--color-purple-dark);text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+  .sentence .en.revealed .reveal-hint{display:none}
+
+  .session-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--color-widget-border);padding:14px 24px;display:flex;justify-content:space-between}
+  .wk-button{border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-normal);padding:10px 20px;font-size:14px;font-weight:700;color:var(--color-widget-primary-text);cursor:pointer}
+  .wk-button.primary{background:var(--color-purple);color:#fff;border-color:var(--color-purple)}
+
+  .note{max-width:820px;margin:20px auto 0;padding:0 16px;font-size:12.5px;color:#888}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-top">
+    <div class="home">🏠</div>
+    <div class="counts"><span>K 0</span><span>V 10</span><span>✓ 3</span></div>
+  </div>
+  <div class="char">力</div>
+  <div class="meaning">Power</div>
+</div>
+
+<div class="tabbar">
+  <a href="#kanji-composition">Kanji Composition</a>
+  <a href="#meaning">Meaning</a>
+  <a href="#reading">Reading</a>
+  <a href="#context">Context</a>
+</div>
+
+<main>
+
+  <section id="kanji-composition">
+    <h2>Kanji Composition</h2>
+    <p class="prose">This vocabulary is made up of a single kanji:</p>
+    <div class="composition-row">
+      <div class="ktile"><div class="k">力</div><div class="m">Power</div></div>
+    </div>
+  </section>
+
+  <section id="meaning">
+    <h2>Meaning</h2>
+    <div class="field-row">
+      <div class="field"><div class="k">Primary</div><div class="v primary">Power</div></div>
+      <div class="field"><div class="k">Alternatives</div><div class="v">Strength, Ability</div></div>
+      <div class="field"><div class="k">Word Type</div><div class="v">Noun</div></div>
+    </div>
+    <h3 class="mnemonic-label">Meaning Mnemonic</h3>
+    <p class="prose">When a vocab word is made up of a single kanji and that's it, it almost always takes the meaning from its parent kanji. So this word also means <span class="hl">power</span>.</p>
+  </section>
+
+  <section id="reading">
+    <h2>Reading</h2>
+    <div class="reading-row">
+      <div class="reading-jp">ちから</div>
+      <button class="audio-btn">▶ Kyoko</button>
+      <button class="audio-btn">▶ Kenichi</button>
+    </div>
+    <h3 class="mnemonic-label">Reading Mnemonic</h3>
+    <p class="prose">The martial art that requires the most <span class="hl">power</span> is chee-se kara-te (ちから). Practitioners channel all their power into karate-chopping blocks of cheese.</p>
+    <div class="hint-box">
+      <div class="lbl">❓ HINT</div>
+      Imagine the cheese karate dojo — everyone bowing to a block of cheddar before the match starts.
+    </div>
+  </section>
+
+  <section id="context">
+    <h2>Context</h2>
+    <div class="combo-grid">
+      <div>
+        <div class="k" style="font-size:12px;color:var(--color-widget-secondary-text);margin-bottom:6px">Common Word Combinations</div>
+        <div class="combo-list">
+          <div class="item">力がつく <span style="font-size:11px;color:var(--color-widget-secondary-text)">— to gain strength</span></div>
+          <div class="item">力が入る <span style="font-size:11px;color:var(--color-widget-secondary-text)">— to be filled with strength</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="k" style="font-size:12px;color:var(--color-widget-secondary-text);margin-bottom:6px">Context Sentences</div>
+        <div class="sentence"><div class="jp">力の大きさが、ちがう。</div><div class="en" onclick="this.classList.toggle('revealed')"><span class="en-text">The size of the forces is different.</span><span class="reveal-hint">tap to reveal</span></div></div>
+        <div class="sentence"><div class="jp">うちではママが大きな力をもってるんですよ。</div><div class="en" onclick="this.classList.toggle('revealed')"><span class="en-text">At my house, my mom has a lot of power.</span><span class="reveal-hint">tap to reveal</span></div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="session-footer">
+  <button class="wk-button" disabled>‹ Back</button>
+  <button class="wk-button primary">Next ›</button>
+</div>
+
+<p class="note">
+  Wireframe 12 — one scrolling page per lesson item, hero shown once at the
+  top, sticky tab bar underneath whose links scroll down to each section
+  instead of switching screens. Meaning and Reading both now have their own
+  labeled Mnemonic block. No Radicals tab/section anywhere. Kanji lessons
+  reuse this shell in pink with tabs Meaning / Reading / Examples (no Kanji
+  Composition, no Radicals). Screenshot + compare, then tell me what's next
+  — building the Meaning/Context steps for a Kanji-lesson example too, or
+  moving on to the review/quiz screen.
+</p>
+
+</body>
+</html>

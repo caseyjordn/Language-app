@@ -1,0 +1,229 @@
+<!--
+  WIREFRAME SAMPLE 1 of ? — dashboard shell only.
+  Static markup/CSS, no JS, no real data. Purpose: agree on the visual
+  language (paper-warm palette + WaniKani widget/grid structure) before
+  building anything else. Open this directly in a browser or VS Code
+  Live Preview to check colors/spacing render as intended.
+
+  Shown here: top nav + 3 widgets (Reviews, Study Streak, Recent Mistakes)
+  as a small taste of the full dashboard grid described in the brief.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 1 — Dashboard Shell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans:wght@400;500;600;700&family=Palanquin:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- literal WaniKani values (do not approximate) ---- */
+    --wk-blue:#00AAFF;       /* kana / radical-equivalent */
+    --wk-blue-light:#CBEBFF;
+    --wk-pink:#FF00AA;       /* kanji */
+    --wk-pink-light:#FFD4F1;
+    --wk-purple:#AA00FF;     /* vocabulary */
+    --wk-purple-light:#EDC8FF;
+    --wk-charcoal:#6B7079;   /* secondary text, on WK's own white cards */
+    --wk-border:#CAD0D6;
+    --radius-widget:16px;
+    --radius-normal:8px;
+    --radius-pill:9999px;
+
+    /* ---- paper-warm skin, replacing WK's cool white/gray ---- */
+    --paper-bg:#C7B37E;        /* dusty khaki-mustard, not bright yellow */
+    --paper-grain-opacity:0.05;
+    --card-bg:#FBF6EA;         /* cream */
+    --card-border:#DED0A6;     /* warm tan, plays the role of --wk-border on paper */
+    --ink:#2B2420;             /* warm near-black for headings */
+    --ink-secondary:#7A6F5A;   /* warm charcoal for body text on cream cards */
+    --accent-mustard:#B99A3E;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background-color:var(--paper-bg);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/></svg>");
+    font-family:"Noto Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+  }
+  h1,h2,h3,.headline{font-family:"Palanquin","Noto Sans JP",sans-serif;font-weight:700;}
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    display:flex;align-items:center;gap:28px;
+    padding:14px 28px;
+    background:var(--card-bg);
+    border-bottom:1px solid var(--card-border);
+  }
+  .wordmark{display:flex;align-items:center;gap:10px;margin-right:8px}
+  .wordmark .mark{
+    width:34px;height:34px;border-radius:50%;
+    background:var(--accent-mustard);
+    position:relative;flex:none;
+  }
+  .wordmark .mark::before,.wordmark .mark::after{
+    content:"";position:absolute;top:13px;width:4px;height:4px;border-radius:50%;background:var(--ink);
+  }
+  .wordmark .mark::before{left:10px}
+  .wordmark .mark::after{left:20px}
+  .wordmark .name{font-family:"Palanquin",sans-serif;font-weight:700;font-size:19px;color:var(--ink)}
+  .navlinks{display:flex;gap:22px;flex:1}
+  .navlinks a{
+    color:var(--ink-secondary);text-decoration:none;font-weight:500;font-size:14.5px;
+    padding:6px 2px;border-bottom:2px solid transparent;
+  }
+  .navlinks a.active{color:var(--ink);border-bottom-color:var(--accent-mustard);font-weight:600}
+  .navlinks a:hover{color:var(--ink)}
+  .navright{display:flex;align-items:center;gap:14px}
+  .streak-chip{
+    display:flex;align-items:center;gap:6px;
+    background:#F4EDD9;border:1px solid var(--card-border);border-radius:var(--radius-pill);
+    padding:5px 12px;font-size:13.5px;font-weight:600;color:var(--ink);
+  }
+  .avatar{width:32px;height:32px;border-radius:50%;background:var(--wk-purple-light);border:1px solid var(--card-border)}
+
+  /* ---------- dashboard grid ---------- */
+  main{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:18px;
+  }
+  .widget{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-widget);
+    padding:18px 20px;
+  }
+  .widget__title{font-size:15px;margin:0 0 4px;color:var(--ink)}
+  .widget__subtext{font-size:13px;color:var(--ink-secondary);margin:0 0 14px;line-height:1.45}
+
+  .count-bubble{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--ink);color:#fff;
+    border-radius:var(--radius-pill);
+    font-size:13px;font-weight:600;
+    padding:2px 10px;margin-left:8px;
+  }
+  .count-bubble.zero{background:#B7AC91}
+
+  /* Reviews widget */
+  .reviews-widget .headcount{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+  .reviews-widget .bignum{font-family:"Palanquin",sans-serif;font-size:40px;font-weight:700;line-height:1}
+
+  /* Study streak */
+  .streak-days{display:flex;gap:6px;margin:10px 0 4px}
+  .streak-day{
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    font-size:11px;color:var(--ink-secondary);
+  }
+  .streak-day .dot{
+    width:26px;height:26px;border-radius:50%;
+    background:#EAE0C2;border:1px solid var(--card-border);
+  }
+  .streak-day.complete .dot{background:var(--accent-mustard);border-color:var(--accent-mustard)}
+  .streak-day.today .dot{outline:2px solid var(--ink);outline-offset:2px}
+  .streak-count{font-family:"Palanquin",sans-serif;font-size:30px;font-weight:700}
+
+  /* Recent mistakes / subject tiles */
+  .tilerow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .tile{
+    width:44px;height:44px;border-radius:var(--radius-normal);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:"Noto Sans JP",sans-serif;font-size:16px;font-weight:500;
+  }
+  .tile--kana{background:var(--wk-blue)}
+  .tile--kanji{background:var(--wk-pink)}
+  .tile--vocab{background:var(--wk-purple)}
+  .btnrow{display:flex;gap:10px;margin-top:14px}
+  .btn{
+    border:1px solid var(--card-border);background:#fff;
+    border-radius:var(--radius-normal);
+    padding:8px 14px;font-size:13.5px;font-weight:600;color:var(--ink);
+    cursor:pointer;
+  }
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  .note{max-width:980px;margin:24px auto 0;padding:0 20px;font-size:12.5px;color:#6b6152}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wordmark">
+    <div class="mark"></div>
+    <div class="name">Japanese Practice</div>
+  </div>
+  <div class="navlinks">
+    <a class="active" href="#">Dashboard</a>
+    <a href="#">Lessons</a>
+    <a href="#">Reviews</a>
+    <a href="#">Vocab</a>
+    <a href="#">Kana &amp; Kanji</a>
+    <a href="#">Speaking</a>
+    <a href="#">Photos</a>
+  </div>
+  <div class="navright">
+    <div class="streak-chip">🔥 12日</div>
+    <div class="avatar"></div>
+  </div>
+</nav>
+
+<main>
+  <div class="grid">
+
+    <div class="widget reviews-widget">
+      <div class="widget__title">Reviews</div>
+      <div class="headcount">
+        <div class="bignum">18</div>
+        <div class="widget__subtext" style="margin:0">due now</div>
+      </div>
+      <div class="btnrow"><button class="btn primary">Start reviews</button></div>
+    </div>
+
+    <div class="widget">
+      <div class="widget__title">Study Streak</div>
+      <div class="streak-count">12<span style="font-size:16px;font-weight:500" lang="ja">日</span></div>
+      <div class="streak-days">
+        <div class="streak-day complete"><div class="dot"></div>Sat</div>
+        <div class="streak-day complete"><div class="dot"></div>Sun</div>
+        <div class="streak-day complete"><div class="dot"></div>Mon</div>
+        <div class="streak-day complete"><div class="dot"></div>Tue</div>
+        <div class="streak-day complete"><div class="dot"></div>Wed</div>
+        <div class="streak-day complete"><div class="dot"></div>Thu</div>
+        <div class="streak-day today"><div class="dot"></div>Today</div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <div class="widget__title">Recent Mistakes<span class="count-bubble">5</span></div>
+      <p class="widget__subtext">From the last 24 hours — give these another pass.</p>
+      <div class="tilerow">
+        <div class="tile tile--kana" title="kana">り</div>
+        <div class="tile tile--kanji" title="kanji">力</div>
+        <div class="tile tile--vocab" title="vocab" style="font-size:14px">十六</div>
+        <div class="tile tile--kana" title="kana">ゆ</div>
+        <div class="tile tile--kanji" title="kanji">分</div>
+      </div>
+      <div class="btnrow">
+        <button class="btn">Extra study</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<p class="note">
+  Wireframe 1 of several — nav + 3 widgets only, to check the paper-khaki background,
+  cream cards, warm borders, and WaniKani category-color tiles (blue/pink/purple) feel
+  right together before I build out the rest of the dashboard grid.
+</p>
+
+</body>
+</html>
