@@ -3147,7 +3147,10 @@ function otherReadingFor(type, item, field) {
 // <span class="hl"> highlight styling, so mnemonics can be pasted in as-is.
 function mdBold(s) { return String(s || '').replace(/\*\*(.+?)\*\*/g, '<span class="hl">$1</span>'); }
 
-function normalizeAnswer(s) { return String(s || '').trim().toLowerCase().replace(/[.,、。\s!！]/g, ''); }
+// katakanaToHiragana folds script differences out of the comparison — an
+// answer typed in katakana matches an accepted reading written in hiragana
+// (or vice versa) since they're the same sounds. No-op on English text.
+function normalizeAnswer(s) { return katakanaToHiragana(String(s || '').trim().toLowerCase().replace(/[.,、。\s!！]/g, '')); }
 function levenshtein(a, b) {
   const m = a.length, n = b.length;
   const dp = new Array(n + 1);
@@ -3454,6 +3457,15 @@ const ROMAJI_TO_HIRAGANA = {
 const HIRAGANA_START = 0x3041, HIRAGANA_END = 0x3096, KATAKANA_OFFSET = 0x60;
 function hiraganaToKatakana(s) {
   return s.replace(/[ぁ-ゖ]/g, ch => String.fromCharCode(ch.charCodeAt(0) + KATAKANA_OFFSET));
+}
+// Reverse of the above — used to fold a katakana answer down to hiragana
+// before comparing against an accepted reading, so typing a word's reading
+// in katakana (a phone's IME will often render a whole mixed word like
+// テーブルの上 in katakana once you type past the katakana part) counts the
+// same as the "correct" hiragana form. They're the same sounds; the script
+// choice shouldn't be what makes an answer wrong.
+function katakanaToHiragana(s) {
+  return s.replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - KATAKANA_OFFSET));
 }
 
 // Reverse lookup: hiragana char -> the vowel sound it ends in (the last
