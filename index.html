@@ -2905,13 +2905,39 @@ function numberWordToDigits(phrase) {
   return String(total + current);
 }
 
+// Not every entry's source doc lists every reasonable synonym as an alt
+// meaning (e.g. "American Person" has no listed "American" alt, even
+// though that's obviously an acceptable answer) — auditing all ~1500
+// vocab/kanji entries by hand for missing synonyms isn't practical, so
+// instead auto-derive the obvious trimmed variants: strip a generic
+// trailing/leading word (the kind that turns a specific noun into a
+// generic-noun phrase, or marks a verb infinitive) and accept that too.
+// "American Person" -> also accepts "American"; "To Eat" -> also accepts
+// "Eat"; "Six Things" -> also accepts "Six". This isn't true semantic
+// understanding, just a targeted heuristic for the pattern that actually
+// shows up in this data.
+const MEANING_GENERIC_TRAILING_WORDS = ['person', 'people', 'thing', 'things', 'one', 'ones', 'man', 'woman'];
+function expandMeaningVariants(meanings) {
+  const out = new Set();
+  meanings.forEach(m => {
+    out.add(m);
+    const words = m.trim().split(/\s+/);
+    if (words.length <= 1) return;
+    const lastWord = words[words.length - 1].toLowerCase().replace(/[^a-z]/g, '');
+    if (MEANING_GENERIC_TRAILING_WORDS.includes(lastWord)) out.add(words.slice(0, -1).join(' '));
+    if (words[0].toLowerCase() === 'to') out.add(words.slice(1).join(' '));
+  });
+  return [...out];
+}
+
 function fieldsFor(type) { return type === 'grammar' ? ['blank'] : ['meaning', 'reading']; }
 function acceptedFor(type, item, field) {
   if (type === 'grammar') {
     return (item.blankAnswerAccepted && item.blankAnswerAccepted.length ? item.blankAnswerAccepted : [item.blankAnswer]).filter(Boolean);
   }
   if (field === 'meaning') {
-    const meanings = (item.altMeanings && item.altMeanings.length ? [item.meaning, ...item.altMeanings] : [item.meaning]).filter(Boolean);
+    const rawMeanings = (item.altMeanings && item.altMeanings.length ? [item.meaning, ...item.altMeanings] : [item.meaning]).filter(Boolean);
+    const meanings = expandMeaningVariants(rawMeanings);
     const digitForms = meanings.map(numberWordToDigits).filter(Boolean);
     return meanings.concat(digitForms);
   }
@@ -3049,6 +3075,17 @@ function loadAudioManifest() {
   }
   return _audioManifestPromise;
 }
+// Kick this off at load rather than waiting for the first play-button
+// click — otherwise that first click pays for this fetch AND the
+// (likely-unreachable-on-a-phone) VOICEVOX Engine round trip before
+// finally reaching the browser-TTS fallback, which risks losing the
+// "user gesture" iOS needs to allow audio at all. Warming the manifest
+// and the voice list up front keeps that first real playTTS() call fast.
+if (typeof fetch === 'function') loadAudioManifest();
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener('voiceschanged', () => window.speechSynthesis.getVoices());
+}
 
 async function playPreGenerated(text, gender) {
   const manifest = await loadAudioManifest();
@@ -3061,11 +3098,27 @@ async function playPreGenerated(text, gender) {
   return true;
 }
 
+// A local-only desktop app (VOICEVOX Engine) is never reachable from a
+// phone/PWA, and an unreachable-host fetch can otherwise hang for many
+// seconds before the browser gives up on its own — on iOS Safari in
+// particular, waiting that long between the original button tap and the
+// eventual speechSynthesis fallback call risks the browser deciding the
+// "user gesture" that authorizes audio playback has expired, so the
+// fallback silently does nothing. Capping this fetch at 1.2s keeps the
+// whole fallback chain fast enough that the eventual browser-TTS call
+// still lands within the same user-gesture window.
+const VOICEVOX_TIMEOUT_MS = 1200;
+function fetchWithTimeout(url, options) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), VOICEVOX_TIMEOUT_MS);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
 async function playViaVoicevoxEngine(text, speakerId) {
-  const qRes = await fetch(`${VOICEVOX_BASE}/audio_query?speaker=${speakerId}&text=${encodeURIComponent(text)}`, { method: 'POST' });
+  const qRes = await fetchWithTimeout(`${VOICEVOX_BASE}/audio_query?speaker=${speakerId}&text=${encodeURIComponent(text)}`, { method: 'POST' });
   if (!qRes.ok) throw new Error('audio_query failed (' + qRes.status + ')');
   const query = await qRes.json();
-  const sRes = await fetch(`${VOICEVOX_BASE}/synthesis?speaker=${speakerId}`, {
+  const sRes = await fetchWithTimeout(`${VOICEVOX_BASE}/synthesis?speaker=${speakerId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(query)
@@ -3078,10 +3131,30 @@ async function playViaVoicevoxEngine(text, speakerId) {
   await audio.play();
 }
 
+// Cached once loaded — getVoices() can start out empty and only populate
+// after the browser's async 'voiceschanged' event, so this returns
+// whatever's available right now (which is normally already populated by
+// the time someone's clicked into a lesson) rather than blocking on it.
+let _cachedVoices = null;
+function getJapaneseVoice() {
+  if (!window.speechSynthesis) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (voices && voices.length) _cachedVoices = voices;
+  const pool = _cachedVoices || voices || [];
+  return pool.find(v => v.lang === 'ja-JP') || pool.find(v => v.lang && v.lang.startsWith('ja')) || null;
+}
+
 function playViaBrowserTTS(text) {
   if (!window.speechSynthesis) return false;
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = 'ja-JP';
+  // Some engines only actually speak if `.voice` is explicitly set to a
+  // matching one — setting just `.lang` is occasionally silently ignored
+  // if the platform's default voice doesn't support it, which reads as
+  // "nothing happened" with no error at all.
+  const jaVoice = getJapaneseVoice();
+  if (jaVoice) utter.voice = jaVoice;
+  utter.onerror = e => console.warn('Browser speech synthesis error:', e.error);
   window.speechSynthesis.speak(utter);
   return true;
 }
@@ -3202,12 +3275,45 @@ function hiraganaToKatakana(s) {
   return s.replace(/[ぁ-ゖ]/g, ch => String.fromCharCode(ch.charCodeAt(0) + KATAKANA_OFFSET));
 }
 
+// Reverse lookup: hiragana char -> the vowel sound it ends in (the last
+// letter of its romaji key already gives this for every entry, including
+// the palatalized きゃ/しゃ/etc. rows). Used below to catch a long vowel
+// typed as a doubled letter (e.g. "koohii" for コーヒー) even though, by
+// the time the second vowel key is pressed, the first one has ALREADY
+// been converted into a kana character — so the two vowel letters are
+// never actually adjacent in the live buffer the way "oo" would be.
+// Covers BOTH the hiragana form and its katakana equivalent: in katakana
+// mode, by the time a second vowel keystroke arrives, the whole buffer
+// (including the kana from the previous keystroke) has already been run
+// through hiraganaToKatakana once — so what's actually sitting in `out`
+// at check time is katakana already, not hiragana.
+const KANA_VOWEL = {};
+Object.entries(ROMAJI_TO_HIRAGANA).forEach(([key, kana]) => {
+  const vowel = key[key.length - 1];
+  if (!'aiueo'.includes(vowel)) return;
+  KANA_VOWEL[kana] = vowel;
+  const code = kana.charCodeAt(0);
+  if (code >= HIRAGANA_START && code <= HIRAGANA_END) KANA_VOWEL[String.fromCharCode(code + KATAKANA_OFFSET)] = vowel;
+});
+
 function romajiToKana(input, katakana) {
   const s = input.toLowerCase();
   let out = '';
   let i = 0;
   while (i < s.length) {
     const c = s[i], c2 = s[i + 1];
+    // Katakana long vowel: the natural way to type one is a doubled vowel
+    // letter ("koohii" -> コーヒー), but since this whole string gets
+    // reprocessed after every keystroke, the FIRST vowel is already part
+    // of a converted kana (こ) by the time the second one is typed — so
+    // detect it by checking whether the kana already in `out` ends in the
+    // same vowel sound as the new letter, rather than looking for two
+    // adjacent ascii vowels (which will never actually occur here).
+    // Hiragana doesn't use ー this way (native long vowels double the kana
+    // itself, e.g. おかあさん), so this only applies in katakana mode.
+    if (katakana && 'aiueo'.includes(c) && out.length && KANA_VOWEL[out[out.length - 1]] === c) {
+      out += 'ー'; i++; continue;
+    }
     // "n" not followed by a vowel/y/another pending n-context -> ん
     if (c === 'n' && c2 !== undefined && "aiueoy".indexOf(c2) === -1 && c2 !== "'") {
       out += 'ん'; i++; continue;
@@ -3236,9 +3342,18 @@ function romajiToKana(input, katakana) {
 // Converts a genuinely trailing lone "n" left over from live conversion
 // (e.g. finishing on "hon") to ん — safe to call once we know the answer
 // is actually being submitted, since nothing more is coming after it.
+// Also handles the double-n case ("honn", typed specifically to force ん
+// without waiting — see romajiToKana's n-handling): by submit time the
+// live conversion has already turned the FIRST n into ん and left the
+// SECOND n sitting as a literal trailing character (nothing told it to
+// become anything, since nothing followed it yet either) — so if a ん/ン
+// already immediately precedes the trailing "n", just drop the leftover
+// letter instead of adding a second ん on top of it.
 function finalizeTrailingN(s, katakana) {
-  if (/n$/i.test(s)) return s.slice(0, -1) + (katakana ? 'ン' : 'ん');
-  return s;
+  if (!/n$/i.test(s)) return s;
+  const nChar = katakana ? 'ン' : 'ん';
+  if (s.slice(-2, -1) === nChar) return s.slice(0, -1);
+  return s.slice(0, -1) + nChar;
 }
 
 /* ======================================================================

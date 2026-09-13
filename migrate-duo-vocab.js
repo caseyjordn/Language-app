@@ -9,13 +9,11 @@
 //     Level 1+2+3 kanji count (18+35+30), confirming all L1-3 kanji are
 //     introduced, matching what she reported ("all level 3 kanji in my
 //     current review")
-//   - VOCAB: exact per-word matching wasn't feasible (WK's real vocab set
-//     doesn't line up 1:1 with this app's curated word list — many real WK
-//     words like compound counters/dates aren't in it at all), so this is
-//     level-based instead: L1-2 Guru'd, L3 mostly introduced but the LAST
-//     18 (by array order) left un-introduced, matching the real ~18
-//     level-3 words her WK Lesson Picker showed as not-yet-learned
-//     ("haven't learned all the level 3 vocab yet")
+//   - VOCAB Level 1-2: level-based (Guru'd) — no per-word screen for these.
+//     Level 3: exact, word-for-word from her real WK Level 3 list (see
+//     LEVEL3_LEARNED_WORDS) — all 73 words matched CORE_VOCAB 1:1 with zero
+//     misses, so this replaced the earlier "first N by array order" guess
+//     once it turned out not to match her real reviews.
 //   - Her Duolingo vocab (DUO_RAW) and tourist/food vocab
 //     (tourist-vocab-output.json, built by build-tourist-vocab.js from
 //     files/tokyo-vocabulary-merged.md) both go into STATE.customVocab.vocab
@@ -146,15 +144,29 @@ KANJI.forEach(k => {
   else setItemStageSpread('kanji', k.id, stage, GURU_SPREAD_HOURS); // Guru tiers — spread out
 });
 
-// ---- VOCAB: level-based (see comment at top of file for why not exact).
-// L1-2 Guru'd + spread; L3 mostly introduced (due now) but the last 18
-// left un-introduced, matching the ~18 real Level 3 words still in her WK
-// Lesson Picker.
+// ---- VOCAB Level 1-2: Guru'd + spread (no per-word screen for these, so
+// still level-based). ----
 CORE_VOCAB.filter(v => v.level === 1 || v.level === 2).forEach(v => setItemStageSpread('vocab', v.id, 5, GURU_SPREAD_HOURS));
+
+// ---- VOCAB Level 3: exact, word-for-word from her real WK Level 3
+// lesson/review lists (all 73 words matched 1:1 against CORE_VOCAB — no
+// misses, unlike the vocab-word mismatches seen at other levels). Replaces
+// the earlier "introduce the first N by array order" guess, which visibly
+// didn't match her real reviews.
+const LEVEL3_LEARNED_WORDS = [
+  'これ', 'する', 'リンゴ', 'コーヒー', 'こんにちは', 'いつ', '山びこ', 'テーブルの上',
+  'ベッドの下', '日の出', 'イギリス人', 'アメリカ人', 'フランス人', 'ビー玉', '一万', '二万',
+  '十万', '分', '引く', '牛', '一台', '二台', '五台', '十台', '〜台', '〜人', '万',
+  '女の人', '大人しい'
+];
+// Everything else at Level 3 — her WK "Lessons" (available, not started)
+// and "Locked" (kanji prerequisite not met) items alike — isn't introduced
+// in our app either; we have no kanji-locks-vocab mechanic, so both just
+// stay as ordinary un-learned Lessons, same as they'd naturally appear.
 const level3Vocab = CORE_VOCAB.filter(v => v.level === 3);
-const LEVEL3_NOT_YET_LEARNED = 18;
-const level3ToIntroduce = level3Vocab.slice(0, Math.max(0, level3Vocab.length - LEVEL3_NOT_YET_LEARNED));
-level3ToIntroduce.forEach(v => setItemStage('vocab', v.id, 3, true));
+const learnedSet = new Set(LEVEL3_LEARNED_WORDS);
+const level3Matched = level3Vocab.filter(v => learnedSet.has(v.word));
+level3Matched.forEach(v => setItemStage('vocab', v.id, 3, true));
 
 // Duo + tourist vocab: added to the custom deck only, NOT introduced —
 // they'll show up in Vocab > Custom Vocab for her to pick and lesson.
@@ -181,6 +193,7 @@ console.log(`Kanji matched to a real stage: ${kanjiApplied} of ${KANJI.filter(k 
 console.log(`  Apprentice (stage 2-4): ${Object.values(KANJI_STAGE_OVERRIDES).flat().length - KANJI_STAGE_OVERRIDES[5].length - KANJI_STAGE_OVERRIDES[6].length}`);
 console.log(`  Guru (stage 5-6): ${KANJI_STAGE_OVERRIDES[5].length + KANJI_STAGE_OVERRIDES[6].length}`);
 console.log(`Vocab L1-2 Guru'd: ${CORE_VOCAB.filter(v => v.level === 1 || v.level === 2).length}`);
-console.log(`Vocab L3 introduced (due now): ${level3ToIntroduce.length} of ${level3Vocab.length} (${LEVEL3_NOT_YET_LEARNED} left as ordinary Lessons)`);
+console.log(`Vocab L3 matched exactly and introduced: ${level3Matched.length} of ${LEVEL3_LEARNED_WORDS.length} real learned words (expect 29 of 29)`);
+console.log(`  L3 left as ordinary Lessons: ${level3Vocab.length - level3Matched.length}`);
 console.log(`Custom vocab deck total (not introduced, ready to pick in Custom Vocab Lessons): ${state.customVocab.vocab.length}`);
 console.log(`  of which tourist/food vocab: ${touristCount}`);
