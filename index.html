@@ -3604,19 +3604,24 @@ function render() {
   setHeroCompact(false);
 }
 
-// iOS Safari keyboard fix, take 3: two earlier attempts (CSS position:sticky
-// alone, then a JS position:fixed pinned to visualViewport.offsetTop) both
-// still left the big kanji/word scrolled off the top of the screen — Safari
-// auto-scrolls the focused input into view against a coordinate system
-// (the layout viewport) that doesn't reliably match what's actually drawn
-// on screen once the keyboard's up, and neither sticky nor fixed positioning
-// could be trusted to compensate for that in testing. Fighting the browser's
-// scroll behavior turned out to be the wrong layer to fix this at — instead,
-// when the answer input is focused, shrink the hero itself (drop the audio
-// buttons, session bar, and mode badge, and use a small word) so the WHOLE
-// quiz-hero + quiz-card comfortably fits inside the smaller visible area
-// the keyboard leaves, and there's nothing left that NEEDS to scroll off
-// screen in the first place, regardless of which viewport quirk Safari hits.
+// iOS Safari keyboard fix, take 4: sticky positioning, then a JS
+// position:fixed pinned to visualViewport.offsetTop, then compacting keyed
+// off visualViewport shrinking — all three still failed in real testing.
+// The visualViewport-size heuristic in particular turned out to be
+// unreliable in practice (on the actual device the keyboard was clearly
+// open — Safari had already scrolled the input's card up so far its top
+// (and the "MEANING" label) went UNDER the still-full-size sticky hero —
+// but visualViewport.height never read as meaningfully smaller than
+// window.innerHeight, so compacting never triggered at all).
+// Autofocus was the actual reason that heuristic existed in the first
+// place (to avoid compacting from a focus event fired by autofocus before
+// any keyboard was real) — removing autofocus from the quiz inputs (see
+// the <input> tags below) removes that problem at its source: focus now
+// only ever fires from a genuine tap, which on a touchscreen always means
+// a real keyboard is coming. So this drives compacting off plain
+// focus/blur again, gated to touch devices (pointer:coarse) so desktop,
+// which never had this problem, keeps the full hero while typing.
+const IS_TOUCH_DEVICE = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 function setHeroCompact(compact) {
   const hero = document.getElementById('hero');
   if (!hero || typeof hero.querySelector !== 'function') return;
@@ -3635,21 +3640,6 @@ function setHeroCompact(compact) {
     if (sessionBar) sessionBar.style.display = '';
     hideEls.forEach(el => { el.style.display = ''; });
   }
-}
-// Drive compacting off a REAL keyboard-open signal (the visual viewport
-// actually shrinking) rather than the input's `focus` event alone — the
-// quiz inputs use `autofocus`, which can fire a focus event on page load
-// before any keyboard is genuinely showing, and compacting the hero then
-// would just be a cosmetic downgrade for no reason. Where visualViewport
-// isn't available at all, the focus/blur listeners below fall back to
-// triggering directly off focus instead.
-function updateHeroCompactFromViewport() {
-  if (!window.visualViewport) return;
-  setHeroCompact(window.visualViewport.height < window.innerHeight - 100);
-}
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', updateHeroCompactFromViewport);
-  window.visualViewport.addEventListener('scroll', updateHeroCompactFromViewport);
 }
 
 function topNav(section, parts) {
@@ -5006,7 +4996,7 @@ function renderQuizQuestion() {
     <div class="quiz-hero-spacer" id="heroSpacer"></div>
     <div class="quiz-card">
       <div class="question-label">${label}</div>
-      <input class="answer" id="answerInput" type="text" placeholder="${placeholder}" autocomplete="off" autofocus>
+      <input class="answer" id="answerInput" type="text" placeholder="${placeholder}" autocomplete="off">
       <div class="hint">Press Enter or Check to submit.</div>
       <div class="feedback-row">
         <div class="feedback-msg" id="feedbackMsg"></div>
@@ -5158,7 +5148,7 @@ function attachQuizHandlers() {
     if (awaitingNext) advanceAfterMiss();
     else check();
   });
-  input.addEventListener('focus', () => { if (!window.visualViewport) setHeroCompact(true); setTimeout(() => window.scrollTo(0, 0), 60); });
+  input.addEventListener('focus', () => { if (IS_TOUCH_DEVICE) setHeroCompact(true); setTimeout(() => window.scrollTo(0, 0), 60); });
   input.addEventListener('blur', () => setHeroCompact(false));
 
   // romaji -> kana live conversion on Reading questions (vocab/kanji) and
@@ -5276,7 +5266,7 @@ function renderSentencePractice() {
     <div class="quiz-hero-spacer" id="heroSpacer"></div>
     <div class="quiz-card">
       <div class="question-label">${isTranslate ? 'Type it in Japanese' : 'Type the reading (romaji)'}</div>
-      <input class="answer" id="answerInput" type="text" placeholder="${isTranslate ? 'kana/kanji or romaji' : 'romaji'}" autocomplete="off" autofocus>
+      <input class="answer" id="answerInput" type="text" placeholder="${isTranslate ? 'kana/kanji or romaji' : 'romaji'}" autocomplete="off">
       <div class="hint">${isTranslate ? 'Kana/kanji or romaji both work.' : 'Read the sentence above, then type its reading.'}</div>
       <div class="feedback-row">
         <div class="feedback-msg" id="feedbackMsg"></div>
@@ -5346,7 +5336,7 @@ function attachSentencePracticeHandlers() {
     if (e.key === 'Enter') check();
     if (!locked) input.classList.remove('correct', 'incorrect');
   });
-  input.addEventListener('focus', () => { if (!window.visualViewport) setHeroCompact(true); setTimeout(() => window.scrollTo(0, 0), 60); });
+  input.addEventListener('focus', () => { if (IS_TOUCH_DEVICE) setHeroCompact(true); setTimeout(() => window.scrollTo(0, 0), 60); });
   input.addEventListener('blur', () => setHeroCompact(false));
 
   const wordBreakdown = document.getElementById('wordBreakdown');
