@@ -314,8 +314,8 @@
      staying visible the whole time you're typing. */
   .quiz-hero{background:var(--accent);color:#fff;padding:16px 20px 40px;text-align:center;transition:background .2s ease;position:sticky;top:0;z-index:5}
   .quiz-hero-spacer{height:0}
-  .quiz-hero.kb-compact{padding:10px 20px 14px}
-  .quiz-hero.kb-compact .quiz-hero-top{margin-bottom:6px}
+  .quiz-hero.kb-compact{padding:14px 20px 20px}
+  .quiz-hero.kb-compact .quiz-hero-top{margin-bottom:8px}
   .quiz-hero.state-correct{background:var(--color-correct)}
   .quiz-hero.state-incorrect{background:var(--color-incorrect)}
   .quiz-hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
@@ -3631,8 +3631,8 @@ function setHeroCompact(compact) {
   hero.classList.toggle('kb-compact', compact);
   if (compact) {
     if (char && char.dataset.origFs === undefined) char.dataset.origFs = char.style.fontSize || '';
-    if (char) { char.style.fontSize = '22px'; char.style.marginTop = '2px'; }
-    if (sessionBar) sessionBar.style.display = 'none';
+    if (char) { char.style.fontSize = '38px'; char.style.marginTop = '8px'; }
+    if (sessionBar) sessionBar.style.display = '';
     hideEls.forEach(el => { el.style.display = 'none'; });
   } else {
     if (char && char.dataset.origFs !== undefined) { char.style.fontSize = char.dataset.origFs; delete char.dataset.origFs; }
