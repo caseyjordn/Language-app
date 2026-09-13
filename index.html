@@ -278,7 +278,13 @@
   }
 
   /* ---------- review / quiz ---------- */
-  .quiz-hero{background:var(--accent);color:#fff;padding:16px 20px 40px;text-align:center;transition:background .2s ease}
+  /* BUG FIX: on mobile, focusing the answer input pops the keyboard and
+     the browser auto-scrolls that input into view — which was scrolling
+     the word/kanji itself out of view above the fold, since nothing was
+     anchoring it. Sticking the hero to the top of the viewport means that
+     auto-scroll can never carry it away: it just pins there instead,
+     staying visible the whole time you're typing. */
+  .quiz-hero{background:var(--accent);color:#fff;padding:16px 20px 40px;text-align:center;transition:background .2s ease;position:sticky;top:0;z-index:5}
   .quiz-hero.state-correct{background:var(--color-correct)}
   .quiz-hero.state-incorrect{background:var(--color-incorrect)}
   .quiz-hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
