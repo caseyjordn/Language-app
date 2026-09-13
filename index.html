@@ -313,6 +313,7 @@
      auto-scroll can never carry it away: it just pins there instead,
      staying visible the whole time you're typing. */
   .quiz-hero{background:var(--accent);color:#fff;padding:16px 20px 40px;text-align:center;transition:background .2s ease;position:sticky;top:0;z-index:5}
+  .quiz-hero-spacer{height:0}
   .quiz-hero.state-correct{background:var(--color-correct)}
   .quiz-hero.state-incorrect{background:var(--color-incorrect)}
   .quiz-hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
@@ -3598,6 +3599,54 @@ function render() {
   root.innerHTML = topNav(section, parts) + view.html;
   if (view.after) view.after();
   window.scrollTo(0, 0);
+  resetHeroKeyboardPin();
+}
+
+// iOS Safari keyboard fix, take 2: `position:sticky`/`fixed` position
+// against the LAYOUT viewport, but when the keyboard opens, Safari's
+// auto-scroll-focused-input-into-view scrolls the page while the VISUAL
+// viewport (what's actually drawn on screen) shrinks by the keyboard's
+// height — those two viewports can end up offset from each other, so a
+// sticky top:0 hero computes a position that's technically correct for the
+// layout viewport but scrolled off the top of what's actually visible
+// on screen (this is what was still happening after the earlier sticky +
+// interactive-widget=resizes-content attempt — Safari doesn't actually
+// honor interactive-widget). The fix: use the VisualViewport API directly
+// and pin the hero's `top` to its live offsetTop whenever the two
+// viewports diverge (keyboard open), falling back to normal CSS sticky
+// the rest of the time. A spacer div (see quiz-hero-spacer in the quiz
+// templates) takes over the hero's normal-flow space while it's fixed, so
+// nothing else on the page jumps.
+function pinHeroForKeyboard() {
+  const hero = document.getElementById('hero');
+  const spacer = document.getElementById('heroSpacer');
+  if (!hero || !spacer || !window.visualViewport) return;
+  const vv = window.visualViewport;
+  const keyboardLikelyOpen = vv.height < window.innerHeight - 100;
+  if (keyboardLikelyOpen) {
+    if (hero.style.position !== 'fixed') spacer.style.height = hero.offsetHeight + 'px';
+    hero.style.position = 'fixed';
+    hero.style.top = vv.offsetTop + 'px';
+    hero.style.left = '0';
+    hero.style.right = '0';
+  } else {
+    hero.style.position = '';
+    hero.style.top = '';
+    hero.style.left = '';
+    hero.style.right = '';
+    spacer.style.height = '0';
+  }
+}
+function resetHeroKeyboardPin() {
+  const hero = document.getElementById('hero');
+  const spacer = document.getElementById('heroSpacer');
+  if (hero) { hero.style.position = ''; hero.style.top = ''; hero.style.left = ''; hero.style.right = ''; }
+  if (spacer) spacer.style.height = '0';
+  if (window.visualViewport) pinHeroForKeyboard();
+}
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', pinHeroForKeyboard);
+  window.visualViewport.addEventListener('scroll', pinHeroForKeyboard);
 }
 
 function topNav(section, parts) {
@@ -4951,6 +5000,7 @@ function renderQuizQuestion() {
       ${ttsButton}
       ${modeBadge}
     </div>
+    <div class="quiz-hero-spacer" id="heroSpacer"></div>
     <div class="quiz-card">
       <div class="question-label">${label}</div>
       <input class="answer" id="answerInput" type="text" placeholder="${placeholder}" autocomplete="off" autofocus>
@@ -5218,6 +5268,7 @@ function renderSentencePractice() {
         ? `<div style="font-size:12px;font-weight:700;text-transform:uppercase;opacity:.8;margin-top:22px">Translate</div><div style="font-size:26px;margin-top:8px;font-weight:500">${s.en}</div>`
         : `<div class="quiz-char" style="font-size:30px">${s.jp}</div><div style="margin-top:6px">${audioButtonsHTML(s.jp, 'background:rgba(255,255,255,.18);border-color:transparent;color:#fff')}</div>`}
     </div>
+    <div class="quiz-hero-spacer" id="heroSpacer"></div>
     <div class="quiz-card">
       <div class="question-label">${isTranslate ? 'Type it in Japanese' : 'Type the reading (romaji)'}</div>
       <input class="answer" id="answerInput" type="text" placeholder="${isTranslate ? 'kana/kanji or romaji' : 'romaji'}" autocomplete="off" autofocus>
