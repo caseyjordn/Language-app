@@ -2995,6 +2995,29 @@ function withDigitsSubstituted(phrase) {
 // true semantic understanding, just targeted heuristics for the patterns
 // that actually show up in this data.
 const MEANING_GENERIC_TRAILING_WORDS = ['person', 'people', 'thing', 'things', 'one', 'ones', 'man', 'woman'];
+
+// Japan's irregular calendar day-names (九日 "kokonoka", etc.) are
+// genuinely ambiguous in real Japanese — they mean BOTH a calendar date
+// ("the ninth") AND a plain duration ("nine days"), depending on context,
+// and real WK accepts both. Our data only lists the ordinal/date form
+// ("Ninth Day") as the primary meaning, so without this, the equally
+// correct duration form ("Nine Days") reads as wrong. Deriving it
+// mechanically from the ordinal word covers every day-name item at once
+// (1st-20th, 30th) instead of needing a MEANING_OVERRIDES entry per item.
+const ORDINAL_TO_CARDINAL = {
+  first: 'One', second: 'Two', third: 'Three', fourth: 'Four', fifth: 'Five', sixth: 'Six', seventh: 'Seven',
+  eighth: 'Eight', ninth: 'Nine', tenth: 'Ten', eleventh: 'Eleven', twelfth: 'Twelve', thirteenth: 'Thirteen',
+  fourteenth: 'Fourteen', fifteenth: 'Fifteen', sixteenth: 'Sixteen', seventeenth: 'Seventeen', eighteenth: 'Eighteen',
+  nineteenth: 'Nineteen', twentieth: 'Twenty', thirtieth: 'Thirty'
+};
+function ordinalDayVariant(meaning) {
+  const m = /^(\w+)\s+Day$/i.exec(meaning.trim());
+  if (!m) return null;
+  const cardinal = ORDINAL_TO_CARDINAL[m[1].toLowerCase()];
+  if (!cardinal) return null;
+  return cardinal + (cardinal === 'One' ? ' Day' : ' Days');
+}
+
 function expandMeaningVariants(meanings) {
   const out = new Set();
   const addWithDigits = s => {
@@ -3004,6 +3027,8 @@ function expandMeaningVariants(meanings) {
   };
   meanings.forEach(m => {
     addWithDigits(m);
+    const dayVariant = ordinalDayVariant(m);
+    if (dayVariant) addWithDigits(dayVariant);
     const words = m.trim().split(/\s+/);
     if (words.length <= 1) return;
     const lastWord = words[words.length - 1].toLowerCase().replace(/[^a-z]/g, '');
@@ -5012,7 +5037,7 @@ function renderQuizQuestion() {
         <h4>Meaning</h4><p><strong>${item.meaning || ''}</strong></p>
         <h4>Meaning Mnemonic</h4><p>${mdBold(item.meaningMnemonic)}</p>
         <h4>Reading</h4>
-        ${readingSectionHTML(type, item, null)}
+        ${readingSectionHTML(type, item, displayReading(type, item))}
       `}
     </div>`;
 }
