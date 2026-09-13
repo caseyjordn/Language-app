@@ -42,7 +42,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>Japanese Practice</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
@@ -154,6 +154,7 @@
   .page-header h1{font-size:24px;font-weight:700;margin:0;display:flex;align-items:center;gap:10px}
   .page-header h1 .chip{width:30px;height:30px;border-radius:var(--border-radius-normal);background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Noto Sans JP",sans-serif;font-size:15px}
   .library-link{font-size:14px;font-weight:600;color:var(--accent-dark);text-decoration:none}
+  .page-header-links{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 
   .levelup-banner{background:var(--accent);color:#fff;border-radius:var(--border-radius-widget);padding:18px 24px;margin-top:24px;display:flex;align-items:center;justify-content:space-between}
   .levelup-banner .msg{font-size:18px;font-weight:700}
@@ -233,6 +234,10 @@
   .vtile .word{font-family:"Noto Sans JP",sans-serif;font-size:20px;font-weight:500;line-height:1.2;color:#fff}
   .vtile .reading{font-family:"Noto Sans JP",sans-serif;font-size:12px;color:#fff}
   .vtile .meaning{font-size:11px;color:var(--accent-light)}
+
+  .tier-section{margin-top:22px}
+  .tier-section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .tier-section-title{font-size:16px;font-weight:700}
 
   /* ---------- lesson (single scroll + anchor tabs) ---------- */
   html{scroll-behavior:smooth}
@@ -332,6 +337,22 @@
   .confetti-piece{position:fixed;top:0;left:0;width:8px;height:14px;pointer-events:none;z-index:50;animation-name:confetti-pop;animation-timing-function:cubic-bezier(0,.7,.2,1);animation-fill-mode:forwards}
   @keyframes confetti-pop{0%{transform:translate(0,0) rotate(0deg) scale(.6);opacity:1}70%{opacity:1}100%{transform:translate(calc(var(--fx) * 1px), calc(var(--fy) * 1px)) rotate(calc(var(--rot) * 1deg)) scale(1);opacity:0}}
 
+  /* WK-style tier-change toast (Guru!/Master!/etc. on promotion, a
+     quieter notice on demotion) — see showStageChangeToast. */
+  .stage-toast{
+    position:fixed;left:50%;top:14%;transform:translate(-50%,-14px);
+    display:flex;align-items:center;gap:12px;background:#fff;color:var(--color-widget-primary-text);
+    border-radius:999px;padding:10px 22px 10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.18);
+    border:2px solid var(--toast-color, #AA00FF);opacity:0;pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;z-index:60;max-width:88vw
+  }
+  .stage-toast.visible{opacity:1;transform:translate(-50%,0)}
+  .stage-toast-icon{font-size:30px;line-height:1}
+  .stage-toast-title{font-size:15px;font-weight:800;color:var(--toast-color, #AA00FF)}
+  .stage-toast-word{font-size:13px;color:var(--color-widget-secondary-text);font-family:"Noto Sans JP",sans-serif}
+  .stage-toast.demoted{border-style:dashed}
+  .stage-toast.demoted .stage-toast-title{color:var(--color-widget-secondary-text)}
+
   /* ---------- sentences hub ---------- */
   .page-sub{font-size:14px;color:var(--color-widget-secondary-text);margin:0 0 24px;max-width:560px;line-height:1.6}
   .pool-line{font-size:11px;color:var(--color-widget-secondary-text);background:#fff;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-pill);padding:5px 14px;display:inline-block;margin-bottom:24px}
@@ -385,6 +406,7 @@
   .lesson-picker-row .lp-meaning{flex:1;color:var(--color-widget-secondary-text)}
 
   .custom-vocab-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--color-widget-border);font-size:14px}
+  .custom-vocab-row .cv-stage{flex:none;font-size:16px}
   .custom-vocab-row .cv-word{font-weight:700;min-width:70px}
   .custom-vocab-row .cv-reading{color:var(--color-widget-secondary-text);min-width:80px}
   .custom-vocab-row .cv-meaning{flex:1;color:var(--color-widget-secondary-text)}
@@ -2646,6 +2668,20 @@ const SENTENCES = [
 const SRS_HOURS = [null, 4, 8, 23, 47, 167, 335, 719, 2879];
 const STAGE_NAMES = ['', 'Apprentice I', 'Apprentice II', 'Apprentice III', 'Apprentice IV', 'Guru I', 'Guru II', 'Master', 'Enlightened', 'Burned'];
 
+// Groups the 9 numbered stages into the 5 named tiers, same grouping the
+// dashboard's Item Spread widget already uses. Shared here so the
+// stage-change celebration (see showStageChangeToast) and the tier
+// browser (see viewTierBrowser) agree on tier boundaries with the rest of
+// the app instead of re-deriving them separately.
+function tierForStage(stage) {
+  if (stage <= 4) return 'apprentice';
+  if (stage <= 6) return 'guru';
+  if (stage === 7) return 'master';
+  if (stage === 8) return 'enlightened';
+  return 'burned';
+}
+const TIER_LABEL = { apprentice: 'Apprentice', guru: 'Guru', master: 'Master', enlightened: 'Enlightened', burned: 'Burned' };
+
 function nextAvailableAt(stage) {
   if (stage >= 9) return null;
   return now() + SRS_HOURS[stage] * 3600 * 1000;
@@ -2876,11 +2912,7 @@ function stageBreakdown(type) {
   contentFor(type).forEach(it => {
     const r = getRecord(type, it.id);
     if (!r) return;
-    if (r.stage <= 4) counts.apprentice++;
-    else if (r.stage <= 6) counts.guru++;
-    else if (r.stage === 7) counts.master++;
-    else if (r.stage === 8) counts.enlightened++;
-    else counts.burned++;
+    counts[tierForStage(r.stage)]++;
   });
   return counts;
 }
@@ -2911,29 +2943,116 @@ function numberWordToDigits(phrase) {
   return String(total + current);
 }
 
+// Substitutes any KNOWN number word appearing anywhere in a longer phrase
+// with its digit — "Five Machines" -> "5 Machines" — as opposed to
+// numberWordToDigits above, which only handles a phrase that's ENTIRELY a
+// number ("Five" -> "5") and returns null for anything else. Word-boundary
+// matched so it only ever touches whole number-words, never a substring
+// inside an unrelated word.
+const NUMBER_WORD_REGEX = new RegExp('\\b(' + Object.keys(NUMBER_WORDS).join('|') + ')\\b', 'gi');
+function withDigitsSubstituted(phrase) {
+  if (!NUMBER_WORD_REGEX.test(phrase)) return null;
+  const replaced = phrase.replace(NUMBER_WORD_REGEX, w => String(NUMBER_WORDS[w.toLowerCase()]));
+  return replaced !== phrase ? replaced : null;
+}
+
 // Not every entry's source doc lists every reasonable synonym as an alt
 // meaning (e.g. "American Person" has no listed "American" alt, even
 // though that's obviously an acceptable answer) — auditing all ~1500
 // vocab/kanji entries by hand for missing synonyms isn't practical, so
 // instead auto-derive the obvious trimmed variants: strip a generic
 // trailing/leading word (the kind that turns a specific noun into a
-// generic-noun phrase, or marks a verb infinitive) and accept that too.
-// "American Person" -> also accepts "American"; "To Eat" -> also accepts
-// "Eat"; "Six Things" -> also accepts "Six". This isn't true semantic
-// understanding, just a targeted heuristic for the pattern that actually
-// shows up in this data.
+// generic-noun phrase, or marks a verb infinitive) and accept that too,
+// plus a digit-substituted copy of every variant (see withDigitsSubstituted
+// above). "American Person" -> also accepts "American"; "To Eat" -> also
+// accepts "Eat"; "Five Machines" -> also accepts "5 Machines". This isn't
+// true semantic understanding, just targeted heuristics for the patterns
+// that actually show up in this data.
 const MEANING_GENERIC_TRAILING_WORDS = ['person', 'people', 'thing', 'things', 'one', 'ones', 'man', 'woman'];
 function expandMeaningVariants(meanings) {
   const out = new Set();
+  const addWithDigits = s => {
+    out.add(s);
+    const digits = withDigitsSubstituted(s);
+    if (digits) out.add(digits);
+  };
   meanings.forEach(m => {
-    out.add(m);
+    addWithDigits(m);
     const words = m.trim().split(/\s+/);
     if (words.length <= 1) return;
     const lastWord = words[words.length - 1].toLowerCase().replace(/[^a-z]/g, '');
-    if (MEANING_GENERIC_TRAILING_WORDS.includes(lastWord)) out.add(words.slice(0, -1).join(' '));
-    if (words[0].toLowerCase() === 'to') out.add(words.slice(1).join(' '));
+    if (MEANING_GENERIC_TRAILING_WORDS.includes(lastWord)) addWithDigits(words.slice(0, -1).join(' '));
+    if (words[0].toLowerCase() === 'to') addWithDigits(words.slice(1).join(' '));
   });
   return [...out];
+}
+
+// Hand-curated extra accepted meanings for specific entries flagged as
+// wrongly-marked-incorrect, keyed by "type:id" — the auto-heuristics above
+// (trailing-word strip, digit substitution) only catch mechanical patterns,
+// not genuine alternate phrasings a dictionary/native speaker would call
+// equally correct (real WK's own synonym lists are grown the same way:
+// staff add reported-missing synonyms over time, since there's no way to
+// exhaustively predict every reasonable answer up front). Add more here as
+// they come up.
+const MEANING_OVERRIDES = {
+  'vocab:こんにちは': ['Good Afternoon', 'Good Morning', 'Hi'],
+  'vocab:テーブルの上': ['Table Top', 'Tabletop', 'Tabletop Surface'],
+  // "Big" here is WK's own qualifier distinguishing this counter from
+  // others, not a meaningful part of the answer — the bag-of-words fallback
+  // below can't drop it on its own since dropping a random adjective isn't
+  // safe to do generically (it would blur genuinely different meanings).
+  'vocab:〜台': ['Machine Counter', 'Number Of Machines', 'Machines Counter']
+};
+
+// General "similar wording" fallback, so one-off overrides don't have to be
+// added by hand for every rephrasing anyone might reasonably type — e.g.
+// "Number Of Machines" for a meaning listed as "Machine Counter" ("Machine
+// Counter" == "Number Of Machines" once you fold "counter"/"number"
+// together and drop word order and the filler word "of"). This is looser
+// than the primary exact/typo-tolerance check on purpose, so it's only used
+// as a fallback once the stricter checks have already failed (see
+// isCloseEnough) — it ignores word order and specific phrasing entirely, so
+// it's reserved for things that would otherwise be marked wrong outright,
+// not used to sharpen ordinary matching. Add new synonym groups here as
+// more mismatches like this turn up.
+const MEANING_STOPWORDS = new Set(['a', 'an', 'the', 'of', 'for', 'to', 'in', 'on', 'at', 'with', 'is', 'are', 'this', 'that']);
+const MEANING_SYNONYM_GROUPS = [
+  ['counter', 'number', 'count', 'amount', 'quantity'],
+  ['person', 'people'],
+  ['thing', 'things', 'item', 'items', 'object', 'objects'],
+  ['man', 'men'],
+  ['woman', 'women'],
+  ['machine', 'machines', 'device', 'devices', 'appliance', 'appliances'],
+  ['animal', 'animals', 'creature', 'creatures'],
+  ['book', 'books', 'volume', 'volumes'],
+  ['hello', 'hi', 'greetings'],
+  ['big', 'large'],
+  ['small', 'little']
+];
+const MEANING_SYNONYM_CANON = {};
+MEANING_SYNONYM_GROUPS.forEach(group => group.forEach(w => { MEANING_SYNONYM_CANON[w] = group[0]; }));
+// Crude English de-pluralizer (drop trailing "es"/"s") so "machines" and
+// "machine" canonicalize the same even without an explicit synonym-group
+// entry for every plural. Only applied to words 4+ letters and never to
+// words ending "ss" (e.g. "glass") to avoid mangling short/irregular words.
+function stemWord(w) {
+  if (w.length > 4 && w.endsWith('es')) return w.slice(0, -2);
+  if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss')) return w.slice(0, -1);
+  return w;
+}
+function canonicalizeToken(word) {
+  const w = word.toLowerCase().replace(/[^a-z]/g, '');
+  if (!w || MEANING_STOPWORDS.has(w)) return null;
+  return MEANING_SYNONYM_CANON[w] || MEANING_SYNONYM_CANON[stemWord(w)] || stemWord(w);
+}
+function bagOfWordsKey(phrase) {
+  return String(phrase || '').trim().split(/\s+/).map(canonicalizeToken).filter(Boolean).sort().join(' ');
+}
+function bagOfWordsMatch(rawVal, acceptedList) {
+  const inputKey = bagOfWordsKey(rawVal);
+  if (!inputKey) return false;
+  return acceptedList.some(a => bagOfWordsKey(a) === inputKey);
 }
 
 function fieldsFor(type) { return type === 'grammar' ? ['blank'] : ['meaning', 'reading']; }
@@ -2942,7 +3061,8 @@ function acceptedFor(type, item, field) {
     return (item.blankAnswerAccepted && item.blankAnswerAccepted.length ? item.blankAnswerAccepted : [item.blankAnswer]).filter(Boolean);
   }
   if (field === 'meaning') {
-    const rawMeanings = (item.altMeanings && item.altMeanings.length ? [item.meaning, ...item.altMeanings] : [item.meaning]).filter(Boolean);
+    const overrideExtras = MEANING_OVERRIDES[type + ':' + item.id] || [];
+    const rawMeanings = (item.altMeanings && item.altMeanings.length ? [item.meaning, ...item.altMeanings] : [item.meaning]).concat(overrideExtras).filter(Boolean);
     const meanings = expandMeaningVariants(rawMeanings);
     const digitForms = meanings.map(numberWordToDigits).filter(Boolean);
     return meanings.concat(digitForms);
@@ -2991,7 +3111,7 @@ function levenshtein(a, b) {
   }
   return dp[n];
 }
-function isCloseEnough(rawVal, acceptedList) {
+function isCloseEnough(rawVal, acceptedList, field) {
   const val = normalizeAnswer(rawVal);
   if (!val) return false;
   for (const raw of acceptedList) {
@@ -3010,6 +3130,10 @@ function isCloseEnough(rawVal, acceptedList) {
     const tolerance = Math.floor(target.length * 0.15);
     if (tolerance > 0 && levenshtein(val, target) <= tolerance) return true;
   }
+  // English-meaning-only fallback: word-order/synonym-independent match
+  // (see bagOfWordsMatch) for rephrasings the checks above can't catch —
+  // never applied to kana readings, where word "synonyms" make no sense.
+  if (field === 'meaning' && bagOfWordsMatch(rawVal, acceptedList)) return true;
   return false;
 }
 
@@ -3384,6 +3508,35 @@ function burstConfetti() {
     document.body.appendChild(piece);
     piece.addEventListener('animationend', () => piece.remove());
   }
+}
+
+// WK-style stage-change toast — fires whenever a review answer moves an
+// item across a TIER boundary (Apprentice/Guru/Master/Enlightened/Burned),
+// not just a stage within the same tier (e.g. Apprentice I -> II doesn't
+// trigger this, but Apprentice IV -> Guru I does). Promotions get the
+// celebratory treatment (own color per tier + a bigger stage icon);
+// demotions (a miss dropping you back a tier, e.g. Guru -> Apprentice)
+// get a quieter, distinctly-styled notice instead of a party.
+const TIER_TOAST_COLOR = { guru: '#AA00FF', master: '#00AAFF', enlightened: '#FFC700', burned: '#434343', apprentice: '#8A8D97' };
+function showStageChangeToast(type, item, oldStage, newStage) {
+  const oldTier = tierForStage(oldStage), newTier = tierForStage(newStage);
+  if (oldTier === newTier) return;
+  const promoted = newStage > oldStage;
+  const el = document.createElement('div');
+  el.className = 'stage-toast' + (promoted ? ' promoted' : ' demoted');
+  el.style.setProperty('--toast-color', TIER_TOAST_COLOR[newTier]);
+  el.innerHTML = `
+    <div class="stage-toast-icon">${STAGE_ICON[newStage] || ''}</div>
+    <div class="stage-toast-text">
+      <div class="stage-toast-title">${promoted ? TIER_LABEL[newTier] + '!' : 'Back to ' + TIER_LABEL[newTier]}</div>
+      <div class="stage-toast-word">${displayWord(type, item)}</div>
+    </div>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('visible'));
+  setTimeout(() => {
+    el.classList.remove('visible');
+    setTimeout(() => el.remove(), 300);
+  }, 2200);
 }
 
 /* ======================================================================
@@ -3770,13 +3923,32 @@ function viewCustomVocabHub() {
   const notLearned = (type, list) => list.filter(it => !isIntroduced(type, it.id));
   const learned = (type, list) => list.filter(it => isIntroduced(type, it.id));
 
-  const learnedRow = (type, item) => `
+  const learnedRow = (type, item, record) => `
     <div class="custom-vocab-row">
+      <span class="cv-stage">${STAGE_ICON[record.stage] || ''}</span>
       <span class="cv-word">${displayWord(type, item)}</span>
       <span class="cv-reading">${item.reading || item.onyomi || item.kunyomi || ''}</span>
       <span class="cv-meaning">${item.meaning}</span>
       <button class="cv-remove" data-type="${type}" data-id="${item.id}">Remove</button>
     </div>`;
+
+  // Learned custom items shown grouped by SRS tier, same structure as the
+  // per-section "By SRS tier" browser (see viewTierBrowser/groupItemsByTier)
+  // rather than one flat list, so you can see at a glance which custom
+  // words/kanji are already Guru'd vs. still fresh in Apprentice.
+  const learnedByTierHTML = (type, list) => {
+    const groups = groupItemsByTier(type, list);
+    const sections = TIER_ORDER.map(tier => {
+      const entries = groups[tier];
+      if (!entries.length) return '';
+      return `
+        <div class="tier-section">
+          <div class="tier-section-head"><span class="tier-section-title">${TIER_LABEL[tier]}</span><span class="count-bubble">${entries.length}</span></div>
+          ${entries.map(({ item, record }) => learnedRow(type, item, record)).join('')}
+        </div>`;
+    }).join('');
+    return sections || '<p class="empty-state">None yet.</p>';
+  };
 
   const vocabNotLearned = notLearned('vocab', myVocab);
   const kanjiNotLearned = notLearned('kanji', myKanji);
@@ -3837,11 +4009,11 @@ function viewCustomVocabHub() {
 
       <div class="backup-section">
         <h2>Already learned — words (${vocabLearned.length})</h2>
-        ${vocabLearned.length ? vocabLearned.map(v => learnedRow('vocab', v)).join('') : '<p class="empty-state">None yet.</p>'}
+        ${learnedByTierHTML('vocab', vocabLearned)}
       </div>
       <div class="backup-section">
         <h2>Already learned — kanji (${kanjiLearned.length})</h2>
-        ${kanjiLearned.length ? kanjiLearned.map(k => learnedRow('kanji', k)).join('') : '<p class="empty-state">None yet.</p>'}
+        ${learnedByTierHTML('kanji', kanjiLearned)}
       </div>
     </main>`, after: attachCustomVocabHubHandlers };
 }
@@ -4004,6 +4176,7 @@ function viewSectionRoute(type, subparts) {
   if (sub === 'lesson-picker') return viewLessonPicker(type);
   if (sub === 'lesson-active') return { html: renderLessonItem(), after: attachLessonHandlers };
   if (sub === 'custom') return viewCustomVocabHub();
+  if (sub === 'tiers') return viewTierBrowser(type);
   if (sub === 'practice' && subparts[1] === 'recent') return viewPracticeRecent(type);
   if (sub === 'practice' && subparts[1] === 'level' && subparts[2]) return viewPracticeLevel(type, Number(subparts[2]));
   if (sub === 'practice' && subparts[1] === 'pick') return viewPracticePicker(type);
@@ -4038,7 +4211,10 @@ function viewSectionMain(type) {
     <main>
       <div class="page-header">
         <h1><span class="chip">${SECTION_CHIP[type]}</span>${SECTION_LABEL[type]}</h1>
-        <a class="library-link" href="#/${sectionBase(type)}/library">All learned (${introducedCount}) ›</a>
+        <div class="page-header-links">
+          <a class="library-link" href="#/${sectionBase(type)}/library">All learned (${introducedCount}) ›</a>
+          <a class="library-link" href="#/${sectionBase(type)}/tiers">By SRS tier ›</a>
+        </div>
       </div>
 
       ${noContent ? `<p class="empty-state" style="margin-top:16px">No ${SECTION_LABEL[type].toLowerCase()} added yet — add entries to the ${type.toUpperCase()} array at the top of the file to get started.</p>` : ''}
@@ -4342,6 +4518,55 @@ function viewLibrary(type) {
 }
 
 const STAGE_ICON = ['', '🥚', '🥚', '🥚', '🥚', '🐣', '🐣', '🐤', '🐤', '🐢'];
+
+// Groups a list of items by SRS tier for display — shared between the
+// per-section tier browser (viewTierBrowser) and the Custom Vocab hub's
+// "already learned" breakdown, so both present the same 5-tier structure
+// as the dashboard's Item Spread widget and the real WK app screens this
+// was modeled on.
+const TIER_ORDER = ['apprentice', 'guru', 'master', 'enlightened', 'burned'];
+function groupItemsByTier(type, items) {
+  const groups = { apprentice: [], guru: [], master: [], enlightened: [], burned: [] };
+  items.forEach(it => {
+    const r = getRecord(type, it.id);
+    if (!r) return;
+    groups[tierForStage(r.stage)].push({ item: it, record: r });
+  });
+  Object.values(groups).forEach(list => list.sort((a, b) => a.record.stage - b.record.stage || (b.record.learnedAt || 0) - (a.record.learnedAt || 0)));
+  return groups;
+}
+
+function tierSectionHTML(type, tierKey, entries) {
+  if (!entries.length) return '';
+  return `
+    <div class="tier-section">
+      <div class="tier-section-head">
+        <span class="tier-section-title">${TIER_LABEL[tierKey]}</span>
+        <span class="count-bubble">${entries.length}</span>
+      </div>
+      <div class="tile-grid">${entries.map(({ item, record }) => `
+        <a class="vtile" href="#/${sectionBase(type)}/library/${encodeURIComponent(item.id)}">
+          <div class="word">${STAGE_ICON[record.stage] || ''} ${displayWord(type, item)}</div>
+          <div class="reading">${displayReading(type, item) || ''}</div>
+          <div class="meaning">${displayMeaning(type, item) || ''}</div>
+        </a>`).join('')}</div>
+    </div>`;
+}
+
+function viewTierBrowser(type) {
+  const items = introducedItems(type);
+  const groups = groupItemsByTier(type, items);
+  const body = TIER_ORDER.map(tier => tierSectionHTML(type, tier, groups[tier])).join('');
+  return { html: `
+    <div class="topbar">
+      <a class="back-link" href="#/${sectionBase(type)}">‹ Back to ${SECTION_LABEL[type]}</a>
+      <div class="section-title"><span class="chip">${SECTION_CHIP[type]}</span>${SECTION_LABEL[type]} by SRS Tier</div>
+    </div>
+    <main>
+      <p class="wk-text">${items.length} learned item${items.length === 1 ? '' : 's'}, grouped by where they are in the SRS cycle right now.</p>
+      ${items.length ? body : '<p class="empty-state">Nothing learned yet — finish some lessons first.</p>'}
+    </main>` };
+}
 
 function viewItemDetail(type, itemId) {
   const item = contentFor(type).find(it => it.id === itemId);
@@ -4661,7 +4886,7 @@ function attachQuizHandlers() {
       val = finalizeTrailingN(val, /[゠-ヿ]/.test(item.blankAnswer || ''));
     }
     const accepted = acceptedFor(type, item, q.field);
-    const correct = isCloseEnough(val, accepted);
+    const correct = isCloseEnough(val, accepted, q.field);
 
     if (correct) {
       locked = true;
@@ -4679,7 +4904,9 @@ function attachQuizHandlers() {
           if (mode === 'review') {
             const record = getRecord(type, q.itemId);
             const missCount = quizSession.missByItem[q.itemId] || 0;
+            const oldStage = record.stage;
             applyReviewOutcome(record, missCount);
+            showStageChangeToast(type, item, oldStage, record.stage);
             if (missCount > 0) recordMistake(type, q.itemId);
           } else if (mode === 'lesson') {
             introduceItem(type, q.itemId);
@@ -4910,7 +5137,7 @@ function attachSentencePracticeHandlers() {
     const { mode, pool, index } = sentencePractice;
     const s = pool[index];
     const accepted = mode === 'translate' ? s.acceptedTranslations : s.acceptedReadings;
-    const correct = isCloseEnough(val, accepted);
+    const correct = isCloseEnough(val, accepted, mode === 'translate' ? 'meaning' : 'reading');
 
     if (correct) {
       locked = true;
