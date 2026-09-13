@@ -233,11 +233,34 @@
   .vtile{border-radius:var(--border-radius-normal);padding:10px 6px 9px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;background:var(--accent)}
   .vtile .word{font-family:"Noto Sans JP",sans-serif;font-size:20px;font-weight:500;line-height:1.2;color:#fff}
   .vtile .reading{font-family:"Noto Sans JP",sans-serif;font-size:12px;color:#fff}
-  .vtile .meaning{font-size:11px;color:var(--accent-light)}
+  .vtile .meaning{font-size:11px;color:rgba(255,255,255,.85)}
+  .vtile-bar{width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.3);margin-top:6px;overflow:hidden}
+  .vtile-bar-fill{height:100%;background:#00D68F}
+  .vtile-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .vtile-wrap .vtile{width:100%}
+  .vtile.vtile-lessons{background:var(--accent-light);border:2px solid var(--accent)}
+  .vtile.vtile-lessons .word,.vtile.vtile-lessons .reading{color:var(--accent-dark)}
+  .vtile.vtile-locked{background:var(--color-locked-bg);opacity:.65}
+  .vtile.vtile-locked .word,.vtile.vtile-locked .reading{color:var(--color-widget-secondary-text)}
+  .vtile-status-label{font-size:11px;font-weight:600;color:var(--color-widget-secondary-text)}
 
   .tier-section{margin-top:22px}
   .tier-section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
   .tier-section-title{font-size:16px;font-weight:700}
+  .tier-summary-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tier-pill{flex:1;min-width:78px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:12px;background:var(--bg-2,#f2f2f4);text-decoration:none;color:inherit}
+  .tier-pill .n{font-size:20px;font-weight:800}
+  .tier-pill .lbl{font-size:11px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.02em}
+  .level-block{background:#fff;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-widget);padding:16px 20px;margin:14px 0}
+  .level-block-head{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;user-select:none}
+  .level-block-head .title{font-size:16px;font-weight:700}
+  .level-block-head .sub{font-size:12px;color:var(--color-widget-secondary-text)}
+  .level-bar{display:flex;gap:2px;margin:10px 0 6px;height:14px}
+  .level-bar span{flex:1;border-radius:3px;background:var(--color-locked-bg)}
+  .level-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:4px}
+  .level-legend .lg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-widget-secondary-text)}
+  .level-legend .sw{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .level-block-body{margin-top:10px}
 
   /* ---------- lesson (single scroll + anchor tabs) ---------- */
   html{scroll-behavior:smooth}
@@ -406,7 +429,7 @@
   .lesson-picker-row .lp-meaning{flex:1;color:var(--color-widget-secondary-text)}
 
   .custom-vocab-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--color-widget-border);font-size:14px}
-  .custom-vocab-row .cv-stage{flex:none;font-size:16px}
+  .custom-vocab-row .cv-stage{flex:none;width:10px;height:10px;border-radius:3px;display:inline-block}
   .custom-vocab-row .cv-word{font-weight:700;min-width:70px}
   .custom-vocab-row .cv-reading{color:var(--color-widget-secondary-text);min-width:80px}
   .custom-vocab-row .cv-meaning{flex:1;color:var(--color-widget-secondary-text)}
@@ -3668,7 +3691,7 @@ function viewDashboard() {
   const spread = { vocab: stageBreakdown('vocab'), kanji: stageBreakdown('kanji') };
   const spreadRows = tiers.map(([key, label]) => `
     <div class="spread-row">
-      <div class="spread-label">${STAGE_ICON[key === 'apprentice' ? 1 : key === 'guru' ? 5 : key === 'master' ? 7 : key === 'enlightened' ? 8 : 9]} ${label}</div>
+      <div class="spread-label"><span class="sw" style="background:${TIER_TOAST_COLOR[key]};width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px"></span>${label}</div>
       <div class="spread-count" style="background:${COLOR_MAP.vocab.accent}">${spread.vocab[key]}</div>
       <div class="spread-count" style="background:${COLOR_MAP.kanji.accent}">${spread.kanji[key]}</div>
     </div>`).join('');
@@ -3925,7 +3948,7 @@ function viewCustomVocabHub() {
 
   const learnedRow = (type, item, record) => `
     <div class="custom-vocab-row">
-      <span class="cv-stage">${STAGE_ICON[record.stage] || ''}</span>
+      <span class="cv-stage" style="background:${TIER_TOAST_COLOR[tierForStage(record.stage)]}"></span>
       <span class="cv-word">${displayWord(type, item)}</span>
       <span class="cv-reading">${item.reading || item.onyomi || item.kunyomi || ''}</span>
       <span class="cv-meaning">${item.meaning}</span>
@@ -4204,6 +4227,7 @@ function viewSectionMain(type) {
   const total = contentFor(type).length;
   const introducedCount = introducedItems(type).length;
   const recentPoolCount = recentPoolFor(type).length;
+  const tierBreakdown = stageBreakdown(type);
 
   const noContent = total === 0;
 
@@ -4213,7 +4237,6 @@ function viewSectionMain(type) {
         <h1><span class="chip">${SECTION_CHIP[type]}</span>${SECTION_LABEL[type]}</h1>
         <div class="page-header-links">
           <a class="library-link" href="#/${sectionBase(type)}/library">All learned (${introducedCount}) ›</a>
-          <a class="library-link" href="#/${sectionBase(type)}/tiers">By SRS tier ›</a>
         </div>
       </div>
 
@@ -4228,6 +4251,14 @@ function viewSectionMain(type) {
         <div class="progress-track2"><div class="progress-fill2" style="width:${pct}%"></div></div>
         <div class="level-pips">${pips}</div>
         <div class="level-footnote">${guruInBatch} of ${batch.length} Guru'd this level</div>
+      </div>
+
+      <div class="level-widget">
+        <div class="level-widget-head"><span class="title">SRS Tiers</span><a class="library-link" href="#/${sectionBase(type)}/tiers">By level ›</a></div>
+        <p class="wk-text">Every learned item, grouped by SRS tier — same grouping WK uses on its own dashboard.</p>
+        <div class="tier-summary-row">
+          ${TIER_ORDER.map(t => `<a class="tier-pill" href="#/${sectionBase(type)}/tiers" style="border:2px solid ${TIER_TOAST_COLOR[t]}22"><span class="n" style="color:${TIER_TOAST_COLOR[t]}">${tierBreakdown[t]}</span><span class="lbl">${TIER_LABEL[t]}</span></a>`).join('')}
+        </div>
       </div>
 
       <div class="lr-row">
@@ -4517,7 +4548,27 @@ function viewLibrary(type) {
     </main>` };
 }
 
+// STAGE_ICON is kept only for the stage-change celebration toast (a small
+// fun flourish on an already-explicit colored/labeled toast) — everywhere
+// else that used to show these as a stand-in for progress (tile grids, the
+// dashboard's Item Spread rows, item detail pages) now shows a real WK-style
+// colored progress bar instead (see stageProgressPct/vtileHTML below), which
+// actually communicates something (how close to the next stage) rather than
+// just an arbitrary icon per stage number.
 const STAGE_ICON = ['', '🥚', '🥚', '🥚', '🥚', '🐣', '🐣', '🐤', '🐤', '🐢'];
+
+// How far through the CURRENT stage's review interval an item is, 0-100 —
+// this is what the little green bar under a WK tile actually shows (time
+// elapsed since it last leveled up, toward when it's next due), not overall
+// "mastery." Burned items (no more reviews ever) always read as full.
+function stageProgressPct(record) {
+  if (!record) return 0;
+  if (record.stage >= 9 || record.availableAt == null) return 100;
+  const start = record.lastReviewedAt || record.learnedAt || 0;
+  const total = record.availableAt - start;
+  if (total <= 0) return 100;
+  return Math.max(0, Math.min(100, Math.round(((now() - start) / total) * 100)));
+}
 
 // Groups a list of items by SRS tier for display — shared between the
 // per-section tier browser (viewTierBrowser) and the Custom Vocab hub's
@@ -4536,6 +4587,22 @@ function groupItemsByTier(type, items) {
   return groups;
 }
 
+// Real WK-style tile: background colored by SRS tier, with a thin green
+// progress bar underneath showing how far through the current review
+// interval the item is — this is what replaced the old emoji-per-stage
+// prefix on the word.
+function vtileHTML(type, item, record, tierKey) {
+  const bg = TIER_TOAST_COLOR[tierKey];
+  const pct = stageProgressPct(record);
+  return `
+    <a class="vtile" href="#/${sectionBase(type)}/library/${encodeURIComponent(item.id)}" style="background:${bg}">
+      <div class="word">${displayWord(type, item)}</div>
+      <div class="reading">${displayReading(type, item) || ''}</div>
+      <div class="meaning">${displayMeaning(type, item) || ''}</div>
+      <div class="vtile-bar"><div class="vtile-bar-fill" style="width:${pct}%"></div></div>
+    </a>`;
+}
+
 function tierSectionHTML(type, tierKey, entries) {
   if (!entries.length) return '';
   return `
@@ -4544,27 +4611,79 @@ function tierSectionHTML(type, tierKey, entries) {
         <span class="tier-section-title">${TIER_LABEL[tierKey]}</span>
         <span class="count-bubble">${entries.length}</span>
       </div>
-      <div class="tile-grid">${entries.map(({ item, record }) => `
-        <a class="vtile" href="#/${sectionBase(type)}/library/${encodeURIComponent(item.id)}">
-          <div class="word">${STAGE_ICON[record.stage] || ''} ${displayWord(type, item)}</div>
-          <div class="reading">${displayReading(type, item) || ''}</div>
-          <div class="meaning">${displayMeaning(type, item) || ''}</div>
-        </a>`).join('')}</div>
+      <div class="tile-grid">${entries.map(({ item, record }) => vtileHTML(type, item, record, tierKey)).join('')}</div>
+    </div>`;
+}
+
+// One colored segment per item in the level — filled with that item's tier
+// color once learned, plain gray (same "locked" gray the Level Progress
+// pips use) until then. This is the actual WK "colored bar per level" look,
+// as opposed to the flat done/not-done pips on the main section page
+// (those only ever track the CURRENT level; this covers every level).
+function levelBarHTML(type, levelItems) {
+  return `<div class="level-bar">${levelItems.map(it => {
+    const r = getRecord(type, it.id);
+    const color = r ? TIER_TOAST_COLOR[tierForStage(r.stage)] : null;
+    return `<span${color ? ` style="background:${color}"` : ''}></span>`;
+  }).join('')}</div>`;
+}
+
+// Plain, non-SRS-colored tile for an item that isn't learned yet — either
+// ready to learn right now (your level has reached it — "Lessons", same
+// status the Lessons widget on the main section page already uses) or
+// still behind a level you haven't reached ("Locked"). Answers Casey's "do
+// we have a system for that" — yes, it's exactly lessonQueueFor's own
+// level<=STATE.levels[type] check, just visualized per item here instead of
+// only as a count.
+function statusTileHTML(type, item, status) {
+  return `
+    <div class="vtile-wrap">
+      <div class="vtile vtile-${status}">
+        <div class="word">${displayWord(type, item)}</div>
+        <div class="reading">${displayReading(type, item) || ''}</div>
+      </div>
+      <span class="vtile-status-label">${status === 'lessons' ? 'Lessons' : 'Locked'}</span>
     </div>`;
 }
 
 function viewTierBrowser(type) {
-  const items = introducedItems(type);
-  const groups = groupItemsByTier(type, items);
-  const body = TIER_ORDER.map(tier => tierSectionHTML(type, tier, groups[tier])).join('');
+  const levels = totalLevels(type);
+  const currentLevel = STATE.levels[type];
+  const legend = `<div class="level-legend">${TIER_ORDER.map(t =>
+    `<span class="lg"><span class="sw" style="background:${TIER_TOAST_COLOR[t]}"></span>${TIER_LABEL[t]}</span>`
+  ).join('')}<span class="lg"><span class="sw" style="background:var(--color-locked-bg)"></span>Lessons / Locked</span></div>`;
+
+  const blocks = [];
+  for (let level = 1; level <= levels; level++) {
+    const levelItems = levelBatch(type, level);
+    if (!levelItems.length) continue;
+    const introducedInLevel = levelItems.filter(it => isIntroduced(type, it.id));
+    const notIntroduced = levelItems.filter(it => !isIntroduced(type, it.id));
+    const groups = groupItemsByTier(type, introducedInLevel);
+    const learnedBody = TIER_ORDER.map(tier => tierSectionHTML(type, tier, groups[tier])).join('');
+    // Ready-to-learn (your level has reached this batch) vs. genuinely
+    // locked (a future level) — same rule lessonQueueFor uses for the
+    // Lessons widget's count, just shown item-by-item here.
+    const statusBody = notIntroduced.length ? `
+      <div class="tier-section">
+        <div class="tile-grid">${notIntroduced.map(it => statusTileHTML(type, it, level <= currentLevel ? 'lessons' : 'locked')).join('')}</div>
+      </div>` : '';
+    blocks.push(`
+      <details class="level-block"${level === currentLevel ? ' open' : ''}>
+        <summary class="level-block-head"><span class="title">Level ${level}</span><span class="sub">${introducedInLevel.length} of ${levelItems.length} learned</span></summary>
+        ${levelBarHTML(type, levelItems)}
+        <div class="level-block-body">${learnedBody}${statusBody || (learnedBody ? '' : '<p class="empty-state">Nothing learned yet at this level.</p>')}</div>
+      </details>`);
+  }
+
   return { html: `
     <div class="topbar">
       <a class="back-link" href="#/${sectionBase(type)}">‹ Back to ${SECTION_LABEL[type]}</a>
-      <div class="section-title"><span class="chip">${SECTION_CHIP[type]}</span>${SECTION_LABEL[type]} by SRS Tier</div>
+      <div class="section-title"><span class="chip">${SECTION_CHIP[type]}</span>${SECTION_LABEL[type]} by Level &amp; SRS Tier</div>
     </div>
     <main>
-      <p class="wk-text">${items.length} learned item${items.length === 1 ? '' : 's'}, grouped by where they are in the SRS cycle right now.</p>
-      ${items.length ? body : '<p class="empty-state">Nothing learned yet — finish some lessons first.</p>'}
+      ${legend}
+      ${blocks.length ? blocks.join('') : '<p class="empty-state">Nothing here yet.</p>'}
     </main>` };
 }
 
@@ -4598,7 +4717,8 @@ function viewItemDetail(type, itemId) {
   const progressSection = record ? `
     <section class="lesson-section">
       <h2>Your Progress</h2>
-      <p class="prose">${STAGE_ICON[record.stage] || ''} <strong>${STAGE_NAMES[record.stage]}</strong>${item.source === 'duo' ? ' · from Duolingo' : ''}</p>
+      <p class="prose"><strong style="color:${TIER_TOAST_COLOR[tierForStage(record.stage)]}">${STAGE_NAMES[record.stage]}</strong>${item.source === 'duo' ? ' · from Duolingo' : ''}</p>
+      <div class="vtile-bar" style="background:var(--color-locked-bg);max-width:200px"><div class="vtile-bar-fill" style="width:${stageProgressPct(record)}%"></div></div>
       <p class="wk-text">${record.stage >= 9 ? 'Burned — no longer shown in reviews.' : `Next review: ${record.availableAt ? new Date(record.availableAt).toLocaleString() : '—'}`}</p>
     </section>` : '';
 
