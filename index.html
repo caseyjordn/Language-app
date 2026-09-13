@@ -314,6 +314,8 @@
      staying visible the whole time you're typing. */
   .quiz-hero{background:var(--accent);color:#fff;padding:16px 20px 40px;text-align:center;transition:background .2s ease;position:sticky;top:0;z-index:5}
   .quiz-hero-spacer{height:0}
+  .quiz-hero.kb-compact{padding:10px 20px 14px}
+  .quiz-hero.kb-compact .quiz-hero-top{margin-bottom:6px}
   .quiz-hero.state-correct{background:var(--color-correct)}
   .quiz-hero.state-incorrect{background:var(--color-incorrect)}
   .quiz-hero-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 18px}
@@ -3599,54 +3601,55 @@ function render() {
   root.innerHTML = topNav(section, parts) + view.html;
   if (view.after) view.after();
   window.scrollTo(0, 0);
-  resetHeroKeyboardPin();
+  setHeroCompact(false);
 }
 
-// iOS Safari keyboard fix, take 2: `position:sticky`/`fixed` position
-// against the LAYOUT viewport, but when the keyboard opens, Safari's
-// auto-scroll-focused-input-into-view scrolls the page while the VISUAL
-// viewport (what's actually drawn on screen) shrinks by the keyboard's
-// height — those two viewports can end up offset from each other, so a
-// sticky top:0 hero computes a position that's technically correct for the
-// layout viewport but scrolled off the top of what's actually visible
-// on screen (this is what was still happening after the earlier sticky +
-// interactive-widget=resizes-content attempt — Safari doesn't actually
-// honor interactive-widget). The fix: use the VisualViewport API directly
-// and pin the hero's `top` to its live offsetTop whenever the two
-// viewports diverge (keyboard open), falling back to normal CSS sticky
-// the rest of the time. A spacer div (see quiz-hero-spacer in the quiz
-// templates) takes over the hero's normal-flow space while it's fixed, so
-// nothing else on the page jumps.
-function pinHeroForKeyboard() {
+// iOS Safari keyboard fix, take 3: two earlier attempts (CSS position:sticky
+// alone, then a JS position:fixed pinned to visualViewport.offsetTop) both
+// still left the big kanji/word scrolled off the top of the screen — Safari
+// auto-scrolls the focused input into view against a coordinate system
+// (the layout viewport) that doesn't reliably match what's actually drawn
+// on screen once the keyboard's up, and neither sticky nor fixed positioning
+// could be trusted to compensate for that in testing. Fighting the browser's
+// scroll behavior turned out to be the wrong layer to fix this at — instead,
+// when the answer input is focused, shrink the hero itself (drop the audio
+// buttons, session bar, and mode badge, and use a small word) so the WHOLE
+// quiz-hero + quiz-card comfortably fits inside the smaller visible area
+// the keyboard leaves, and there's nothing left that NEEDS to scroll off
+// screen in the first place, regardless of which viewport quirk Safari hits.
+function setHeroCompact(compact) {
   const hero = document.getElementById('hero');
-  const spacer = document.getElementById('heroSpacer');
-  if (!hero || !spacer || !window.visualViewport) return;
-  const vv = window.visualViewport;
-  const keyboardLikelyOpen = vv.height < window.innerHeight - 100;
-  if (keyboardLikelyOpen) {
-    if (hero.style.position !== 'fixed') spacer.style.height = hero.offsetHeight + 'px';
-    hero.style.position = 'fixed';
-    hero.style.top = vv.offsetTop + 'px';
-    hero.style.left = '0';
-    hero.style.right = '0';
+  if (!hero || typeof hero.querySelector !== 'function') return;
+  const char = hero.querySelector('.quiz-char');
+  const sessionBar = hero.querySelector('.session-bar');
+  const hideEls = hero.querySelectorAll('.hero-audio-wrap, .hero-mode-badge, .audio-btn');
+  hero.classList.toggle('kb-compact', compact);
+  if (compact) {
+    if (char && char.dataset.origFs === undefined) char.dataset.origFs = char.style.fontSize || '';
+    if (char) { char.style.fontSize = '22px'; char.style.marginTop = '2px'; }
+    if (sessionBar) sessionBar.style.display = 'none';
+    hideEls.forEach(el => { el.style.display = 'none'; });
   } else {
-    hero.style.position = '';
-    hero.style.top = '';
-    hero.style.left = '';
-    hero.style.right = '';
-    spacer.style.height = '0';
+    if (char && char.dataset.origFs !== undefined) { char.style.fontSize = char.dataset.origFs; delete char.dataset.origFs; }
+    if (char) char.style.marginTop = '';
+    if (sessionBar) sessionBar.style.display = '';
+    hideEls.forEach(el => { el.style.display = ''; });
   }
 }
-function resetHeroKeyboardPin() {
-  const hero = document.getElementById('hero');
-  const spacer = document.getElementById('heroSpacer');
-  if (hero) { hero.style.position = ''; hero.style.top = ''; hero.style.left = ''; hero.style.right = ''; }
-  if (spacer) spacer.style.height = '0';
-  if (window.visualViewport) pinHeroForKeyboard();
+// Drive compacting off a REAL keyboard-open signal (the visual viewport
+// actually shrinking) rather than the input's `focus` event alone — the
+// quiz inputs use `autofocus`, which can fire a focus event on page load
+// before any keyboard is genuinely showing, and compacting the hero then
+// would just be a cosmetic downgrade for no reason. Where visualViewport
+// isn't available at all, the focus/blur listeners below fall back to
+// triggering directly off focus instead.
+function updateHeroCompactFromViewport() {
+  if (!window.visualViewport) return;
+  setHeroCompact(window.visualViewport.height < window.innerHeight - 100);
 }
 if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', pinHeroForKeyboard);
-  window.visualViewport.addEventListener('scroll', pinHeroForKeyboard);
+  window.visualViewport.addEventListener('resize', updateHeroCompactFromViewport);
+  window.visualViewport.addEventListener('scroll', updateHeroCompactFromViewport);
 }
 
 function topNav(section, parts) {
@@ -4981,12 +4984,12 @@ function renderQuizQuestion() {
   // audio only offered on Meaning questions — playing the reading on a
   // Reading question would just hand you the answer
   const ttsButton = (type !== 'grammar' && q.field === 'meaning' && displayReading(type, item))
-    ? `<div style="margin-top:8px">${audioButtonsHTML(displayReading(type, item), 'background:rgba(255,255,255,.18);border-color:transparent;color:#fff')}</div>`
+    ? `<div class="hero-audio-wrap" style="margin-top:8px">${audioButtonsHTML(displayReading(type, item), 'background:rgba(255,255,255,.18);border-color:transparent;color:#fff')}</div>`
     : '';
   const modeBadge = mode === 'lesson'
-    ? `<div style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">Lesson Quiz</div>`
+    ? `<div class="hero-mode-badge" style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">Lesson Quiz</div>`
     : mode === 'practice'
-    ? `<div style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">Practice — doesn't affect SRS progress</div>`
+    ? `<div class="hero-mode-badge" style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">Practice — doesn't affect SRS progress</div>`
     : '';
 
   return `
@@ -5155,6 +5158,8 @@ function attachQuizHandlers() {
     if (awaitingNext) advanceAfterMiss();
     else check();
   });
+  input.addEventListener('focus', () => { if (!window.visualViewport) setHeroCompact(true); setTimeout(() => window.scrollTo(0, 0), 60); });
+  input.addEventListener('blur', () => setHeroCompact(false));
 
   // romaji -> kana live conversion on Reading questions (vocab/kanji) and
   // Grammar's fill-in-the-blank (particles/conjugated forms are kana too),
@@ -5265,8 +5270,8 @@ function renderSentencePractice() {
       </div>
       <div class="session-bar"><span class="done" style="width:100%"></span></div>
       ${isTranslate
-        ? `<div style="font-size:12px;font-weight:700;text-transform:uppercase;opacity:.8;margin-top:22px">Translate</div><div style="font-size:26px;margin-top:8px;font-weight:500">${s.en}</div>`
-        : `<div class="quiz-char" style="font-size:30px">${s.jp}</div><div style="margin-top:6px">${audioButtonsHTML(s.jp, 'background:rgba(255,255,255,.18);border-color:transparent;color:#fff')}</div>`}
+        ? `<div class="hero-mode-badge" style="font-size:12px;font-weight:700;text-transform:uppercase;opacity:.8;margin-top:22px">Translate</div><div class="quiz-char" style="font-size:26px;margin-top:8px;font-weight:500">${s.en}</div>`
+        : `<div class="quiz-char" style="font-size:30px">${s.jp}</div><div class="hero-audio-wrap" style="margin-top:6px">${audioButtonsHTML(s.jp, 'background:rgba(255,255,255,.18);border-color:transparent;color:#fff')}</div>`}
     </div>
     <div class="quiz-hero-spacer" id="heroSpacer"></div>
     <div class="quiz-card">
@@ -5341,6 +5346,8 @@ function attachSentencePracticeHandlers() {
     if (e.key === 'Enter') check();
     if (!locked) input.classList.remove('correct', 'incorrect');
   });
+  input.addEventListener('focus', () => { if (!window.visualViewport) setHeroCompact(true); setTimeout(() => window.scrollTo(0, 0), 60); });
+  input.addEventListener('blur', () => setHeroCompact(false));
 
   const wordBreakdown = document.getElementById('wordBreakdown');
   const wordDetail = document.getElementById('wordDetail');
