@@ -4173,19 +4173,26 @@ function customVocabCategorySectionsHTML(type, list) {
     const selectAllId = `cvlSelectAll-${type}-${category}`;
     const clearId = `cvlClear-${type}-${category}`;
     const startId = `cvlStart-${type}-${category}`;
+    // Duo vocab is words you already know from Duolingo — no need for the
+    // WK-style lesson card, just a one-shot check (see startDuoCheck).
+    const isDuo = category === 'duo';
+    const sectionTitle = isDuo ? 'One-Time Review' : 'Lessons';
+    const startLabel = isDuo ? 'Start One-Time Review' : 'Start Lesson';
+    const emptyNote = isDuo ? 'Nothing left to check in this set.' : 'Nothing waiting to be learned in this set.';
     return `
       <div class="backup-section">
         <h2>${CUSTOM_VOCAB_CATEGORY_LABEL[category]} — ${label} (${items.length})</h2>
         <div class="cv-category-block">
-          <h3>Lessons (${notLearned.length})</h3>
+          <h3>${sectionTitle} (${notLearned.length})</h3>
+          ${isDuo ? `<p class="wk-text">You already know these from Duolingo — one shot to answer each, no lesson intro. Get it right and it starts at Guru I; miss it and it starts at Apprentice II instead of Apprentice I.</p>` : ''}
           ${notLearned.length ? `
             <div class="lesson-picker-actions">
               <button type="button" class="wk-button" id="${selectAllId}">Select All</button>
               <button type="button" class="wk-button" id="${clearId}">Clear</button>
             </div>
             <div class="lesson-picker-list">${notLearned.map(it => lessonPickerRowHTML(type, it, checkClass)).join('')}</div>
-            <button type="button" class="wk-button primary" id="${startId}" disabled style="margin-top:10px">Start Lesson (0 selected)</button>
-          ` : '<p class="empty-state">Nothing waiting to be learned in this set.</p>'}
+            <button type="button" class="wk-button primary" id="${startId}" disabled style="margin-top:10px">${startLabel} (0 selected)</button>
+          ` : `<p class="empty-state">${emptyNote}</p>`}
         </div>
         <div class="cv-category-block">
           <h3>Already Learned (${learnedItems.length})</h3>
@@ -4201,6 +4208,18 @@ function startCustomVocabLesson(type, ids) {
   if (!items.length) return;
   lessonSession = { type, items, poolTotal: items.length, index: 0 };
   navigate('vocab/lesson-active');
+}
+
+// Duo vocab skips the WK-style lesson card entirely — these are words you
+// already know from Duolingo, not brand new, so there's no mnemonic/intro
+// step to show. Goes straight to a one-shot quiz (mode 'duocheck' — see
+// markCorrect/advanceAfterMiss) instead of the normal lesson flow.
+function startDuoCheck(type, ids) {
+  const source = (STATE.customVocab && STATE.customVocab[type]) || [];
+  const items = source.filter(it => ids.includes(it.id));
+  if (!items.length) return;
+  quizSession = buildQuizSession(type, items, 'duocheck');
+  navigate(`${sectionBase(type)}/duo-check`);
 }
 
 function attachCustomVocabHubHandlers() {
@@ -4244,12 +4263,14 @@ function attachCustomVocabHubHandlers() {
     });
   });
 
-  function wirePicker(checkClass, selectAllId, clearId, startId, type) {
+  function wirePicker(checkClass, selectAllId, clearId, startId, type, category) {
+    const isDuo = category === 'duo';
+    const startLabel = isDuo ? 'Start One-Time Review' : 'Start Lesson';
     const checks = () => document.querySelectorAll('.' + checkClass);
     const startBtn = document.getElementById(startId);
     function updateCount() {
       const n = document.querySelectorAll('.' + checkClass + ':checked').length;
-      if (startBtn) { startBtn.textContent = `Start Lesson (${n} selected)`; startBtn.disabled = n === 0; }
+      if (startBtn) { startBtn.textContent = `${startLabel} (${n} selected)`; startBtn.disabled = n === 0; }
     }
     checks().forEach(c => c.addEventListener('change', updateCount));
     const selectAll = document.getElementById(selectAllId);
@@ -4258,12 +4279,12 @@ function attachCustomVocabHubHandlers() {
     if (clearBtn) clearBtn.addEventListener('click', () => { checks().forEach(c => { c.checked = false; }); updateCount(); });
     if (startBtn) startBtn.addEventListener('click', () => {
       const ids = [...document.querySelectorAll('.' + checkClass + ':checked')].map(c => c.value);
-      startCustomVocabLesson(type, ids);
+      if (isDuo) startDuoCheck(type, ids); else startCustomVocabLesson(type, ids);
     });
   }
   ['vocab', 'kanji'].forEach(type => {
     CUSTOM_VOCAB_CATEGORY_ORDER.forEach(category => {
-      wirePicker(`cvl-check-${type}-${category}`, `cvlSelectAll-${type}-${category}`, `cvlClear-${type}-${category}`, `cvlStart-${type}-${category}`, type);
+      wirePicker(`cvl-check-${type}-${category}`, `cvlSelectAll-${type}-${category}`, `cvlClear-${type}-${category}`, `cvlStart-${type}-${category}`, type, category);
     });
   });
 }
@@ -4357,6 +4378,7 @@ function viewSectionRoute(type, subparts) {
   if (sub === 'review') return viewReview(type);
   if (sub === 'lesson-picker') return viewLessonPicker(type);
   if (sub === 'lesson-active') return { html: renderLessonItem(), after: attachLessonHandlers };
+  if (sub === 'duo-check') return { html: renderQuizQuestion(), after: attachQuizHandlers };
   if (sub === 'custom') return viewCustomVocabHub();
   if (sub === 'tiers') return viewTierBrowser(type);
   if (sub === 'practice' && subparts[1] === 'recent') return viewPracticeRecent(type);
@@ -5097,6 +5119,8 @@ function renderQuizQuestion() {
     ? `<div class="hero-mode-badge" style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">Lesson Quiz</div>`
     : mode === 'practice'
     ? `<div class="hero-mode-badge" style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">Practice — doesn't affect SRS progress</div>`
+    : mode === 'duocheck'
+    ? `<div class="hero-mode-badge" style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">One-Time Check — no retries</div>`
     : '';
 
   return `
@@ -5153,6 +5177,29 @@ function attachQuizHandlers() {
   let awaitingNext = false;
   let lastMissedVal = '';
 
+  // Shared tail end for finishing a question, once we already know its
+  // outcome — used by a real correct answer, the override button, AND a
+  // duocheck miss (see advanceAfterMiss). `outcomeFn` applies whatever
+  // state change that specific outcome/mode calls for, but only once every
+  // field for this item is actually done (stillPending covers a vocab item
+  // with both a meaning and reading question still left to answer).
+  function finishQuestion(q, type, outcomeFn) {
+    quizSession.remaining.shift();
+    quizSession.answeredCount++;
+    const stillPending = quizSession.remaining.some(r => r.itemId === q.itemId);
+    if (!stillPending) {
+      outcomeFn();
+      saveState();
+    }
+    if (!quizSession.remaining.length) {
+      if (quizSession.mode === 'review') (quizSession.types || [type]).forEach(t => maybeLevelUp(t));
+      saveState();
+      navigate(quizSession.backRoute);
+    } else {
+      rerenderQuiz();
+    }
+  }
+
   // Shared by a real correct answer AND the "Actually, I had it right"
   // override button — both end the question the same way. `overridden`
   // just swaps the toast copy so it's clear which path happened.
@@ -5170,10 +5217,7 @@ function attachQuizHandlers() {
     checkBtn.textContent = 'Check';
     burstConfetti();
     setTimeout(() => {
-      quizSession.remaining.shift();
-      quizSession.answeredCount++;
-      const stillPending = quizSession.remaining.some(r => r.itemId === q.itemId);
-      if (!stillPending) {
+      finishQuestion(q, type, () => {
         if (mode === 'review') {
           const record = getRecord(type, q.itemId);
           const missCount = quizSession.missByItem[q.itemId] || 0;
@@ -5183,17 +5227,19 @@ function attachQuizHandlers() {
           if (missCount > 0) recordMistake(type, q.itemId);
         } else if (mode === 'lesson') {
           introduceItem(type, q.itemId);
+        } else if (mode === 'duocheck') {
+          // One-shot check for words you already know from Duolingo — no
+          // multi-review climb up from Apprentice I. Answer everything for
+          // this word right on the only attempt you get and it starts at
+          // Guru I (stage 5); miss any part of it and it starts at
+          // Apprentice II (stage 2) instead of the usual Apprentice I,
+          // since "knew it well enough to try, just not perfectly" is a
+          // step ahead of never having seen it.
+          const missCount = quizSession.missByItem[q.itemId] || 0;
+          setItemStage(type, q.itemId, missCount > 0 ? 2 : 5);
         }
         // mode === 'practice': no state change — pure drilling
-        saveState();
-      }
-      if (!quizSession.remaining.length) {
-        if (mode === 'review') (quizSession.types || [type]).forEach(t => maybeLevelUp(t));
-        saveState();
-        navigate(quizSession.backRoute);
-      } else {
-        rerenderQuiz();
-      }
+      });
     }, 1100);
   }
 
@@ -5258,6 +5304,17 @@ function attachQuizHandlers() {
   }
 
   function advanceAfterMiss() {
+    // duocheck is a genuine one-shot — a miss doesn't get a second attempt
+    // at the same question the way review/lesson/practice do. Clicking
+    // Next just finalizes this word right now (see markCorrect's duocheck
+    // branch for the other half of this — same stage-2 outcome either way,
+    // whether the miss was on the meaning, the reading, or both).
+    if (quizSession.mode === 'duocheck') {
+      const missed = quizSession.remaining[0];
+      const type = missed.itemType;
+      finishQuestion(missed, type, () => setItemStage(type, missed.itemId, 2));
+      return;
+    }
     // BUG FIX: this used to always push the missed question to the very
     // END of the queue — a deterministic FIFO rotation, not an actual
     // reshuffle. With few items left in a session that made it reappear
