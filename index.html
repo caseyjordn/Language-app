@@ -3131,7 +3131,17 @@ function bagOfWordsMatch(rawVal, acceptedList) {
   return acceptedList.some(a => bagOfWordsKey(a) === inputKey);
 }
 
-function fieldsFor(type) { return type === 'grammar' ? ['blank'] : ['meaning', 'reading']; }
+// A vocab word with no kanji in it AT ALL (already pure hiragana/katakana,
+// e.g. リンゴ, これ, こんにちは) has nothing to "read" — what's displayed on
+// the hero already IS the reading, so a reading question is just retyping
+// what's on screen. Kanji items are always a single kanji character (never
+// pure-kana), so this only ever changes vocab.
+function isPureKana(word) { return !/[一-鿿]/.test(String(word || '')); }
+function fieldsFor(type, item) {
+  if (type === 'grammar') return ['blank'];
+  if (type === 'vocab' && item && isPureKana(item.word)) return ['meaning'];
+  return ['meaning', 'reading'];
+}
 
 // Answers learned from the "Actually, I had it right" override button (see
 // attachQuizHandlers) — permanent, per-account, and additive on top of
@@ -5030,7 +5040,7 @@ function buildQuizSession(type, items, mode) {
 // no single section to return to.
 function buildMixedQuizSession(entries, mode, backRoute) {
   const questions = [];
-  entries.forEach(({ type, item }) => fieldsFor(type).forEach(field => questions.push({ itemType: type, itemId: item.id, field })));
+  entries.forEach(({ type, item }) => fieldsFor(type, item).forEach(field => questions.push({ itemType: type, itemId: item.id, field })));
   shuffleArray(questions);
   // Tracks every distinct type in the session so a finished mixed review
   // (e.g. the "Active Reviews" page, vocab+kanji together) can check
