@@ -213,6 +213,9 @@
 
   .backup-section{background:#fff;border:1px solid var(--color-widget-border);border-radius:16px;padding:20px 24px;margin-bottom:16px}
   .backup-section h2{font-size:18px;margin:0 0 6px}
+  .cv-category-block{margin-top:18px;padding-top:14px;border-top:1px solid var(--color-widget-border)}
+  .cv-category-block:first-of-type{margin-top:10px;padding-top:0;border-top:none}
+  .cv-category-block h3{font-size:14px;font-weight:700;margin:0 0 8px;color:var(--color-widget-secondary-text)}
   /* font-size 16px minimum — same iOS auto-zoom reason as .level-select */
   .backup-textarea{width:100%;min-height:140px;font-family:monospace;font-size:16px;border:1px solid var(--color-widget-border);border-radius:8px;padding:10px;margin:10px 0;resize:vertical}
   .backup-status{margin-left:10px;font-size:12px;color:var(--color-widget-secondary-text)}
@@ -2736,6 +2739,7 @@ const STORAGE_KEY = 'jpPracticeState_v1';
 function defaultState() {
   return {
     items: {},              // key `${type}:${id}` -> { stage, availableAt, learnedAt, lastReviewedAt }
+    updatedAt: 0,           // stamped on every saveState() — lets boot pick whichever of local/cloud is actually newer (see onAuthStateChanged)
     levels: { vocab: 1, kanji: 1, grammar: 1 },
     recentMistakes: [],     // { type, id, at }
     lessonBatchSize: 5,     // how many new items are taught per lesson session before the end-of-batch quiz
@@ -2773,6 +2777,7 @@ function loadLocalState(uid) {
 // typing/reviewing). Cloud sync piggybacks on every save but is fire-and-
 // forget and debounced — see scheduleCloudSync() below.
 function saveState() {
+  STATE.updatedAt = Date.now();
   if (CURRENT_UID) localStorage.setItem(localKeyFor(CURRENT_UID), JSON.stringify(STATE));
   scheduleCloudSync();
 }
@@ -4022,40 +4027,6 @@ function slugifyCustomId(prefix, text) {
 function viewCustomVocabHub() {
   const myVocab = (STATE.customVocab && STATE.customVocab.vocab) || [];
   const myKanji = (STATE.customVocab && STATE.customVocab.kanji) || [];
-  const notLearned = (type, list) => list.filter(it => !isIntroduced(type, it.id));
-  const learned = (type, list) => list.filter(it => isIntroduced(type, it.id));
-
-  const learnedRow = (type, item, record) => `
-    <div class="custom-vocab-row">
-      <span class="cv-stage" style="background:${TIER_TOAST_COLOR[tierForStage(record.stage)]}"></span>
-      <span class="cv-word">${displayWord(type, item)}</span>
-      <span class="cv-reading">${item.reading || item.onyomi || item.kunyomi || ''}</span>
-      <span class="cv-meaning">${item.meaning}</span>
-      <button class="cv-remove" data-type="${type}" data-id="${item.id}">Remove</button>
-    </div>`;
-
-  // Learned custom items shown grouped by SRS tier, same structure as the
-  // per-section "By SRS tier" browser (see viewTierBrowser/groupItemsByTier)
-  // rather than one flat list, so you can see at a glance which custom
-  // words/kanji are already Guru'd vs. still fresh in Apprentice.
-  const learnedByTierHTML = (type, list) => {
-    const groups = groupItemsByTier(type, list);
-    const sections = TIER_ORDER.map(tier => {
-      const entries = groups[tier];
-      if (!entries.length) return '';
-      return `
-        <div class="tier-section">
-          <div class="tier-section-head"><span class="tier-section-title">${TIER_LABEL[tier]}</span><span class="count-bubble">${entries.length}</span></div>
-          ${entries.map(({ item, record }) => learnedRow(type, item, record)).join('')}
-        </div>`;
-    }).join('');
-    return sections || '<p class="empty-state">None yet.</p>';
-  };
-
-  const vocabNotLearned = notLearned('vocab', myVocab);
-  const kanjiNotLearned = notLearned('kanji', myKanji);
-  const vocabLearned = learned('vocab', myVocab);
-  const kanjiLearned = learned('kanji', myKanji);
 
   return { html: `
     <div class="topbar">
@@ -4069,6 +4040,9 @@ function viewCustomVocabHub() {
         <div class="auth-field"><label>Word</label><input type="text" id="cvWord" placeholder="食べる"></div>
         <div class="auth-field"><label>Reading</label><input type="text" id="cvReading" placeholder="たべる"></div>
         <div class="auth-field"><label>Meaning</label><input type="text" id="cvMeaning" placeholder="to eat"></div>
+        <div class="auth-field"><label>Category</label>
+          <select id="cvCategory">${CUSTOM_VOCAB_CATEGORY_ORDER.map(c => `<option value="${c}">${CUSTOM_VOCAB_CATEGORY_LABEL[c]}</option>`).join('')}</select>
+        </div>
         <button class="wk-button primary" id="cvAddWord">Add word</button>
         <span id="cvWordStatus" class="backup-status"></span>
       </div>
@@ -4080,44 +4054,94 @@ function viewCustomVocabHub() {
         <div class="auth-field"><label>On'yomi (optional)</label><input type="text" id="cvOnyomi" placeholder="ショク"></div>
         <div class="auth-field"><label>Kun'yomi (optional)</label><input type="text" id="cvKunyomi" placeholder="た(べる)"></div>
         <div class="auth-field"><label>Meaning</label><input type="text" id="cvKanjiMeaning" placeholder="Eat"></div>
+        <div class="auth-field"><label>Category</label>
+          <select id="cvKanjiCategory">${CUSTOM_VOCAB_CATEGORY_ORDER.map(c => `<option value="${c}">${CUSTOM_VOCAB_CATEGORY_LABEL[c]}</option>`).join('')}</select>
+        </div>
         <button class="wk-button primary" id="cvAddKanji">Add kanji</button>
         <span id="cvKanjiStatus" class="backup-status"></span>
       </div>
 
-      <div class="backup-section">
-        <h2>Custom Vocab Lessons (${vocabNotLearned.length})</h2>
-        <p class="wk-text">Pick which of these to learn now — no level requirement, choose any of them.</p>
-        ${vocabNotLearned.length ? `
-          <div class="lesson-picker-actions">
-            <button type="button" class="wk-button" id="cvlSelectAllVocab">Select All</button>
-            <button type="button" class="wk-button" id="cvlClearVocab">Clear</button>
-          </div>
-          <div class="lesson-picker-list">${vocabNotLearned.map(it => lessonPickerRowHTML('vocab', it, 'cvl-check-vocab')).join('')}</div>
-          <button type="button" class="wk-button primary" id="cvlStartVocab" disabled style="margin-top:10px">Start Lesson (0 selected)</button>
-        ` : '<p class="empty-state">Nothing waiting to be learned — add a word above.</p>'}
-      </div>
-
-      <div class="backup-section">
-        <h2>Custom Kanji Lessons (${kanjiNotLearned.length})</h2>
-        ${kanjiNotLearned.length ? `
-          <div class="lesson-picker-actions">
-            <button type="button" class="wk-button" id="cvlSelectAllKanji">Select All</button>
-            <button type="button" class="wk-button" id="cvlClearKanji">Clear</button>
-          </div>
-          <div class="lesson-picker-list">${kanjiNotLearned.map(it => lessonPickerRowHTML('kanji', it, 'cvl-check-kanji')).join('')}</div>
-          <button type="button" class="wk-button primary" id="cvlStartKanji" disabled style="margin-top:10px">Start Lesson (0 selected)</button>
-        ` : '<p class="empty-state">Nothing waiting to be learned — add a kanji above.</p>'}
-      </div>
-
-      <div class="backup-section">
-        <h2>Already learned — words (${vocabLearned.length})</h2>
-        ${learnedByTierHTML('vocab', vocabLearned)}
-      </div>
-      <div class="backup-section">
-        <h2>Already learned — kanji (${kanjiLearned.length})</h2>
-        ${learnedByTierHTML('kanji', kanjiLearned)}
-      </div>
+      ${customVocabCategorySectionsHTML('vocab', myVocab)}
+      ${customVocabCategorySectionsHTML('kanji', myKanji)}
     </main>`, after: attachCustomVocabHubHandlers };
+}
+
+function customVocabLearnedRow(type, item, record) {
+  return `
+    <div class="custom-vocab-row">
+      <span class="cv-stage" style="background:${TIER_TOAST_COLOR[tierForStage(record.stage)]}"></span>
+      <span class="cv-word">${displayWord(type, item)}</span>
+      <span class="cv-reading">${item.reading || item.onyomi || item.kunyomi || ''}</span>
+      <span class="cv-meaning">${item.meaning}</span>
+      <button class="cv-remove" data-type="${type}" data-id="${item.id}">Remove</button>
+    </div>`;
+}
+
+// Learned custom items shown grouped by SRS tier, same structure as the
+// per-section "By SRS tier" browser (see viewTierBrowser/groupItemsByTier)
+// rather than one flat list, so you can see at a glance which custom
+// words/kanji are already Guru'd vs. still fresh in Apprentice.
+function customVocabLearnedByTierHTML(type, list) {
+  const groups = groupItemsByTier(type, list);
+  const sections = TIER_ORDER.map(tier => {
+    const entries = groups[tier];
+    if (!entries.length) return '';
+    return `
+      <div class="tier-section">
+        <div class="tier-section-head"><span class="tier-section-title">${TIER_LABEL[tier]}</span><span class="count-bubble">${entries.length}</span></div>
+        ${entries.map(({ item, record }) => customVocabLearnedRow(type, item, record)).join('')}
+      </div>`;
+  }).join('');
+  return sections || '<p class="empty-state">None yet.</p>';
+}
+
+// Everything you've added yourself splits into whichever batch it came from
+// (the Duolingo word list, the tourist-phrase doc) so those stay
+// browsable as their own sets rather than one big undifferentiated pile —
+// "custom" is the catch-all for anything added by hand afterward via the
+// forms above, not tied to either import.
+const CUSTOM_VOCAB_CATEGORY_ORDER = ['duo', 'tourist', 'custom'];
+const CUSTOM_VOCAB_CATEGORY_LABEL = { duo: 'Duolingo Vocab', tourist: 'Tourist Vocab', custom: 'Other Custom Vocab' };
+function customVocabCategory(item) { return item.category || 'custom'; }
+
+// Same Lessons-vs-Reviews split every other section already has (see
+// viewSectionMain's Lessons/Reviews widgets) — items you haven't run
+// through a lesson yet show as a picker; items already lessoned and in the
+// real review cycle show grouped by SRS tier, same as viewTierBrowser.
+// Applied per category so "which words are done vs still to learn" reads
+// clearly within Duo/Tourist/Other separately rather than all mixed
+// together.
+function customVocabCategorySectionsHTML(type, list) {
+  const label = type === 'kanji' ? 'Kanji' : 'Words';
+  return CUSTOM_VOCAB_CATEGORY_ORDER.map(category => {
+    const items = list.filter(it => customVocabCategory(it) === category);
+    if (!items.length) return '';
+    const notLearned = items.filter(it => !isIntroduced(type, it.id));
+    const learnedItems = items.filter(it => isIntroduced(type, it.id));
+    const checkClass = `cvl-check-${type}-${category}`;
+    const selectAllId = `cvlSelectAll-${type}-${category}`;
+    const clearId = `cvlClear-${type}-${category}`;
+    const startId = `cvlStart-${type}-${category}`;
+    return `
+      <div class="backup-section">
+        <h2>${CUSTOM_VOCAB_CATEGORY_LABEL[category]} — ${label} (${items.length})</h2>
+        <div class="cv-category-block">
+          <h3>Lessons (${notLearned.length})</h3>
+          ${notLearned.length ? `
+            <div class="lesson-picker-actions">
+              <button type="button" class="wk-button" id="${selectAllId}">Select All</button>
+              <button type="button" class="wk-button" id="${clearId}">Clear</button>
+            </div>
+            <div class="lesson-picker-list">${notLearned.map(it => lessonPickerRowHTML(type, it, checkClass)).join('')}</div>
+            <button type="button" class="wk-button primary" id="${startId}" disabled style="margin-top:10px">Start Lesson (0 selected)</button>
+          ` : '<p class="empty-state">Nothing waiting to be learned in this set.</p>'}
+        </div>
+        <div class="cv-category-block">
+          <h3>Already Learned (${learnedItems.length})</h3>
+          ${customVocabLearnedByTierHTML(type, learnedItems)}
+        </div>
+      </div>`;
+  }).join('') || `<div class="backup-section"><h2>${label} (0)</h2><p class="empty-state">Nothing added yet.</p></div>`;
 }
 
 function startCustomVocabLesson(type, ids) {
@@ -4135,8 +4159,9 @@ function attachCustomVocabHubHandlers() {
     const meaning = document.getElementById('cvMeaning').value.trim();
     const status = document.getElementById('cvWordStatus');
     if (!word || !reading || !meaning) { status.textContent = 'Fill in all three fields.'; status.style.color = '#C00'; return; }
+    const category = document.getElementById('cvCategory').value;
     STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
-    const item = { id: slugifyCustomId('vocab', word), word, reading, meaning, source: 'custom' };
+    const item = { id: slugifyCustomId('vocab', word), word, reading, meaning, source: 'custom', category };
     STATE.customVocab.vocab.push(item);
     saveState();
     render();
@@ -4149,8 +4174,9 @@ function attachCustomVocabHubHandlers() {
     const meaning = document.getElementById('cvKanjiMeaning').value.trim();
     const status = document.getElementById('cvKanjiStatus');
     if (!char || !meaning || (!onyomi && !kunyomi)) { status.textContent = 'Character, meaning, and at least one reading are required.'; status.style.color = '#C00'; return; }
+    const category = document.getElementById('cvKanjiCategory').value;
     STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
-    const item = { id: slugifyCustomId('kanji', char), char, onyomi, kunyomi, meaning, source: 'custom' };
+    const item = { id: slugifyCustomId('kanji', char), char, onyomi, kunyomi, meaning, source: 'custom', category };
     STATE.customVocab.kanji.push(item);
     saveState();
     render();
@@ -4184,8 +4210,11 @@ function attachCustomVocabHubHandlers() {
       startCustomVocabLesson(type, ids);
     });
   }
-  wirePicker('cvl-check-vocab', 'cvlSelectAllVocab', 'cvlClearVocab', 'cvlStartVocab', 'vocab');
-  wirePicker('cvl-check-kanji', 'cvlSelectAllKanji', 'cvlClearKanji', 'cvlStartKanji', 'kanji');
+  ['vocab', 'kanji'].forEach(type => {
+    CUSTOM_VOCAB_CATEGORY_ORDER.forEach(category => {
+      wirePicker(`cvl-check-${type}-${category}`, `cvlSelectAll-${type}-${category}`, `cvlClear-${type}-${category}`, `cvlStart-${type}-${category}`, type);
+    });
+  });
 }
 
 /* ======================================================================
@@ -5435,15 +5464,32 @@ const db = firebase.firestore();
 let CURRENT_USER_EMAIL = null;
 let cloudSyncTimer = null;
 
+function pushStateToCloud() {
+  if (!CURRENT_UID) return;
+  db.collection('users').doc(CURRENT_UID).set(STATE).catch(err => {
+    console.warn('Cloud sync failed (will retry on next save):', err.message);
+  });
+}
 function scheduleCloudSync() {
   if (!CURRENT_UID) return;
   clearTimeout(cloudSyncTimer);
-  cloudSyncTimer = setTimeout(() => {
-    db.collection('users').doc(CURRENT_UID).set(STATE).catch(err => {
-      console.warn('Cloud sync failed (will retry on next save):', err.message);
-    });
-  }, 1000);
+  cloudSyncTimer = setTimeout(pushStateToCloud, 1000);
 }
+// Best-effort safety net for the debounce window above: if the tab/app gets
+// backgrounded or closed mid-review (very normal — you answer a couple,
+// close the app, come back later), fire the pending push immediately
+// instead of letting up to 1s of it wait and possibly never fire. This is
+// a belt-and-suspenders complement to the updatedAt freshness check in
+// onAuthStateChanged, not a replacement for it — a flush attempt made as
+// the page is closing still isn't guaranteed to complete.
+function flushCloudSyncNow() {
+  if (!cloudSyncTimer) return;
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = null;
+  pushStateToCloud();
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloudSyncNow(); });
+window.addEventListener('pagehide', flushCloudSyncNow);
 
 function renderAuthLoading() {
   document.getElementById('app').innerHTML = `<div class="auth-shell"><div class="auth-loading">Loading…</div></div>`;
@@ -5497,13 +5543,24 @@ auth.onAuthStateChanged(user => {
 
   db.collection('users').doc(user.uid).get()
     .then(doc => {
+      // BUG FIX: this used to always trust the cloud copy whenever it
+      // existed, unconditionally discarding `local` — but a review session
+      // saves per-item to localStorage instantly and in full (see
+      // saveState()), while the cloud push is fire-and-forget and debounced
+      // 1s behind. Close the tab/app (or lose signal) inside that 1s window
+      // — completely realistic mid-review on mobile — and the cloud copy
+      // is stale, but boot would blindly overwrite the correct, newer local
+      // progress with it. Comparing `updatedAt` and keeping whichever is
+      // actually newer is what "last write wins" was supposed to mean.
       const local = loadLocalState(user.uid);
-      STATE = doc.exists ? Object.assign(defaultState(), doc.data()) : local;
+      const cloud = doc.exists ? Object.assign(defaultState(), doc.data()) : null;
+      const localIsNewer = !cloud || (local.updatedAt || 0) > (cloud.updatedAt || 0);
+      STATE = localIsNewer ? local : cloud;
       postLoadInit();
       APP_BOOTED = true;
       if (!location.hash || location.hash === '#/') location.hash = '#/dashboard';
       render();
-      if (!doc.exists) scheduleCloudSync(); // push local progress up as the starting cloud copy
+      if (localIsNewer) scheduleCloudSync(); // local was ahead — push it up so the cloud copy catches up
     })
     .catch(err => {
       console.warn('Could not reach cloud, using local copy:', err.message);
