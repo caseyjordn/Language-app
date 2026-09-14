@@ -2749,6 +2749,11 @@ function defaultState() {
     lessonBatchSize: 5,     // how many new items are taught per lesson session before the end-of-batch quiz
     devTimeOffsetMs: 0,     // DEV ONLY — lets the "+24h" button fast-forward review timing for testing
     customVocab: { vocab: [], kanji: [], grammar: [] }, // per-user words added from the "Add Custom Vocab" screen
+    // Answers you've hit "Actually, I had it right" on — keyed by
+    // "type:id:field" -> array of exact strings you typed that get
+    // permanently accepted from then on, so the same phrasing (e.g.
+    // "Skilled" for 上手's listed "Good At") never needs overriding twice.
+    learnedSynonyms: {},
     audioSettings: {
       enabled: true,
       // empty array = "all voices of this gender allowed" (see
@@ -3071,7 +3076,9 @@ const MEANING_OVERRIDES = {
   // trailing-word stripper: 行き ("Train Direction") would wrongly start
   // accepting "Train" alone, which isn't actually correct for that word.
   'vocab:左': ['Left'],
-  'vocab:右': ['Right']
+  'vocab:右': ['Right'],
+  'vocab:上手': ['Skilled', 'Skillful', 'Skilled At'],
+  'vocab:下手': ['Bad At', 'Poor At', 'Unskilled']
 };
 
 // General "similar wording" fallback, so one-off overrides don't have to be
@@ -3125,16 +3132,37 @@ function bagOfWordsMatch(rawVal, acceptedList) {
 }
 
 function fieldsFor(type) { return type === 'grammar' ? ['blank'] : ['meaning', 'reading']; }
+
+// Answers learned from the "Actually, I had it right" override button (see
+// attachQuizHandlers) — permanent, per-account, and additive on top of
+// everything else acceptedFor already allows.
+function learnedSynonymKey(type, id, field) { return `${type}:${id}:${field}`; }
+function learnedSynonymsFor(type, id, field) {
+  const store = STATE.learnedSynonyms || {};
+  return store[learnedSynonymKey(type, id, field)] || [];
+}
+function learnSynonym(type, id, field, answer) {
+  const val = String(answer || '').trim();
+  if (!val) return;
+  STATE.learnedSynonyms = STATE.learnedSynonyms || {};
+  const key = learnedSynonymKey(type, id, field);
+  const list = STATE.learnedSynonyms[key] || [];
+  if (!list.some(existing => normalizeAnswer(existing) === normalizeAnswer(val))) {
+    STATE.learnedSynonyms[key] = [...list, val];
+  }
+}
+
 function acceptedFor(type, item, field) {
+  const learned = learnedSynonymsFor(type, item.id, field);
   if (type === 'grammar') {
-    return (item.blankAnswerAccepted && item.blankAnswerAccepted.length ? item.blankAnswerAccepted : [item.blankAnswer]).filter(Boolean);
+    return (item.blankAnswerAccepted && item.blankAnswerAccepted.length ? item.blankAnswerAccepted : [item.blankAnswer]).filter(Boolean).concat(learned);
   }
   if (field === 'meaning') {
     const overrideExtras = MEANING_OVERRIDES[type + ':' + item.id] || [];
     const rawMeanings = (item.altMeanings && item.altMeanings.length ? [item.meaning, ...item.altMeanings] : [item.meaning]).concat(overrideExtras).filter(Boolean);
     const meanings = expandMeaningVariants(rawMeanings);
     const digitForms = meanings.map(numberWordToDigits).filter(Boolean);
-    return meanings.concat(digitForms);
+    return meanings.concat(digitForms).concat(learned);
   }
   // Matches real WK: a reading question has exactly ONE correct answer —
   // the "headline" reading (on'yomi, falling back to kun'yomi for the rare
@@ -3143,7 +3171,7 @@ function acceptedFor(type, item, field) {
   // it gets its own soft "wrong reading type" handling in attachQuizHandlers
   // (see otherReadingFor) instead of silently passing here.
   const base = type === 'kanji' ? [item.onyomi || item.kunyomi] : [item.reading];
-  return base.filter(Boolean).concat(item.readingAccepted && item.readingAccepted.length ? item.readingAccepted : []);
+  return base.filter(Boolean).concat(item.readingAccepted && item.readingAccepted.length ? item.readingAccepted : []).concat(learned);
 }
 
 // Other REAL readings of this kanji that aren't the one being quizzed right
@@ -5113,6 +5141,7 @@ function attachQuizHandlers() {
   const lessonReviewPanel = document.getElementById('lessonReview');
   let locked = false;
   let awaitingNext = false;
+  let lastMissedVal = '';
 
   // Shared by a real correct answer AND the "Actually, I had it right"
   // override button — both end the question the same way. `overridden`
@@ -5198,6 +5227,7 @@ function attachQuizHandlers() {
       setTimeout(() => { input.classList.remove('incorrect'); input.value = ''; }, 500);
     } else {
       quizSession.missByItem[q.itemId] = (quizSession.missByItem[q.itemId] || 0) + 1;
+      lastMissedVal = val;
       input.classList.remove('shake');
       void input.offsetWidth;
       input.classList.add('incorrect', 'shake');
@@ -5238,9 +5268,12 @@ function attachQuizHandlers() {
 
   // "Actually, I had it right" — for when the matching logic is too strict
   // (or just wrong) about an answer that really was correct. Undoes the
-  // miss this question just recorded and finishes it exactly like a real
-  // correct answer, so the SRS stage isn't wrongly demoted over a
-  // false-negative in the checker rather than an actual mistake.
+  // miss this question just recorded, PERMANENTLY remembers the exact
+  // phrasing you typed (see learnSynonym) so the same answer is accepted
+  // outright next time instead of needing overriding again, and finishes
+  // the question exactly like a real correct answer — so the SRS stage
+  // isn't wrongly demoted over a false-negative in the checker rather than
+  // an actual mistake.
   const overrideBtn = document.getElementById('overrideBtn');
   if (overrideBtn) {
     overrideBtn.addEventListener('click', () => {
@@ -5249,6 +5282,7 @@ function attachQuizHandlers() {
       const type = q.itemType;
       const item = contentFor(type).find(it => it.id === q.itemId);
       quizSession.missByItem[q.itemId] = Math.max(0, (quizSession.missByItem[q.itemId] || 0) - 1);
+      learnSynonym(type, q.itemId, q.field, lastMissedVal);
       markCorrect(q, type, item, true);
     });
   }
