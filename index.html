@@ -343,6 +343,10 @@
   .lesson-review{max-width:520px;margin:14px auto 0;background:#fff;border-radius:16px;border:1px solid var(--color-widget-border);padding:22px 30px;display:none}
   .lesson-review.visible{display:block}
   .lesson-review .lr-title{font-size:12px;font-weight:700;color:var(--color-incorrect);text-transform:uppercase;letter-spacing:.03em;margin-bottom:12px}
+  .lr-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .lr-title-row .lr-title{margin-bottom:0}
+  .override-btn{font-size:12px;font-weight:700;color:var(--color-correct);background:#fff;border:2px solid var(--color-correct);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+  .override-btn:hover{background:var(--color-correct);color:#fff}
   .lesson-review h4{font-size:13px;font-weight:700;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.03em;margin:14px 0 4px}
   .lesson-review h4:first-of-type{margin-top:0}
   .lesson-review p{font-size:14px;line-height:1.6;margin:0}
@@ -3058,7 +3062,16 @@ const MEANING_OVERRIDES = {
   // others, not a meaningful part of the answer — the bag-of-words fallback
   // below can't drop it on its own since dropping a random adjective isn't
   // safe to do generically (it would blur genuinely different meanings).
-  'vocab:〜台': ['Machine Counter', 'Number Of Machines', 'Machines Counter']
+  'vocab:〜台': ['Machine Counter', 'Number Of Machines', 'Machines Counter'],
+  // 左/右 as standalone VOCAB words are labeled "Left/Right Direction" only
+  // to distinguish them from the KANJI 左/右 (meaning plain "Left"/"Right")
+  // in our own data — both show as the identical single character on
+  // screen with no way to tell which one's being asked, so "Left"/"Right"
+  // needs to work for the vocab meaning too. Not generalized into the
+  // trailing-word stripper: 行き ("Train Direction") would wrongly start
+  // accepting "Train" alone, which isn't actually correct for that word.
+  'vocab:左': ['Left'],
+  'vocab:右': ['Right']
 };
 
 // General "similar wording" fallback, so one-off overrides don't have to be
@@ -5070,7 +5083,10 @@ function renderQuizQuestion() {
       </div>
     </div>
     <div class="lesson-review" id="lessonReview">
-      <div class="lr-title">⚠ Let's review this one</div>
+      <div class="lr-title-row">
+        <div class="lr-title">⚠ Let's review this one</div>
+        <button type="button" class="override-btn" id="overrideBtn">✓ Actually, I had it right</button>
+      </div>
       ${type === 'grammar' ? `
         <h4>Explanation</h4><p>${item.explanation || ''}</p>
         <h4>Example</h4><p class="jp">${item.example ? item.example.jp : ''}</p><p>${item.example ? item.example.en : ''}</p>
@@ -5098,11 +5114,55 @@ function attachQuizHandlers() {
   let locked = false;
   let awaitingNext = false;
 
+  // Shared by a real correct answer AND the "Actually, I had it right"
+  // override button — both end the question the same way. `overridden`
+  // just swaps the toast copy so it's clear which path happened.
+  function markCorrect(q, type, item, overridden) {
+    const { mode } = quizSession;
+    locked = true;
+    awaitingNext = false;
+    input.classList.remove('incorrect', 'shake');
+    input.classList.add('correct');
+    hero.classList.remove('state-incorrect');
+    hero.classList.add('state-correct');
+    feedback.textContent = overridden ? 'Marked correct.' : 'Correct!';
+    feedback.className = 'feedback-msg correct';
+    lessonReviewPanel.classList.remove('visible');
+    checkBtn.textContent = 'Check';
+    burstConfetti();
+    setTimeout(() => {
+      quizSession.remaining.shift();
+      quizSession.answeredCount++;
+      const stillPending = quizSession.remaining.some(r => r.itemId === q.itemId);
+      if (!stillPending) {
+        if (mode === 'review') {
+          const record = getRecord(type, q.itemId);
+          const missCount = quizSession.missByItem[q.itemId] || 0;
+          const oldStage = record.stage;
+          applyReviewOutcome(record, missCount);
+          showStageChangeToast(type, item, oldStage, record.stage);
+          if (missCount > 0) recordMistake(type, q.itemId);
+        } else if (mode === 'lesson') {
+          introduceItem(type, q.itemId);
+        }
+        // mode === 'practice': no state change — pure drilling
+        saveState();
+      }
+      if (!quizSession.remaining.length) {
+        if (mode === 'review') (quizSession.types || [type]).forEach(t => maybeLevelUp(t));
+        saveState();
+        navigate(quizSession.backRoute);
+      } else {
+        rerenderQuiz();
+      }
+    }, 1100);
+  }
+
   function check() {
     if (locked || awaitingNext) return;
     let val = input.value.trim();
     if (!val) return;
-    const { mode, remaining } = quizSession;
+    const { remaining } = quizSession;
     const q = remaining[0];
     const type = q.itemType;
     const item = contentFor(type).find(it => it.id === q.itemId);
@@ -5118,39 +5178,7 @@ function attachQuizHandlers() {
     const correct = isCloseEnough(val, accepted, q.field);
 
     if (correct) {
-      locked = true;
-      input.classList.add('correct');
-      hero.classList.add('state-correct');
-      feedback.textContent = 'Correct!';
-      feedback.className = 'feedback-msg correct';
-      lessonReviewPanel.classList.remove('visible');
-      burstConfetti();
-      setTimeout(() => {
-        quizSession.remaining.shift();
-        quizSession.answeredCount++;
-        const stillPending = quizSession.remaining.some(r => r.itemId === q.itemId);
-        if (!stillPending) {
-          if (mode === 'review') {
-            const record = getRecord(type, q.itemId);
-            const missCount = quizSession.missByItem[q.itemId] || 0;
-            const oldStage = record.stage;
-            applyReviewOutcome(record, missCount);
-            showStageChangeToast(type, item, oldStage, record.stage);
-            if (missCount > 0) recordMistake(type, q.itemId);
-          } else if (mode === 'lesson') {
-            introduceItem(type, q.itemId);
-          }
-          // mode === 'practice': no state change — pure drilling
-          saveState();
-        }
-        if (!quizSession.remaining.length) {
-          if (mode === 'review') (quizSession.types || [type]).forEach(t => maybeLevelUp(t));
-          saveState();
-          navigate(quizSession.backRoute);
-        } else {
-          rerenderQuiz();
-        }
-      }, 1100);
+      markCorrect(q, type, item, false);
     } else if (otherReadingFor(type, item, q.field).find(r => isCloseEnough(val, [r]))) {
       // Matches real WK: you typed a genuinely correct OTHER reading of
       // this kanji (there can be several now — see otherReadings), just
@@ -5206,6 +5234,23 @@ function attachQuizHandlers() {
       quizSession.remaining.splice(insertAt, 0, missed);
     }
     rerenderQuiz();
+  }
+
+  // "Actually, I had it right" — for when the matching logic is too strict
+  // (or just wrong) about an answer that really was correct. Undoes the
+  // miss this question just recorded and finishes it exactly like a real
+  // correct answer, so the SRS stage isn't wrongly demoted over a
+  // false-negative in the checker rather than an actual mistake.
+  const overrideBtn = document.getElementById('overrideBtn');
+  if (overrideBtn) {
+    overrideBtn.addEventListener('click', () => {
+      if (locked || !awaitingNext) return;
+      const q = quizSession.remaining[0];
+      const type = q.itemType;
+      const item = contentFor(type).find(it => it.id === q.itemId);
+      quizSession.missByItem[q.itemId] = Math.max(0, (quizSession.missByItem[q.itemId] || 0) - 1);
+      markCorrect(q, type, item, true);
+    });
   }
 
   checkBtn.addEventListener('click', () => { if (awaitingNext) advanceAfterMiss(); else check(); });
