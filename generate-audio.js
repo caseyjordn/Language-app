@@ -79,7 +79,7 @@ function loadAppData() {
 
   const vm = require('vm');
   const context = vm.createContext(sandbox);
-  vm.runInContext(code + '\nthis.__EXPORTED__ = { VOCAB, KANJI, SENTENCES };', context);
+  vm.runInContext(code + '\nthis.__EXPORTED__ = { VOCAB, KANJI, SENTENCES, GRAMMAR };', context);
   return context.__EXPORTED__;
 }
 
@@ -99,11 +99,26 @@ async function synthesize(text, speakerId) {
 async function main() {
   if (!fs.existsSync(AUDIO_DIR)) fs.mkdirSync(AUDIO_DIR, { recursive: true });
 
-  const { VOCAB, KANJI, SENTENCES } = loadAppData();
+  const { VOCAB, KANJI, SENTENCES, GRAMMAR } = loadAppData();
 
+  // BUG FIX: this used to only cover the headline reading for each vocab/
+  // kanji entry, never the "Example Sentences" shown underneath it (or
+  // grammar's own example) — those always fell through to the live
+  // VOICEVOX Engine / browser-TTS fallback instead of a pre-generated
+  // file, which is why example-sentence audio never sounded like the same
+  // VOICEVOX voice as the reading audio right above it (and why it doesn't
+  // play at all on mobile, where there's no VOICEVOX Engine to fall
+  // through to). Every example.jp is now collected too.
   const texts = new Set();
-  VOCAB.forEach(v => { if (v.reading) texts.add(v.reading); });
-  KANJI.forEach(k => { if (k.onyomi) texts.add(k.onyomi); });
+  VOCAB.forEach(v => {
+    if (v.reading) texts.add(v.reading);
+    (v.examples || []).forEach(e => { if (e.jp) texts.add(e.jp); });
+  });
+  KANJI.forEach(k => {
+    if (k.onyomi) texts.add(k.onyomi);
+    (k.examples || []).forEach(e => { if (e.jp) texts.add(e.jp); });
+  });
+  (GRAMMAR || []).forEach(g => { if (g.example && g.example.jp) texts.add(g.example.jp); });
   SENTENCES.forEach(s => { if (s.jp) texts.add(s.jp); });
 
   let manifest = {};
