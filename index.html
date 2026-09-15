@@ -3407,11 +3407,26 @@ async function playTTS(text, gender = 'female') {
   } catch (err) {
     console.warn('Pre-generated audio playback failed, trying live VOICEVOX:', err);
   }
-  try {
-    await playViaVoicevoxEngine(text, pickSpeakerId(gender, text));
-    return;
-  } catch (err) {
-    console.warn('Live VOICEVOX Engine unreachable, falling back to browser TTS:', err);
+  // BUG FIX: custom vocab (yours, Duo's, tourist words) has no pre-generated
+  // audio file — playPreGenerated always returns false for it, so it was
+  // ALWAYS falling through to this VOICEVOX Engine attempt. VOICEVOX Engine
+  // is a local desktop app; it can only ever be reachable from the same
+  // machine running the browser, so on a phone this attempt has zero chance
+  // of succeeding and just burns real time on a dead-end network call —
+  // which is exactly the kind of async delay that can make iOS Safari
+  // decide the original tap's "user gesture" has expired by the time
+  // playViaBrowserTTS finally runs, so the fallback silently does nothing.
+  // Core WK vocab/kanji (which DO have pre-generated files) never hit this
+  // at all, which is why only custom-vocab audio was affected. Skipping
+  // this tier entirely on touch devices removes that dead hop; desktop
+  // still gets to use VOICEVOX for nicer-quality audio when it's running.
+  if (!IS_TOUCH_DEVICE) {
+    try {
+      await playViaVoicevoxEngine(text, pickSpeakerId(gender, text));
+      return;
+    } catch (err) {
+      console.warn('Live VOICEVOX Engine unreachable, falling back to browser TTS:', err);
+    }
   }
   if (!playViaBrowserTTS(text)) {
     alert('No audio available: no pre-generated file, VOICEVOX Engine unreachable, and this browser has no built-in speech synthesis.');
@@ -5151,7 +5166,8 @@ function renderQuizQuestion() {
       </div>
       ${type === 'grammar' ? `
         <h4>Explanation</h4><p>${item.explanation || ''}</p>
-        <h4>Example</h4><p class="jp">${item.example ? item.example.jp : ''}</p><p>${item.example ? item.example.en : ''}</p>
+        <h4>Example</h4>
+        ${item.example ? exampleSentenceHTML(item.example) : ''}
       ` : `
         <h4>Meaning</h4><p><strong>${item.meaning || ''}</strong></p>
         <h4>Meaning Mnemonic</h4><p>${mdBold(item.meaningMnemonic)}</p>
