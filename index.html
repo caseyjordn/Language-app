@@ -141,8 +141,14 @@
   .widget-title-row .title{font-size:18px;font-weight:700}
   .wk-text{font-size:14px;color:var(--color-widget-secondary-text);margin:0 0 12px}
   .count-bubble{display:inline-flex;align-items:center;justify-content:center;background:#6B7079;color:#fff;border-radius:var(--border-radius-pill);font-size:14px;font-weight:700;padding:1px 10px;min-width:22px}
-  .tilerow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-  .tile{width:44px;height:44px;border-radius:var(--border-radius-normal);display:flex;align-items:center;justify-content:center;color:#fff;font-family:"Noto Sans JP",sans-serif;font-size:15px}
+  /* Recent Mistakes list — readable rows instead of the old fixed 44x44
+     squares, which squashed multi-character words and only showed the
+     meaning in a hover title (useless on mobile touch, no hover at all). */
+  .mistake-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--color-widget-border);text-decoration:none;color:inherit}
+  .mistake-row:last-child{border-bottom:none}
+  .mistake-row .type-chip{flex:none;width:24px;height:24px;border-radius:5px;color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Noto Sans JP",sans-serif;font-size:12px}
+  .mistake-row .mistake-word{font-family:"Noto Sans JP",sans-serif;font-weight:700;font-size:15px;min-width:80px}
+  .mistake-row .mistake-meaning{flex:1;color:var(--color-widget-secondary-text);font-size:13px}
   .empty-state{font-size:13px;color:var(--color-widget-secondary-text);font-style:italic;padding:8px 0}
 
   .wk-button{border:1px solid var(--color-widget-border);background:#fff;border-radius:var(--border-radius-normal);padding:8px 16px;font-size:13px;font-weight:700;color:var(--color-widget-primary-text);cursor:pointer;text-decoration:none;display:inline-block}
@@ -3746,6 +3752,7 @@ function render() {
   else if (section === 'vocab' || section === 'kanji' || section === 'grammar') view = viewSectionRoute(section, parts.slice(1));
   else if (section === 'sentences') view = viewSentencesRoute(parts.slice(1));
   else if (section === 'practice' && parts[1] === 'custom') view = viewCustomPracticePicker();
+  else if (section === 'practice' && parts[1] === 'mistakes') view = viewRecentMistakesPractice();
   else if (section === 'backup') view = viewBackupRestore();
   else if (section === 'reviews') view = viewActiveReviews();
   else if (section === 'settings') view = viewSettings();
@@ -3855,24 +3862,17 @@ function viewDashboard() {
       <div class="chevron">›</div>
     </a>`;
 
-  // De-duped by (type,id), keeping the most recent miss -- missing the same
-  // word twice in 24h used to show it as two separate tiles here instead of
-  // once, which is confusing (each MISS is logged separately in
-  // recentMistakes for the "Recent" practice pool's own purposes, but this
-  // display should show distinct WORDS, not distinct miss events).
-  const seenMistakeKeys = new Set();
-  const mistakes = STATE.recentMistakes
-    .filter(m => now() - m.at < 24 * 3600 * 1000)
-    .reverse()
-    .filter(m => { const k = m.type + ':' + m.id; if (seenMistakeKeys.has(k)) return false; seenMistakeKeys.add(k); return true; })
-    .reverse()
-    .slice(-12);
-  const mistakesHtml = mistakes.length
-    ? `<div class="tilerow">${mistakes.map(m => {
-        const item = contentFor(m.type).find(it => it.id === m.id);
-        if (!item) return '';
-        return `<div class="tile" style="background:${COLOR_MAP[m.type].accent}" title="${displayMeaning(m.type, item)}">${displayWord(m.type, item)}</div>`;
-      }).join('')}</div>`
+  const allMistakeEntries = recentMistakeEntries();
+  const mistakeEntries = allMistakeEntries.slice(-12);
+  const mistakesHtml = mistakeEntries.length
+    ? `<div class="mistake-list">${mistakeEntries.map(({ type, item }) => `
+        <a class="mistake-row" href="#/${sectionBase(type)}/library/${encodeURIComponent(item.id)}">
+          <span class="type-chip" style="background:${COLOR_MAP[type].accent}">${SECTION_CHIP[type]}</span>
+          <span class="mistake-word">${displayWord(type, item)}</span>
+          <span class="mistake-meaning">${displayMeaning(type, item) || ''}</span>
+        </a>`).join('')}</div>
+      ${mistakeEntries.length < allMistakeEntries.length ? `<p class="wk-text" style="margin-top:8px">+ ${allMistakeEntries.length - mistakeEntries.length} more not shown</p>` : ''}
+      <a class="wk-button primary" href="#/practice/mistakes" style="margin-top:12px">Review Recent Mistakes (${allMistakeEntries.length})</a>`
     : `<p class="empty-state">No mistakes in the last 24 hours.</p>`;
 
   // ---- Level Progress widget: level + how many Guru+ at that level, per type ----
@@ -3952,6 +3952,25 @@ function viewDashboard() {
 function recordMistake(type, id) {
   STATE.recentMistakes.push({ type, id, at: now() });
   if (STATE.recentMistakes.length > 200) STATE.recentMistakes.shift();
+}
+
+// De-duped by (type,id), keeping the most recent miss and its matching
+// item — each MISS is logged separately in recentMistakes (for
+// recentPoolFor's own purposes), but anything showing this list to look at
+// or review should show distinct WORDS, not distinct miss events. Shared
+// by the dashboard widget and the "Review Recent Mistakes" practice
+// session so they always agree on exactly what counts.
+function recentMistakeEntries(limit) {
+  const seen = new Set();
+  const deduped = STATE.recentMistakes
+    .filter(m => now() - m.at < 24 * 3600 * 1000)
+    .reverse()
+    .filter(m => { const k = m.type + ':' + m.id; if (seen.has(k)) return false; seen.add(k); return true; })
+    .reverse();
+  const limited = limit ? deduped.slice(-limit) : deduped;
+  return limited
+    .map(m => ({ type: m.type, item: contentFor(m.type).find(it => it.id === m.id) }))
+    .filter(e => e.item);
 }
 
 /* ======================================================================
@@ -4739,6 +4758,19 @@ function attachPickerHandlers(type) {
     attachQuizHandlers();
     window.scrollTo(0, 0);
   });
+}
+
+// ---- Review Recent Mistakes, from the Dashboard widget: everything you've
+// missed in the last 24h (across all three categories), one no-penalty
+// Practice session — same "doesn't touch real SRS" spirit as Custom
+// Review, just pre-picked instead of chosen by hand. ----
+function viewRecentMistakesPractice() {
+  const entries = recentMistakeEntries();
+  if (!entries.length) {
+    return { html: `<main><p class="empty-state" style="margin-top:40px">No mistakes in the last 24 hours. <a href="#/dashboard">Back to Dashboard</a></p></main>` };
+  }
+  quizSession = buildMixedQuizSession(entries, 'practice', 'dashboard');
+  return { html: renderQuizQuestion(), after: attachQuizHandlers };
 }
 
 // ---- Custom Review, from the Dashboard: pick items across Vocab, Kanji,
