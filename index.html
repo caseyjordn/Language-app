@@ -1468,7 +1468,7 @@ const CORE_VOCAB = [
   {id:'南米',word:'南米',reading:'なんべい',altMeanings:[],meaning:'South America',readingType:`proper noun`,level:9,meaningMnemonic:`South (なん) + America/rice (べい).`,examples:[{level:'easy',jp:'南米に行きます。',romaji:'Nanbei ni ikimasu.',en:'I\'ll go to South America.'}, {level:'advanced',jp:'南米からの観光客が、この地域に増えているようだ。',romaji:'Nanbei kara no kankoukyaku ga, kono chiiki ni fuete iru you da.',en:'It seems tourists from South America are increasing in this area.'}]},
   {id:'南風',word:'南風',reading:'みなみかぜ',altMeanings:[],meaning:'South Wind',readingType:`noun`,level:9,meaningMnemonic:`South (みなみ) + wind (かぜ).`,examples:[{level:'easy',jp:'南風が吹いています。',romaji:'Minamikaze ga fuite imasu.',en:'A south wind is blowing.'}, {level:'advanced',jp:'暖かい南風が、街全体を優しく包み込んでいた。',romaji:'Atatakai minamikaze ga, machi zentai o yasashiku tsutsumikonde ita.',en:'A warm south wind gently enveloped the entire town.'}]},
   {id:'辛い',word:'辛い',reading:'からい',altMeanings:[],meaning:'Spicy',readingType:`い-adjective`,level:9,meaningMnemonic:`Spicy (から) + い.`,examples:[{level:'easy',jp:'辛いです。',romaji:'Karai desu.',en:'It\'s spicy.'}, {level:'advanced',jp:'このカレーは、辛口ながらも深いコクが感じられる。',romaji:'Kono karee wa, karakuchi nagara mo fukai koku ga kanjirareru.',en:'This curry has a deep richness even though it\'s on the spicy side.'}]},
-  {id:'辛口',word:'辛口',reading:'からくち',altMeanings:[],meaning:'Spicy Taste',readingType:`noun`,level:9,meaningMnemonic:`Spicy (から) + mouth (くち).`,examples:[{level:'easy',jp:'辛口です。',romaji:'Karakuchi desu.',en:'It\'s spicy/dry-tasting.'}, {level:'advanced',jp:'このカレーは、辛口ながらも深いコクが感じられる。',romaji:'Kono karee wa, karakuchi nagara mo fukai koku ga kanjirareru.',en:'This curry has a deep richness even though it\'s on the spicy side.'}]},
+  {id:'辛口',word:'辛口',reading:'からくち',altMeanings:['Dry'],meaning:'Spicy Taste',readingType:`noun`,level:9,meaningMnemonic:`Spicy (から) + mouth (くち).`,examples:[{level:'easy',jp:'辛口です。',romaji:'Karakuchi desu.',en:'It\'s spicy/dry-tasting.'}, {level:'advanced',jp:'このカレーは、辛口ながらも深いコクが感じられる。',romaji:'Kono karee wa, karakuchi nagara mo fukai koku ga kanjirareru.',en:'This curry has a deep richness even though it\'s on the spicy side.'}]},
   {id:'立場',word:'立場',reading:'たちば',altMeanings:[],meaning:'Standpoint',readingType:`noun`,level:9,meaningMnemonic:`Stand (たち) + location (ば).`,examples:[{level:'easy',jp:'立場が違います。',romaji:'Tachiba ga chigaimasu.',en:'Our standpoints differ.'}, {level:'advanced',jp:'二人は、お互いの立場を尊重し、相互に理解を深めていった。',romaji:'Futari wa, otagai no tachiba o sonchou shi, sougo ni rikai o fukamete itta.',en:'The two of them respected each other\'s positions and deepened their mutual understanding.'}]},
   {id:'星',word:'星',reading:'ほし',altMeanings:[],meaning:'Star',readingType:`noun`,level:9,meaningMnemonic:`"**SAY**," twinkles the **STAR**.`,examples:[{level:'easy',jp:'星がきれいです。',romaji:'Hoshi ga kirei desu.',en:'The stars are beautiful.'}, {level:'advanced',jp:'火星への有人探査は、今も多くの科学者の夢だ。',romaji:'Kasei e no yuujin tansa wa, ima mo ooku no kagakusha no yume da.',en:'A manned mission to Mars is still the dream of many scientists.'}]},
   {id:'〜屋',word:'〜屋',reading:'や',altMeanings:[],meaning:'Store',readingType:`suffix`,level:9,meaningMnemonic:`Kun-native, standalone suffix.`,examples:[{level:'easy',jp:'本屋です。',romaji:'Hon\'ya desu.',en:'It\'s a bookstore.'}, {level:'advanced',jp:'彼女は、街の小さなパン屋で長年働いている。',romaji:'Kanojo wa, machi no chiisana pan\'ya de naganen hataraite iru.',en:'She\'s worked at a small bakery in town for many years.'}]},
@@ -2849,7 +2849,23 @@ const BATCH_SIZE = { vocab: 15, kanji: 15, grammar: 5 };
 function contentFor(type) {
   const base = type === 'vocab' ? VOCAB : type === 'kanji' ? KANJI : GRAMMAR;
   const custom = (STATE.customVocab && STATE.customVocab[type]) || [];
-  return custom.length ? base.concat(custom) : base;
+  if (!custom.length) return base;
+  // BUG FIX: a custom word whose id collides with a built-in entry (e.g.
+  // you add "出口" yourself and it's already a real WK vocab word), or two
+  // custom entries that happen to share an id (a bundled-card split
+  // producing the same word twice), used to just get concatenated in —
+  // both copies rendered as separate review cards for what's really the
+  // same item, showing up as duplicate/repeated vocab in a review session.
+  // Built-in content always wins a collision; among custom entries, the
+  // one added first wins.
+  const seenIds = new Set(base.map(it => it.id));
+  const dedupedCustom = [];
+  custom.forEach(it => {
+    if (seenIds.has(it.id)) return;
+    seenIds.add(it.id);
+    dedupedCustom.push(it);
+  });
+  return base.concat(dedupedCustom);
 }
 function displayWord(type, item) {
   return type === 'kanji' ? item.char : (type === 'grammar' ? item.title : item.word);
@@ -3810,7 +3826,18 @@ function viewDashboard() {
       <div class="chevron">›</div>
     </a>`;
 
-  const mistakes = STATE.recentMistakes.filter(m => now() - m.at < 24 * 3600 * 1000).slice(-12);
+  // De-duped by (type,id), keeping the most recent miss -- missing the same
+  // word twice in 24h used to show it as two separate tiles here instead of
+  // once, which is confusing (each MISS is logged separately in
+  // recentMistakes for the "Recent" practice pool's own purposes, but this
+  // display should show distinct WORDS, not distinct miss events).
+  const seenMistakeKeys = new Set();
+  const mistakes = STATE.recentMistakes
+    .filter(m => now() - m.at < 24 * 3600 * 1000)
+    .reverse()
+    .filter(m => { const k = m.type + ':' + m.id; if (seenMistakeKeys.has(k)) return false; seenMistakeKeys.add(k); return true; })
+    .reverse()
+    .slice(-12);
   const mistakesHtml = mistakes.length
     ? `<div class="tilerow">${mistakes.map(m => {
         const item = contentFor(m.type).find(it => it.id === m.id);

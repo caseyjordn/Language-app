@@ -73,6 +73,11 @@ function loadAppData() {
     },
     getComputedStyle: () => ({ getPropertyValue: () => '#AA00FF' }),
     fetch: () => Promise.reject(new Error('no network in extraction sandbox')),
+    navigator: {},
+    // index.html initializes Firebase at top-level script load now -- this
+    // sandbox only needs it to not throw, since we're just extracting the
+    // content arrays, never actually signing in or touching Firestore.
+    firebase: { initializeApp() {}, auth: () => ({ onAuthStateChanged() {}, signOut() {} }), firestore() {} },
     alert() {},
     console
   };
