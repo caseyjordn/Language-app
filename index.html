@@ -373,13 +373,16 @@
   /* WK-style tier-change toast (Guru!/Master!/etc. on promotion, a
      quieter notice on demotion) — see showStageChangeToast. */
   .stage-toast{
-    position:fixed;left:50%;top:14%;transform:translate(-50%,-14px);
-    display:flex;align-items:center;gap:12px;background:#fff;color:var(--color-widget-primary-text);
-    border-radius:999px;padding:10px 22px 10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.18);
+    /* Off to the side rather than dead-center: the quiz character/word is
+       centered in the hero, so a centered toast used to land right on top
+       of it, blocking the next question the moment it appeared. */
+    position:fixed;right:14px;top:calc(14px + env(safe-area-inset-top));left:auto;transform:translateX(24px);
+    display:flex;align-items:center;gap:10px;background:#fff;color:var(--color-widget-primary-text);
+    border-radius:999px;padding:8px 18px 8px 12px;box-shadow:0 8px 24px rgba(0,0,0,.18);
     border:2px solid var(--toast-color, #AA00FF);opacity:0;pointer-events:none;
-    transition:opacity .3s ease, transform .3s ease;z-index:60;max-width:88vw
+    transition:opacity .3s ease, transform .3s ease;z-index:60;max-width:min(88vw, 320px)
   }
-  .stage-toast.visible{opacity:1;transform:translate(-50%,0)}
+  .stage-toast.visible{opacity:1;transform:translateX(0)}
   .stage-toast-icon{font-size:30px;line-height:1}
   .stage-toast-title{font-size:15px;font-weight:800;color:var(--toast-color, #AA00FF)}
   .stage-toast-word{font-size:13px;color:var(--color-widget-secondary-text);font-family:"Noto Sans JP",sans-serif}
@@ -3874,6 +3877,10 @@ function viewDashboard() {
     </div>`).join('');
 
   const dueCount = allDueCount();
+  const nextAt = dueCount ? null : nextReviewAt();
+  const emptySub = nextAt
+    ? `You're all caught up. Next review ${formatDueIn(nextAt)} (${new Date(nextAt).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' })}).`
+    : "You're all caught up. Check back later.";
 
   return { html: `
     <main>
@@ -3881,7 +3888,7 @@ function viewDashboard() {
         <div class="reviews-banner-count">${dueCount}</div>
         <div class="reviews-banner-body">
           <div class="reviews-banner-title">${dueCount ? 'Reviews Available' : 'No Reviews Due'}</div>
-          <div class="reviews-banner-sub">${dueCount ? 'Vocab, Kanji, and Grammar due right now — start them together.' : "You're all caught up. Check back later."}</div>
+          <div class="reviews-banner-sub">${dueCount ? 'Vocab, Kanji, and Grammar due right now — start them together.' : emptySub}</div>
         </div>
         ${dueCount ? '<div class="chevron">›</div>' : ''}
       </a>
@@ -5111,7 +5118,11 @@ function buildMixedQuizSession(entries, mode, backRoute) {
   // level-up for each type it touched, not just whichever type happened
   // to be the last question answered.
   const types = [...new Set(entries.map(e => e.type))];
-  return { mode, backRoute, totalQuestions: questions.length, remaining: questions, missByItem: {}, answeredCount: 0, types };
+  // correctAttempts/totalAttempts track every single submission (right or
+  // wrong), independent of answeredCount (which only counts a question
+  // once, when it's FINALLY correct) — this is what drives the live
+  // accuracy percentage shown during the session.
+  return { mode, backRoute, totalQuestions: questions.length, remaining: questions, missByItem: {}, answeredCount: 0, types, totalAttempts: 0, correctAttempts: 0 };
 }
 
 function viewReview(type) {
@@ -5137,8 +5148,39 @@ function allDueCount() {
   return ['vocab', 'kanji', 'grammar'].reduce((sum, type) => sum + reviewQueueFor(type).length, 0);
 }
 
+// Earliest availableAt across every introduced, not-yet-burned item that
+// ISN'T due yet -- i.e. the exact moment the next review will appear, for
+// the dashboard's "nothing due right now" state. Null if you have nothing
+// in the SRS ladder at all yet.
+function nextReviewAt() {
+  let earliest = null;
+  ['vocab', 'kanji', 'grammar'].forEach(type => {
+    contentFor(type).forEach(it => {
+      const r = getRecord(type, it.id);
+      if (!r || r.stage >= 9 || r.availableAt == null) return;
+      if (r.availableAt <= now()) return; // already due -- not "next", it's "now"
+      if (earliest === null || r.availableAt < earliest) earliest = r.availableAt;
+    });
+  });
+  return earliest;
+}
+
+// Short, human "in 41m" / "in 3h" / "in 2d" style countdown -- exact
+// clock times read fine on a screen you're looking at right now, but
+// "next review in ~40 minutes" is what you actually want at a glance.
+function formatDueIn(timestamp) {
+  const diff = timestamp - now();
+  if (diff <= 0) return 'now';
+  const mins = Math.round(diff / 60000);
+  if (mins < 60) return `in ${mins}m`;
+  const hours = Math.round(diff / 3600000);
+  if (hours < 48) return `in ${hours}h`;
+  const days = Math.round(diff / (24 * 3600000));
+  return `in ${days}d`;
+}
+
 function renderQuizQuestion() {
-  const { mode, remaining, totalQuestions, answeredCount, backRoute } = quizSession;
+  const { mode, remaining, totalQuestions, answeredCount, backRoute, totalAttempts, correctAttempts } = quizSession;
   if (!remaining.length) {
     return `<main><p class="empty-state" style="margin-top:40px">Nothing here right now. <a href="#/${backRoute}">Back</a></p></main>`;
   }
@@ -5169,7 +5211,7 @@ function renderQuizQuestion() {
     <div class="quiz-hero" id="hero">
       <div class="quiz-hero-top">
         <a class="home" href="#/${backRoute}" style="color:#fff;text-decoration:none">🏠</a>
-        <div class="count" id="sessionCount" style="font-size:13px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px">${answeredCount + 1} of ${totalQuestions}</div>
+        <div class="count" id="sessionCount" style="font-size:13px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px">${answeredCount + 1} of ${totalQuestions}${totalAttempts ? ` · ${Math.round((correctAttempts / totalAttempts) * 100)}%` : ''}</div>
       </div>
       <div class="session-bar" id="sessionBar">${segs}</div>
       <div class="quiz-char" style="${type === 'grammar' ? 'font-size:26px' : ''}">${promptChar}</div>
@@ -5305,6 +5347,9 @@ function attachQuizHandlers() {
     const accepted = acceptedFor(type, item, q.field);
     const correct = isCloseEnough(val, accepted, q.field);
 
+    quizSession.totalAttempts++;
+    if (correct) quizSession.correctAttempts++;
+
     if (correct) {
       markCorrect(q, type, item, false);
     } else if (otherReadingFor(type, item, q.field).find(r => isCloseEnough(val, [r]))) {
@@ -5392,6 +5437,7 @@ function attachQuizHandlers() {
       const type = q.itemType;
       const item = contentFor(type).find(it => it.id === q.itemId);
       quizSession.missByItem[q.itemId] = Math.max(0, (quizSession.missByItem[q.itemId] || 0) - 1);
+      quizSession.correctAttempts++; // that submission counted as wrong a moment ago -- correct the accuracy % too
       learnSynonym(type, q.itemId, q.field, lastMissedVal);
       markCorrect(q, type, item, true);
     });
