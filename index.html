@@ -2750,6 +2750,7 @@ function defaultState() {
     levels: { vocab: 1, kanji: 1, grammar: 1 },
     recentMistakes: [],     // { type, id, at }
     lessonBatchSize: 5,     // how many new items are taught per lesson session before the end-of-batch quiz
+    apprenticeLimit: 100,   // real WK's own default — caps how many items can sit in Apprentice at once, across vocab+kanji+grammar combined, so new lessons throttle until you clear some reviews (see roomForNewLessons)
     devTimeOffsetMs: 0,     // DEV ONLY — lets the "+24h" button fast-forward review timing for testing
     customVocab: { vocab: [], kanji: [], grammar: [] }, // per-user words added from the "Add Custom Vocab" screen
     // Answers you've hit "Actually, I had it right" on — keyed by
@@ -2962,6 +2963,31 @@ function introducedItems(type) {
   return contentFor(type)
     .filter(it => isIntroduced(type, it.id))
     .sort((a, b) => (getRecord(type, b.id).learnedAt || 0) - (getRecord(type, a.id).learnedAt || 0));
+}
+
+// Real WK's own "Apprentice item limit" — vocab, kanji, and grammar all
+// share ONE pool here, so it's counted across all three combined rather
+// than per type. Existing items already sitting in Apprentice (stages
+// 1-4) count against it regardless of how they got there (a real lesson,
+// a custom-vocab lesson, or a Duo one-time check landing at Apprentice II)
+// since all of them occupy the same "actively cycling, still fragile"
+// slot real WK is trying to cap.
+function currentApprenticeCount() {
+  let count = 0;
+  ['vocab', 'kanji', 'grammar'].forEach(type => {
+    contentFor(type).forEach(it => {
+      const r = getRecord(type, it.id);
+      if (r && tierForStage(r.stage) === 'apprentice') count++;
+    });
+  });
+  return count;
+}
+// How many NEW items you're allowed to start right now, across every
+// lesson entry point (WK lessons, the lesson picker, Custom Vocab lessons,
+// Duo one-time checks) — 0 once you're at/over the cap, meaning you need
+// to clear some Apprentice reviews (get them to Guru) before taking more.
+function roomForNewLessons() {
+  return Math.max(0, STATE.apprenticeLimit - currentApprenticeCount());
 }
 
 // counts introduced items into the 5 named SRS tiers (grouping the 8
@@ -3976,6 +4002,17 @@ function viewSettings() {
       </div>
 
       <div class="mistakes-widget">
+        <div class="widget-title-row"><span class="title">Lessons</span></div>
+        <p class="wk-text">Real WK's own "Apprentice item limit" — caps how many items (vocab + kanji + grammar combined) can sit in Apprentice at once, so new lessons throttle until you clear some reviews to Guru. Currently ${currentApprenticeCount()}/${STATE.apprenticeLimit}.</p>
+        <div class="batch-size-row">
+          <span>Apprentice limit: </span>
+          <button class="batch-btn" id="apprenticeLimitDown">−</button>
+          <span id="apprenticeLimitDisplay">${STATE.apprenticeLimit}</span>
+          <button class="batch-btn" id="apprenticeLimitUp">+</button>
+        </div>
+      </div>
+
+      <div class="mistakes-widget">
         <div class="widget-title-row"><span class="title">Developer</span></div>
         <p class="wk-text">Fast-forward the review clock, for testing SRS timing without waiting real hours.</p>
         <button class="wk-button" id="settingsDevSkip">+24 hours</button>
@@ -4000,6 +4037,17 @@ function voiceRowHTML(gender, speaker) {
 function attachSettingsHandlers() {
   document.getElementById('settingsSignOut').addEventListener('click', signOutUser);
   document.getElementById('settingsDevSkip').addEventListener('click', devSkipTime);
+
+  document.getElementById('apprenticeLimitDown').addEventListener('click', () => {
+    STATE.apprenticeLimit = Math.max(5, STATE.apprenticeLimit - 5);
+    saveState();
+    render();
+  });
+  document.getElementById('apprenticeLimitUp').addEventListener('click', () => {
+    STATE.apprenticeLimit = Math.min(500, STATE.apprenticeLimit + 5);
+    saveState();
+    render();
+  });
 
   document.getElementById('audioEnabledToggle').addEventListener('change', e => {
     STATE.audioSettings.enabled = e.target.checked;
@@ -4068,6 +4116,7 @@ function lessonPickerRowHTML(type, item, checkboxClass) {
 
 function viewLessonPicker(type) {
   const pool = lessonQueueFor(type);
+  const room = roomForNewLessons();
   return { html: `
     <div class="topbar">
       <a class="back-link" href="#/${sectionBase(type)}">‹ Back to ${SECTION_LABEL[type]}</a>
@@ -4075,7 +4124,10 @@ function viewLessonPicker(type) {
     </div>
     <main>
       <p class="wk-text">Pick which of this level's lessons to study now — everything here is from your current level only; Guru enough of it to unlock the next level's lessons.</p>
-      ${pool.length ? `
+      ${room <= 0
+        ? `<p class="wk-text" style="color:var(--color-incorrect)">Apprentice limit reached (${currentApprenticeCount()}/${STATE.apprenticeLimit}) — clear some reviews before taking more lessons.</p>`
+        : `<p class="wk-text">You can start up to <strong>${room}</strong> more right now (Apprentice limit: ${currentApprenticeCount()}/${STATE.apprenticeLimit}).</p>`}
+      ${pool.length && room > 0 ? `
         <div class="lesson-picker-actions">
           <button type="button" class="wk-button" id="lpSelectAll">Select All</button>
           <button type="button" class="wk-button" id="lpClear">Clear</button>
@@ -4084,24 +4136,29 @@ function viewLessonPicker(type) {
         <div class="session-footer">
           <button type="button" class="wk-button primary" id="lpStart" disabled>Start Lesson (0 selected)</button>
         </div>
-      ` : `<p class="empty-state" style="margin-top:16px">No lessons available at your current level right now.</p>`}
-    </main>`, after: () => attachLessonPickerHandlers(type) };
+      ` : pool.length ? '' : `<p class="empty-state" style="margin-top:16px">No lessons available at your current level right now.</p>`}
+    </main>`, after: () => attachLessonPickerHandlers(type, room) };
 }
 
-function attachLessonPickerHandlers(type) {
-  const checks = document.querySelectorAll('.lp-check');
+function attachLessonPickerHandlers(type, room) {
+  const checks = [...document.querySelectorAll('.lp-check')];
   const startBtn = document.getElementById('lpStart');
+  // Room limit applies to the PICKER too — you can select up to as many as
+  // you have Apprentice-limit room for, not the whole level at once.
   function updateCount() {
-    const n = document.querySelectorAll('.lp-check:checked').length;
+    const checked = checks.filter(c => c.checked);
+    const n = checked.length;
+    const atLimit = room !== undefined && n >= room;
+    checks.forEach(c => { if (!c.checked) c.disabled = atLimit; });
     if (startBtn) { startBtn.textContent = `Start Lesson (${n} selected)`; startBtn.disabled = n === 0; }
   }
   checks.forEach(c => c.addEventListener('change', updateCount));
   const selectAll = document.getElementById('lpSelectAll');
   const clearBtn = document.getElementById('lpClear');
-  if (selectAll) selectAll.addEventListener('click', () => { checks.forEach(c => { c.checked = true; }); updateCount(); });
-  if (clearBtn) clearBtn.addEventListener('click', () => { checks.forEach(c => { c.checked = false; }); updateCount(); });
+  if (selectAll) selectAll.addEventListener('click', () => { checks.forEach((c, i) => { c.checked = room === undefined || i < room; }); updateCount(); });
+  if (clearBtn) clearBtn.addEventListener('click', () => { checks.forEach(c => { c.checked = false; c.disabled = false; }); updateCount(); });
   if (startBtn) startBtn.addEventListener('click', () => {
-    const ids = [...document.querySelectorAll('.lp-check:checked')].map(c => c.value);
+    const ids = checks.filter(c => c.checked).map(c => c.value).slice(0, room);
     const items = contentFor(type).filter(it => ids.includes(it.id));
     if (!items.length) return;
     lessonSession = { type, items, poolTotal: items.length, index: 0 };
@@ -4234,6 +4291,7 @@ function customVocabCategorySectionsHTML(type, list) {
         <div class="cv-category-block">
           <h3>${sectionTitle} (${notLearned.length})</h3>
           ${isDuo ? `<p class="wk-text">You already know these from Duolingo — one shot to answer each, no lesson intro. Get it right and it starts at Guru I; miss it and it starts at Apprentice II instead of Apprentice I.</p>` : ''}
+          ${notLearned.length && roomForNewLessons() <= 0 ? `<p class="wk-text" style="color:var(--color-incorrect)">Apprentice limit reached (${currentApprenticeCount()}/${STATE.apprenticeLimit}) — clear some reviews first.</p>` : ''}
           ${notLearned.length ? `
             <div class="lesson-picker-actions">
               <button type="button" class="wk-button" id="${selectAllId}">Select All</button>
@@ -4253,7 +4311,9 @@ function customVocabCategorySectionsHTML(type, list) {
 
 function startCustomVocabLesson(type, ids) {
   const source = (STATE.customVocab && STATE.customVocab[type]) || [];
-  const items = source.filter(it => ids.includes(it.id));
+  // Defensive cap, same as viewLesson — never actually start more than the
+  // remaining Apprentice-limit room, regardless of what the UI let through.
+  const items = source.filter(it => ids.includes(it.id)).slice(0, roomForNewLessons());
   if (!items.length) return;
   lessonSession = { type, items, poolTotal: items.length, index: 0 };
   navigate('vocab/lesson-active');
@@ -4265,7 +4325,7 @@ function startCustomVocabLesson(type, ids) {
 // markCorrect/advanceAfterMiss) instead of the normal lesson flow.
 function startDuoCheck(type, ids) {
   const source = (STATE.customVocab && STATE.customVocab[type]) || [];
-  const items = source.filter(it => ids.includes(it.id));
+  const items = source.filter(it => ids.includes(it.id)).slice(0, roomForNewLessons());
   if (!items.length) return;
   quizSession = buildQuizSession(type, items, 'duocheck');
   navigate(`${sectionBase(type)}/duo-check`);
@@ -4315,21 +4375,31 @@ function attachCustomVocabHubHandlers() {
   function wirePicker(checkClass, selectAllId, clearId, startId, type, category) {
     const isDuo = category === 'duo';
     const startLabel = isDuo ? 'Start One-Time Review' : 'Start Lesson';
-    const checks = () => document.querySelectorAll('.' + checkClass);
+    const checks = () => [...document.querySelectorAll('.' + checkClass)];
     const startBtn = document.getElementById(startId);
+    // Same Apprentice-limit room as the WK lesson picker — custom-vocab
+    // lessons and Duo one-time checks land new items in Apprentice too,
+    // so they draw from the exact same shared pool.
     function updateCount() {
-      const n = document.querySelectorAll('.' + checkClass + ':checked').length;
-      if (startBtn) { startBtn.textContent = `${startLabel} (${n} selected)`; startBtn.disabled = n === 0; }
+      const all = checks();
+      const checked = all.filter(c => c.checked);
+      const n = checked.length;
+      const room = roomForNewLessons();
+      const atLimit = n >= room;
+      all.forEach(c => { if (!c.checked) c.disabled = atLimit; });
+      if (startBtn) { startBtn.textContent = `${startLabel} (${n} selected)`; startBtn.disabled = n === 0 || room === 0; }
     }
     checks().forEach(c => c.addEventListener('change', updateCount));
     const selectAll = document.getElementById(selectAllId);
     const clearBtn = document.getElementById(clearId);
-    if (selectAll) selectAll.addEventListener('click', () => { checks().forEach(c => { c.checked = true; }); updateCount(); });
-    if (clearBtn) clearBtn.addEventListener('click', () => { checks().forEach(c => { c.checked = false; }); updateCount(); });
+    if (selectAll) selectAll.addEventListener('click', () => { const room = roomForNewLessons(); checks().forEach((c, i) => { c.checked = i < room; }); updateCount(); });
+    if (clearBtn) clearBtn.addEventListener('click', () => { checks().forEach(c => { c.checked = false; c.disabled = false; }); updateCount(); });
     if (startBtn) startBtn.addEventListener('click', () => {
-      const ids = [...document.querySelectorAll('.' + checkClass + ':checked')].map(c => c.value);
+      const ids = checks().filter(c => c.checked).map(c => c.value).slice(0, roomForNewLessons());
+      if (!ids.length) return;
       if (isDuo) startDuoCheck(type, ids); else startCustomVocabLesson(type, ids);
     });
+    updateCount(); // reflect the current room immediately, even before any change event
   }
   ['vocab', 'kanji'].forEach(type => {
     CUSTOM_VOCAB_CATEGORY_ORDER.forEach(category => {
@@ -4501,9 +4571,10 @@ function viewSectionMain(type) {
             <span id="batchSizeDisplay">${STATE.lessonBatchSize}</span>
             <button class="batch-btn" id="batchUp">+</button>
           </div>
+          ${roomForNewLessons() <= 0 && lessons.length ? `<p class="wk-text" style="color:var(--color-incorrect)">Apprentice limit reached (${currentApprenticeCount()}/${STATE.apprenticeLimit}) — clear some reviews to unlock more lessons.</p>` : ''}
           <div class="lesson-start-row">
-            <a class="wk-button primary" href="#/${sectionBase(type)}/lesson" ${lessons.length ? '' : 'style="pointer-events:none;opacity:.4"'}>Start lessons (${Math.min(lessons.length, STATE.lessonBatchSize)})</a>
-            <a class="wk-button" href="#/${sectionBase(type)}/lesson-picker" ${lessons.length ? '' : 'style="pointer-events:none;opacity:.4"'}>Choose lessons ›</a>
+            <a class="wk-button primary" href="#/${sectionBase(type)}/lesson" ${lessons.length && roomForNewLessons() > 0 ? '' : 'style="pointer-events:none;opacity:.4"'}>Start lessons (${Math.min(lessons.length, STATE.lessonBatchSize, roomForNewLessons())})</a>
+            <a class="wk-button" href="#/${sectionBase(type)}/lesson-picker" ${lessons.length && roomForNewLessons() > 0 ? '' : 'style="pointer-events:none;opacity:.4"'}>Choose lessons ›</a>
           </div>
         </div>
         <div class="lr-widget">
@@ -4969,7 +5040,11 @@ let lessonSession = null;
 
 function viewLesson(type) {
   const pool = lessonQueueFor(type);
-  lessonSession = { type, items: pool.slice(0, STATE.lessonBatchSize), poolTotal: pool.length, index: 0 };
+  // Defensive cap, not just a UI hint on the button — even if something
+  // navigated here directly, you can never actually start more items than
+  // your remaining Apprentice-limit room allows.
+  const batchSize = Math.min(STATE.lessonBatchSize, roomForNewLessons());
+  lessonSession = { type, items: pool.slice(0, batchSize), poolTotal: pool.length, index: 0 };
   return { html: renderLessonItem(), after: attachLessonHandlers };
 }
 
