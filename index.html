@@ -285,6 +285,8 @@
   .tabbar a:hover{color:#fff}
   .lesson-main{max-width:820px;margin:0 auto;padding:0 24px 140px}
   .lesson-section{background:#fff;margin-top:20px;padding:26px 40px;border-radius:12px;scroll-margin-top:56px}
+  .user-notes-input{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--color-widget-border);border-radius:8px;resize:vertical;margin-bottom:6px}
+  .user-notes .wk-button{margin-top:6px}
   .lesson-section h2{font-size:22px;font-weight:400;margin:0 0 14px;border-bottom:1px solid #eee;padding-bottom:12px}
   .mnemonic-label{font-size:14px;font-weight:700;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.03em;margin:22px 0 8px}
   .field-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:10px}
@@ -2764,6 +2766,9 @@ function defaultState() {
     // permanently accepted from then on, so the same phrasing (e.g.
     // "Skilled" for 上手's listed "Good At") never needs overriding twice.
     learnedSynonyms: {},
+    // Your own mnemonic + free-form notes per vocab/kanji item, keyed by
+    // "type:id" -> { mnemonic, notes } (see userNotesSectionHTML).
+    userNotes: {},
     audioSettings: {
       enabled: true,
       // empty array = "all voices of this gender allowed" (see
@@ -2896,6 +2901,56 @@ function displayMeaning(type, item) {
 // (the "why"), vocab shows its one reading plus the readingType "why".
 // Centralized here instead of duplicated across renderLessonItem,
 // viewItemDetail, and the quiz wrong-answer panel.
+function escapeHTML(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function userNoteFor(type, id) {
+  return (STATE.userNotes && STATE.userNotes[type + ':' + id]) || { mnemonic: '', notes: '' };
+}
+
+// Editable "Your Mnemonic" + "Your Notes" block for a vocab/kanji item —
+// shown on the detail page and in lessons. Saves via the delegated
+// [data-notes-save] handler below (no per-render wiring needed).
+function userNotesSectionHTML(type, item) {
+  if (type === 'grammar') return '';
+  const n = userNoteFor(type, item.id);
+  const key = escapeHTML(type + ':' + item.id);
+  return `
+    <div class="user-notes" data-notes-key="${key}">
+      <h3 class="mnemonic-label">Your Mnemonic</h3>
+      <textarea class="user-notes-input" data-notes-field="mnemonic" rows="3" placeholder="Write your own mnemonic for this ${type === 'kanji' ? 'kanji' : 'word'}…">${escapeHTML(n.mnemonic)}</textarea>
+      <h3 class="mnemonic-label">Your Notes</h3>
+      <textarea class="user-notes-input" data-notes-field="notes" rows="3" placeholder="Extra notes — context, where you saw it, related words…">${escapeHTML(n.notes)}</textarea>
+      <button type="button" class="wk-button" data-notes-save>Save</button>
+      <span class="backup-status" data-notes-status></span>
+    </div>`;
+}
+// Read-only version for spots where editing would get in the way (the
+// quiz's "review this one" panel) — nothing rendered if you haven't
+// written anything.
+function userNotesReadOnlyHTML(type, item) {
+  if (type === 'grammar') return '';
+  const n = userNoteFor(type, item.id);
+  if (!n.mnemonic && !n.notes) return '';
+  return `
+    ${n.mnemonic ? `<h4>Your Mnemonic</h4><p>${escapeHTML(n.mnemonic).replace(/\n/g, '<br>')}</p>` : ''}
+    ${n.notes ? `<h4>Your Notes</h4><p>${escapeHTML(n.notes).replace(/\n/g, '<br>')}</p>` : ''}`;
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-notes-save]');
+  if (!btn) return;
+  const box = btn.closest('.user-notes');
+  const key = box.dataset.notesKey;
+  const val = f => box.querySelector(`[data-notes-field="${f}"]`).value.trim();
+  STATE.userNotes = STATE.userNotes || {};
+  const mnemonic = val('mnemonic'), notes = val('notes');
+  if (!mnemonic && !notes) delete STATE.userNotes[key];
+  else STATE.userNotes[key] = { mnemonic, notes };
+  saveState();
+  const status = box.querySelector('[data-notes-status]');
+  if (status) { status.textContent = 'Saved'; setTimeout(() => { status.textContent = ''; }, 1500); }
+});
+
 function readingSectionHTML(type, item, audioText) {
   if (type === 'kanji') {
     const rows = [];
@@ -5044,6 +5099,9 @@ function viewItemDetail(type, itemId) {
       </section>
       <section class="lesson-section"><h2>Reading</h2>
         ${readingSectionHTML(type, item, displayReading(type, item))}
+      </section>
+      <section class="lesson-section"><h2>Your Notes</h2>
+        ${userNotesSectionHTML(type, item)}
       </section>`;
   }
 
@@ -5092,7 +5150,7 @@ function renderLessonItem() {
 
   const tabs = type === 'grammar'
     ? [['explanation', 'Explanation'], ['example', 'Example']]
-    : [['meaning', 'Meaning'], ['reading', 'Reading']];
+    : [['meaning', 'Meaning'], ['reading', 'Reading'], ['notes', 'Notes']];
 
   let sections = '';
   if (type === 'grammar') {
@@ -5119,6 +5177,10 @@ function renderLessonItem() {
       <div class="lesson-section" id="reading">
         <h2>Reading</h2>
         ${readingSectionHTML(type, item, displayReading(type, item))}
+      </div>
+      <div class="lesson-section" id="notes">
+        <h2>Your Notes</h2>
+        ${userNotesSectionHTML(type, item)}
       </div>`;
   }
 
@@ -5349,6 +5411,7 @@ function renderQuizQuestion() {
         <h4>Meaning Mnemonic</h4><p>${mdBold(item.meaningMnemonic)}</p>
         <h4>Reading</h4>
         ${readingSectionHTML(type, item, displayReading(type, item))}
+        ${userNotesReadOnlyHTML(type, item)}
       `}
     </div>`;
 }
