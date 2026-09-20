@@ -287,6 +287,8 @@
   .lesson-section{background:#fff;margin-top:20px;padding:26px 40px;border-radius:12px;scroll-margin-top:56px}
   .user-notes-input{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--color-widget-border);border-radius:8px;resize:vertical;margin-bottom:6px}
   .user-notes .wk-button{margin-top:6px}
+  body{overscroll-behavior-y:contain}
+  .ptr-indicator{position:fixed;left:50%;top:0;transform:translate(-50%,-100%);z-index:200;background:#fff;color:var(--color-widget-primary-text);border:1px solid var(--color-widget-border);border-radius:999px;padding:8px 18px;font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.15);pointer-events:none;white-space:nowrap}
   .lesson-section h2{font-size:22px;font-weight:400;margin:0 0 14px;border-bottom:1px solid #eee;padding-bottom:12px}
   .mnemonic-label{font-size:14px;font-weight:700;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.03em;margin:22px 0 8px}
   .field-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:10px}
@@ -2925,21 +2927,7 @@ function userNotesSectionHTML(type, item) {
       <span class="backup-status" data-notes-status></span>
     </div>`;
 }
-// Read-only version for spots where editing would get in the way (the
-// quiz's "review this one" panel) — nothing rendered if you haven't
-// written anything.
-function userNotesReadOnlyHTML(type, item) {
-  if (type === 'grammar') return '';
-  const n = userNoteFor(type, item.id);
-  if (!n.mnemonic && !n.notes) return '';
-  return `
-    ${n.mnemonic ? `<h4>Your Mnemonic</h4><p>${escapeHTML(n.mnemonic).replace(/\n/g, '<br>')}</p>` : ''}
-    ${n.notes ? `<h4>Your Notes</h4><p>${escapeHTML(n.notes).replace(/\n/g, '<br>')}</p>` : ''}`;
-}
-document.addEventListener('click', e => {
-  const btn = e.target.closest('[data-notes-save]');
-  if (!btn) return;
-  const box = btn.closest('.user-notes');
+function saveUserNotes(box) {
   const key = box.dataset.notesKey;
   const val = f => box.querySelector(`[data-notes-field="${f}"]`).value.trim();
   STATE.userNotes = STATE.userNotes || {};
@@ -2949,6 +2937,16 @@ document.addEventListener('click', e => {
   saveState();
   const status = box.querySelector('[data-notes-status]');
   if (status) { status.textContent = 'Saved'; setTimeout(() => { status.textContent = ''; }, 1500); }
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-notes-save]');
+  if (btn) saveUserNotes(btn.closest('.user-notes'));
+});
+// Also save when you tap out of a box, so text typed in the review
+// panel isn't lost if you hit Next without pressing Save.
+document.addEventListener('focusout', e => {
+  const ta = e.target.closest && e.target.closest('.user-notes-input');
+  if (ta) saveUserNotes(ta.closest('.user-notes'));
 });
 
 function readingSectionHTML(type, item, audioText) {
@@ -5411,7 +5409,8 @@ function renderQuizQuestion() {
         <h4>Meaning Mnemonic</h4><p>${mdBold(item.meaningMnemonic)}</p>
         <h4>Reading</h4>
         ${readingSectionHTML(type, item, displayReading(type, item))}
-        ${userNotesReadOnlyHTML(type, item)}
+        <h4>Your Mnemonic &amp; Notes</h4>
+        ${userNotesSectionHTML(type, item)}
       `}
     </div>`;
 }
@@ -5976,6 +5975,62 @@ auth.onAuthStateChanged(user => {
       render();
     });
 });
+
+// Pull-to-refresh for the installed PWA (iOS standalone mode has no native
+// one, and there's no address bar to hit reload on). Reloads the page,
+// which re-fetches the latest index.html (the service worker is
+// network-first for it) and re-syncs from the cloud on boot. Disabled
+// mid-review/lesson so an accidental pull can't throw away a session in
+// progress, and while typing in a field.
+(function setupPullToRefresh() {
+  const THRESHOLD = 80;
+  const BLOCKED_ROUTE = /^(review|reviews|lesson|lesson-active|duo-check|practice|mistakes)$/;
+  let startY = null, pulling = false, dist = 0, indicator = null;
+
+  function blocked() {
+    const active = document.activeElement;
+    if (active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)) return true;
+    const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+    return parts.some(p => BLOCKED_ROUTE.test(p));
+  }
+  function ensureIndicator() {
+    if (!indicator) {
+      indicator = document.createElement('div');
+      indicator.className = 'ptr-indicator';
+      document.body.appendChild(indicator);
+    }
+    return indicator;
+  }
+  function hideIndicator() {
+    if (indicator) { indicator.remove(); indicator = null; }
+  }
+
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1 || window.scrollY > 0 || blocked()) { startY = null; return; }
+    startY = e.touches[0].clientY;
+    pulling = false; dist = 0;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (startY === null) return;
+    dist = e.touches[0].clientY - startY;
+    if (dist <= 10 || window.scrollY > 0) { if (pulling) { hideIndicator(); pulling = false; } return; }
+    pulling = true;
+    const el = ensureIndicator();
+    el.textContent = dist >= THRESHOLD ? 'Release to refresh' : 'Pull to refresh';
+    el.style.transform = `translate(-50%, ${Math.min(dist, 120) * 0.6 + 8}px)`;
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (startY === null) return;
+    const shouldRefresh = pulling && dist >= THRESHOLD;
+    startY = null; pulling = false;
+    if (!shouldRefresh) { hideIndicator(); return; }
+    if (indicator) indicator.textContent = 'Refreshing…';
+    if (typeof flushCloudSyncNow === 'function') flushCloudSyncNow();
+    setTimeout(() => location.reload(), 350);
+  }, { passive: true });
+})();
 
 // register the service worker for offline/installable support. Wrapped in
 // a feature check + try/catch since this also gets opened via Live
