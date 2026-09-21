@@ -392,6 +392,8 @@
     body:has(.wkq) .session-bar{order:-1;margin:0 -16px 10px;max-width:none}
     body:has(.wkq) .session-bar span{height:4px;border-radius:0}
     body:has(.wkq) .quiz-char{font-size:88px;margin-top:36px;padding-bottom:6px}
+    body:has(.wkq) .quiz-char.fit1{font-size:min(72px, calc((100vw - 40px) / var(--n, 4)));white-space:nowrap;margin-top:24px}
+    body:has(.wkq) .quiz-char.is-grammar{font-size:26px !important}
     body:has(.wkq) .quiz-card{max-width:none;margin:0;background:transparent;border-radius:0;box-shadow:none;padding:0}
     body:has(.wkq) .question-label{display:block;margin:0;border-radius:0;background:rgba(0,0,0,.72);color:#fff;font-size:15px;text-transform:none;letter-spacing:0;text-align:center;padding:10px 16px}
     body:has(.wkq) .question-label b{color:#fff}
@@ -5486,7 +5488,7 @@ function renderQuizQuestion() {
         <div class="wkq-stats"><span>${totalAttempts ? Math.round((correctAttempts / totalAttempts) * 100) : 100}%</span><span>${answeredCount} done</span><span>${totalQuestions - answeredCount} left</span></div>
       </div>
       <div class="session-bar" id="sessionBar">${segs}</div>
-      <div class="quiz-char" style="${type === 'grammar' ? 'font-size:26px' : ''}">${promptChar}</div>
+      <div class="quiz-char${type === 'grammar' ? ' is-grammar' : ' fit1'}" style="${type === 'grammar' ? 'font-size:26px' : `--n:${Math.max(2, [...String(displayWord(type, item)).replace(/<[^>]*>/g, '')].length)}`}">${promptChar}</div>
       ${ttsButton}
       ${modeBadge}
     </div>
