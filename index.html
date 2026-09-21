@@ -5641,6 +5641,15 @@ function attachQuizHandlers() {
       }
     });
   }
+
+  // Focus the answer box as soon as a question appears so you can just
+  // start typing. (Desktop and Android Chrome honor this outright; iOS
+  // Safari often only raises the keyboard for a focus() that happens
+  // directly inside a tap, so there you may still need one tap.) The
+  // Check/Next button doesn't steal focus, so the box stays active between
+  // pressing Check and moving on.
+  checkBtn.addEventListener('mousedown', e => e.preventDefault());
+  input.focus({ preventScroll: true });
 }
 function rerenderQuiz() {
   document.getElementById('app').innerHTML = topNav(currentRoute()[0], currentRoute()) + renderQuizQuestion();
