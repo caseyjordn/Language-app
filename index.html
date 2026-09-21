@@ -360,21 +360,35 @@
   .answer-row input.answer{flex:1;min-width:0}
   .answer-row .btn.check{flex:none;width:44px;height:44px;border-radius:50%;padding:0;font-size:20px;line-height:1}
   .wkq-stats{display:none}
+  .quit-menu{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:400;display:flex;align-items:flex-end;justify-content:center}
+  .quit-menu[hidden]{display:none}
+  .quit-sheet{background:#fff;color:#222;width:100%;max-width:480px;border-radius:16px 16px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
+  .quit-title{font-weight:700;text-align:center;font-size:15px;color:#555}
+  .quit-sheet button{border:0;border-radius:10px;padding:14px;font-size:16px;font-weight:700;cursor:pointer}
+  .quit-leave{background:var(--color-incorrect);color:#fff}
+  .quit-stay{background:#eee;color:#222}
+  .quit-note{font-size:12px;color:#777;text-align:center}
+  .home-glyph{display:inline-flex;flex-direction:column;gap:5px;padding:6px 2px}
+  .home-glyph i{display:block;width:26px;height:3px;background:#fff;border-radius:2px}
   .quiz-card .question-label b{font-weight:700}
   .wkq-kind{opacity:.75;font-weight:500}
   @media (max-width:700px){
     body:has(.wkq) .topnav{display:none}
-    body:has(.wkq) .quiz-hero{padding:12px 16px 12px}
+    body:has(.wkq){background:#111;overflow:hidden}
+    body:has(.wkq) .quiz-hero{padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
     body:has(.wkq) .wkq-screen{position:fixed;left:0;right:0;top:var(--vvtop,0px);height:var(--vvh,100dvh);display:flex;flex-direction:column;background:var(--accent);z-index:10;overflow:hidden}
     body:has(.wkq) .quiz-hero{position:static;flex:1 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:flex-start}
     body:has(.wkq) .quiz-hero .quiz-char{margin:auto 0;padding:10px 0}
     body:has(.wkq) .quiz-hero-spacer{display:none}
     body:has(.wkq) .quiz-card{flex:none;order:3}
     body:has(.wkq) .lesson-review{order:2;flex:none;max-height:45%;overflow:auto;margin:0;border-radius:16px 16px 0 0}
-    body:has(.wkq) .quiz-hero-top{position:relative;margin-bottom:10px}
+    body:has(.wkq) .quiz-hero-top{position:relative;margin-bottom:10px;width:100%;max-width:none}
+    body:has(.wkq) .feedback-msg:empty{display:none}
+    body:has(.wkq) .feedback-row{display:block}
+    body:has(.wkq) .quiz-card{margin-bottom:0}
     body:has(.wkq) .quiz-hero-top .count{display:none}
     body:has(.wkq) .wkq-stats{display:flex;gap:14px;font-size:14px;font-weight:700}
-    body:has(.wkq) .quiz-hero-top .home{font-size:22px}
+    body:has(.wkq) .quiz-hero-top .home{font-size:22px;line-height:1}
     body:has(.wkq) .session-bar{order:-1;margin:0 -16px 10px;max-width:none}
     body:has(.wkq) .session-bar span{height:4px;border-radius:0}
     body:has(.wkq) .quiz-char{font-size:88px;margin-top:36px;padding-bottom:6px}
@@ -382,7 +396,7 @@
     body:has(.wkq) .question-label{display:block;margin:0;border-radius:0;background:rgba(0,0,0,.72);color:#fff;font-size:15px;text-transform:none;letter-spacing:0;text-align:center;padding:10px 16px}
     body:has(.wkq) .question-label b{color:#fff}
     body:has(.wkq) .answer-row{background:#111;padding:10px 14px}
-    body:has(.wkq) input.answer{border:none;color:#fff;text-align:center;font-size:20px;padding:10px 4px}
+    body:has(.wkq) input.answer{border:none;color:#fff;text-align:center !important;font-size:20px;padding:10px 4px;-webkit-appearance:none;appearance:none}
     body:has(.wkq) input.answer::placeholder{color:rgba(255,255,255,.45)}
     body:has(.wkq) input.answer.correct{color:#7CFFB2}
     body:has(.wkq) input.answer.incorrect{color:#FF8FA3}
@@ -5464,11 +5478,12 @@ function renderQuizQuestion() {
   keepKeyboardOpen();
   return `
     <div class="wkq-screen">
+    <div class="quit-menu" id="quitMenu" hidden><div class="quit-sheet"><div class="quit-title">Review session</div><button type="button" class="quit-leave" id="quitLeave">End session &amp; leave</button><button type="button" class="quit-stay" id="quitStay">Keep going</button><div class="quit-note">Answers you have already finished are saved.</div></div></div>
     <div class="quiz-hero wkq" id="hero">
       <div class="quiz-hero-top">
-        <a class="home" href="#/${backRoute}" style="color:#fff;text-decoration:none">🏠</a>
+        <button type="button" class="home" id="quitBtn" aria-label="Menu" style="color:#fff;background:none;border:0;padding:0;cursor:pointer"><span class="home-glyph"><i></i><i></i><i></i></span></button>
         <div class="count" id="sessionCount" style="font-size:13px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px">${answeredCount + 1} of ${totalQuestions}${totalAttempts ? ` · ${Math.round((correctAttempts / totalAttempts) * 100)}%` : ''}</div>
-        <div class="wkq-stats"><span>👍 ${totalAttempts ? Math.round((correctAttempts / totalAttempts) * 100) : 100}%</span><span>✓ ${answeredCount}</span><span>📥 ${totalQuestions - answeredCount}</span></div>
+        <div class="wkq-stats"><span>${totalAttempts ? Math.round((correctAttempts / totalAttempts) * 100) : 100}%</span><span>${answeredCount} done</span><span>${totalQuestions - answeredCount} left</span></div>
       </div>
       <div class="session-bar" id="sessionBar">${segs}</div>
       <div class="quiz-char" style="${type === 'grammar' ? 'font-size:26px' : ''}">${promptChar}</div>
@@ -5742,6 +5757,17 @@ function attachQuizHandlers() {
   // Check/Next button doesn't steal focus, so the box stays active between
   // pressing Check and moving on.
   checkBtn.addEventListener('mousedown', e => e.preventDefault());
+  const quitMenu = document.getElementById('quitMenu');
+  const quitBtn = document.getElementById('quitBtn');
+  if (quitBtn && quitMenu) {
+    quitBtn.addEventListener('click', () => { quitMenu.hidden = false; });
+    document.getElementById('quitStay').addEventListener('click', () => { quitMenu.hidden = true; input.focus({ preventScroll: true }); });
+    document.getElementById('quitLeave').addEventListener('click', () => {
+      const dest = '#/' + quizSession.backRoute;
+      quizSession = null;
+      if (location.hash === dest) render(); else location.hash = dest;
+    });
+  }
   input.focus({ preventScroll: true });
 }
 function rerenderQuiz() {
