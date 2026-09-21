@@ -364,7 +364,13 @@
   .wkq-kind{opacity:.75;font-weight:500}
   @media (max-width:700px){
     body:has(.wkq) .topnav{display:none}
-    body:has(.wkq) .quiz-hero{padding:12px 16px 26px}
+    body:has(.wkq) .quiz-hero{padding:12px 16px 12px}
+    body:has(.wkq) .wkq-screen{position:fixed;left:0;right:0;top:var(--vvtop,0px);height:var(--vvh,100dvh);display:flex;flex-direction:column;background:var(--accent);z-index:10;overflow:hidden}
+    body:has(.wkq) .quiz-hero{position:static;flex:1 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:flex-start}
+    body:has(.wkq) .quiz-hero .quiz-char{margin:auto 0;padding:10px 0}
+    body:has(.wkq) .quiz-hero-spacer{display:none}
+    body:has(.wkq) .quiz-card{flex:none;order:3}
+    body:has(.wkq) .lesson-review{order:2;flex:none;max-height:45%;overflow:auto;margin:0;border-radius:16px 16px 0 0}
     body:has(.wkq) .quiz-hero-top{position:relative;margin-bottom:10px}
     body:has(.wkq) .quiz-hero-top .count{display:none}
     body:has(.wkq) .wkq-stats{display:flex;gap:14px;font-size:14px;font-weight:700}
@@ -3872,9 +3878,43 @@ function render() {
 // focus/blur again, gated to touch devices (pointer:coarse) so desktop,
 // which never had this problem, keeps the full hero while typing.
 const IS_TOUCH_DEVICE = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+// Keeps the iOS/Android keyboard up between review questions: a persistent
+// off-screen input takes focus just before the question DOM is swapped, so
+// the keyboard never sees "no focused field"; the new answer input then
+// takes focus back. Also feeds the visible viewport size to CSS (--vvh/--vvtop)
+// so the review screen always fits exactly above the keyboard.
+function keepKeyboardOpen() {
+  if (!IS_TOUCH_DEVICE || typeof document.createElement !== 'function') return;
+  const cur = document.activeElement;
+  if (!cur || cur.id !== 'answerInput') return;
+  let k = document.getElementById('kbKeeper');
+  if (!k) {
+    k = document.createElement('input');
+    k.id = 'kbKeeper';
+    k.setAttribute('aria-hidden', 'true');
+    k.tabIndex = -1;
+    k.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;pointer-events:none';
+    document.body.appendChild(k);
+  }
+  try { k.focus({ preventScroll: true }); } catch (e) {}
+}
+(function trackVisualViewport() {
+  const vv = typeof window !== 'undefined' && window.visualViewport;
+  if (!vv || typeof document === 'undefined') return;
+  const apply = () => {
+    document.documentElement.style.setProperty('--vvh', vv.height + 'px');
+    document.documentElement.style.setProperty('--vvtop', vv.offsetTop + 'px');
+  };
+  vv.addEventListener('resize', apply);
+  vv.addEventListener('scroll', apply);
+  apply();
+})();
+
 function setHeroCompact(compact) {
   const hero = document.getElementById('hero');
   if (!hero || typeof hero.querySelector !== 'function') return;
+  // the WK-style mobile review keeps a fixed layout that already fits above the keyboard
+  if (hero.classList.contains('wkq') && typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches) return;
   const char = hero.querySelector('.quiz-char');
   const sessionBar = hero.querySelector('.session-bar');
   const hideEls = hero.querySelectorAll('.hero-audio-wrap, .hero-mode-badge, .audio-btn');
@@ -5421,7 +5461,9 @@ function renderQuizQuestion() {
     ? `<div class="hero-mode-badge" style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">One-Time Check — no retries</div>`
     : '';
 
+  keepKeyboardOpen();
   return `
+    <div class="wkq-screen">
     <div class="quiz-hero wkq" id="hero">
       <div class="quiz-hero-top">
         <a class="home" href="#/${backRoute}" style="color:#fff;text-decoration:none">🏠</a>
@@ -5462,6 +5504,7 @@ function renderQuizQuestion() {
         <h4>Your Mnemonic &amp; Notes</h4>
         ${userNotesSectionHTML(type, item)}
       `}
+    </div>
     </div>`;
 }
 
