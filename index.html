@@ -245,6 +245,12 @@
   .vtile .meaning{font-size:11px;color:rgba(255,255,255,.85)}
   .vtile-bar{width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.3);margin-top:6px;overflow:hidden}
   .vtile-bar-fill{height:100%;background:#00D68F}
+  .stage-bar{display:flex;gap:3px;width:100%;height:5px;margin-top:6px}
+  .stage-bar .seg{flex:1;height:100%;border-radius:2px;background:rgba(255,255,255,.3)}
+  .stage-bar .seg.on,.stage-bar.full .seg{background:#00D68F}
+  .stage-bar.full{gap:0}
+  .stage-bar.light .seg{background:var(--color-locked-bg)}
+  .stage-bar.light .seg.on,.stage-bar.light.full .seg{background:#00D68F}
   .vtile-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
   .vtile-wrap .vtile{width:100%}
   .vtile.vtile-lessons{background:var(--accent-light);border:2px solid var(--accent)}
@@ -349,6 +355,37 @@
   .feedback-msg.correct{color:var(--color-correct)} .feedback-msg.incorrect{color:var(--color-incorrect)}
   .btn.check{background:var(--accent);color:#fff;border:none;border-radius:var(--border-radius-normal);padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer}
   .hint{font-size:12px;color:var(--color-widget-secondary-text);margin-top:6px}
+
+  .answer-row{display:flex;align-items:center;gap:10px}
+  .answer-row input.answer{flex:1;min-width:0}
+  .answer-row .btn.check{flex:none;width:44px;height:44px;border-radius:50%;padding:0;font-size:20px;line-height:1}
+  .wkq-stats{display:none}
+  .quiz-card .question-label b{font-weight:700}
+  .wkq-kind{opacity:.75;font-weight:500}
+  @media (max-width:700px){
+    body:has(.wkq) .topnav{display:none}
+    body:has(.wkq) .quiz-hero{padding:12px 16px 26px}
+    body:has(.wkq) .quiz-hero-top{position:relative;margin-bottom:10px}
+    body:has(.wkq) .quiz-hero-top .count{display:none}
+    body:has(.wkq) .wkq-stats{display:flex;gap:14px;font-size:14px;font-weight:700}
+    body:has(.wkq) .quiz-hero-top .home{font-size:22px}
+    body:has(.wkq) .session-bar{order:-1;margin:0 -16px 10px;max-width:none}
+    body:has(.wkq) .session-bar span{height:4px;border-radius:0}
+    body:has(.wkq) .quiz-char{font-size:88px;margin-top:36px;padding-bottom:6px}
+    body:has(.wkq) .quiz-card{max-width:none;margin:0;background:transparent;border-radius:0;box-shadow:none;padding:0}
+    body:has(.wkq) .question-label{display:block;margin:0;border-radius:0;background:rgba(0,0,0,.72);color:#fff;font-size:15px;text-transform:none;letter-spacing:0;text-align:center;padding:10px 16px}
+    body:has(.wkq) .question-label b{color:#fff}
+    body:has(.wkq) .answer-row{background:#111;padding:10px 14px}
+    body:has(.wkq) input.answer{border:none;color:#fff;text-align:center;font-size:20px;padding:10px 4px}
+    body:has(.wkq) input.answer::placeholder{color:rgba(255,255,255,.45)}
+    body:has(.wkq) input.answer.correct{color:#7CFFB2}
+    body:has(.wkq) input.answer.incorrect{color:#FF8FA3}
+    body:has(.wkq) .answer-row .btn.check{background:#fff;color:#111}
+    body:has(.wkq) .quiz-card .hint{display:none}
+    body:has(.wkq) .feedback-row{margin:0;min-height:0}
+    body:has(.wkq) .feedback-msg{padding:8px 16px;font-size:13px}
+    body:has(.wkq) .lesson-review{margin:10px 12px 24px;padding:18px}
+  }
 
   .lesson-review{max-width:520px;margin:14px auto 0;background:#fff;border-radius:16px;border:1px solid var(--color-widget-border);padding:22px 30px;display:none}
   .lesson-review.visible{display:block}
@@ -4947,6 +4984,17 @@ const STAGE_ICON = ['', '🥚', '🥚', '🥚', '🥚', '🐣', '🐣', '🐤', 
 // this is what the little green bar under a WK tile actually shows (time
 // elapsed since it last leveled up, toward when it's next due), not overall
 // "mastery." Burned items (no more reviews ever) always read as full.
+// Segmented stage bar: Apprentice shows 4 segments with one filled per stage
+// reached (1-4); Guru and above shows a single solid green bar.
+function stageBarHTML(record, light) {
+  if (!record) return '';
+  const cls = 'stage-bar' + (light ? ' light' : '');
+  if (record.stage >= 5) return `<div class="${cls} full"><div class="seg"></div></div>`;
+  let segs = '';
+  for (let i = 1; i <= 4; i++) segs += `<div class="seg${i <= record.stage ? ' on' : ''}"></div>`;
+  return `<div class="${cls}">${segs}</div>`;
+}
+
 function stageProgressPct(record) {
   if (!record) return 0;
   if (record.stage >= 9 || record.availableAt == null) return 100;
@@ -4979,13 +5027,12 @@ function groupItemsByTier(type, items) {
 // prefix on the word.
 function vtileHTML(type, item, record, tierKey) {
   const bg = TIER_TOAST_COLOR[tierKey];
-  const pct = stageProgressPct(record);
   return `
     <a class="vtile" href="#/${sectionBase(type)}/library/${encodeURIComponent(item.id)}" style="background:${bg}">
       <div class="word">${displayWord(type, item)}</div>
       <div class="reading">${displayReading(type, item) || ''}</div>
       <div class="meaning">${displayMeaning(type, item) || ''}</div>
-      <div class="vtile-bar"><div class="vtile-bar-fill" style="width:${pct}%"></div></div>
+      ${stageBarHTML(record)}
     </a>`;
 }
 
@@ -5107,7 +5154,7 @@ function viewItemDetail(type, itemId) {
     <section class="lesson-section">
       <h2>Your Progress</h2>
       <p class="prose"><strong style="color:${TIER_TOAST_COLOR[tierForStage(record.stage)]}">${STAGE_NAMES[record.stage]}</strong>${item.source === 'duo' ? ' · from Duolingo' : ''}</p>
-      <div class="vtile-bar" style="background:var(--color-locked-bg);max-width:200px"><div class="vtile-bar-fill" style="width:${stageProgressPct(record)}%"></div></div>
+      <div style="max-width:200px">${stageBarHTML(record, true)}</div>
       <p class="wk-text">${record.stage >= 9 ? 'Burned — no longer shown in reviews.' : `Next review: ${record.availableAt ? new Date(record.availableAt).toLocaleString() : '—'}`}</p>
     </section>` : '';
 
@@ -5375,10 +5422,11 @@ function renderQuizQuestion() {
     : '';
 
   return `
-    <div class="quiz-hero" id="hero">
+    <div class="quiz-hero wkq" id="hero">
       <div class="quiz-hero-top">
         <a class="home" href="#/${backRoute}" style="color:#fff;text-decoration:none">🏠</a>
         <div class="count" id="sessionCount" style="font-size:13px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px">${answeredCount + 1} of ${totalQuestions}${totalAttempts ? ` · ${Math.round((correctAttempts / totalAttempts) * 100)}%` : ''}</div>
+        <div class="wkq-stats"><span>👍 ${totalAttempts ? Math.round((correctAttempts / totalAttempts) * 100) : 100}%</span><span>✓ ${answeredCount}</span><span>📥 ${totalQuestions - answeredCount}</span></div>
       </div>
       <div class="session-bar" id="sessionBar">${segs}</div>
       <div class="quiz-char" style="${type === 'grammar' ? 'font-size:26px' : ''}">${promptChar}</div>
@@ -5387,12 +5435,14 @@ function renderQuizQuestion() {
     </div>
     <div class="quiz-hero-spacer" id="heroSpacer"></div>
     <div class="quiz-card">
-      <div class="question-label">${label}</div>
-      <input class="answer" id="answerInput" type="text" placeholder="${placeholder}" autocomplete="off">
-      <div class="hint">Press Enter or Check to submit.</div>
+      <div class="question-label"><span class="wkq-kind">${type === 'grammar' ? 'Grammar' : type === 'kanji' ? 'Kanji' : 'Vocabulary'}</span> <b>${label}</b></div>
+      <div class="answer-row">
+        <input class="answer" id="answerInput" type="text" placeholder="${placeholder}" autocomplete="off">
+        <button class="btn check" id="checkBtn" aria-label="Submit answer">✓</button>
+      </div>
+      <div class="hint">Press Enter or ✓ to submit.</div>
       <div class="feedback-row">
         <div class="feedback-msg" id="feedbackMsg"></div>
-        <button class="btn check" id="checkBtn">Check</button>
       </div>
     </div>
     <div class="lesson-review" id="lessonReview">
@@ -5468,7 +5518,7 @@ function attachQuizHandlers() {
     feedback.textContent = overridden ? 'Marked correct.' : 'Correct!';
     feedback.className = 'feedback-msg correct';
     lessonReviewPanel.classList.remove('visible');
-    checkBtn.textContent = 'Check';
+    checkBtn.textContent = '✓';
     burstConfetti();
     setTimeout(() => {
       finishQuestion(q, type, () => {
@@ -5556,7 +5606,7 @@ function attachQuizHandlers() {
       // waits for you to actually click Next, so you have as long as you
       // want to read the mnemonic/info panel before moving on.
       awaitingNext = true;
-      checkBtn.textContent = 'Next ›';
+      checkBtn.textContent = '›';
     }
   }
 
