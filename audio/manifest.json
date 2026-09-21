@@ -251,7 +251,7 @@
     "female": "9deb1af3f736c3372cf4aa0fb4da810d-female.wav",
     "male": "9deb1af3f736c3372cf4aa0fb4da810d-male.wav"
   },
-  "ホテル": {
+  "ほてる": {
     "female": "9d01e3e1384dde236d30bdb621a0a262-female.wav",
     "male": "9d01e3e1384dde236d30bdb621a0a262-male.wav"
   },
@@ -463,7 +463,7 @@
     "female": "27d69d084040ef48320a2200a7c20502-female.wav",
     "male": "27d69d084040ef48320a2200a7c20502-male.wav"
   },
-  "リンゴ": {
+  "りんご": {
     "female": "208aae0fbc4e16611a0f189ff3278fce-female.wav",
     "male": "208aae0fbc4e16611a0f189ff3278fce-male.wav"
   },
@@ -491,7 +491,7 @@
     "female": "fc0e89edd8004187b2a858b7e09019e6-female.wav",
     "male": "fc0e89edd8004187b2a858b7e09019e6-male.wav"
   },
-  "コーヒー": {
+  "こーひー": {
     "female": "2eebd23884f737c016a7e1145451d5fb-female.wav",
     "male": "2eebd23884f737c016a7e1145451d5fb-male.wav"
   },
@@ -759,7 +759,7 @@
     "female": "37a72ff50c66f8c46fa83e30fffadef8-female.wav",
     "male": "37a72ff50c66f8c46fa83e30fffadef8-male.wav"
   },
-  "カレー": {
+  "かれー": {
     "female": "de30e540993c1ad7cfadb67d8e7b0501-female.wav",
     "male": "de30e540993c1ad7cfadb67d8e7b0501-male.wav"
   },
@@ -775,7 +775,7 @@
     "female": "e24da35b1a95decdf8651a568b9101c1-female.wav",
     "male": "e24da35b1a95decdf8651a568b9101c1-male.wav"
   },
-  "パスタ": {
+  "ぱすた": {
     "female": "59fcc8c91d65e8f4a9b64b6c97640498-female.wav",
     "male": "59fcc8c91d65e8f4a9b64b6c97640498-male.wav"
   },
@@ -791,7 +791,7 @@
     "female": "e00b32912b1a3456abc18a3030aa5e26-female.wav",
     "male": "e00b32912b1a3456abc18a3030aa5e26-male.wav"
   },
-  "ジュース": {
+  "じゅーす": {
     "female": "e88c47a2195748ccbad8377f7307ac25-female.wav",
     "male": "e88c47a2195748ccbad8377f7307ac25-male.wav"
   },
@@ -811,7 +811,7 @@
     "female": "bad9092ebfba665386d8ad94ff9dedf9-female.wav",
     "male": "bad9092ebfba665386d8ad94ff9dedf9-male.wav"
   },
-  "サンドイッチ": {
+  "さんどいっち": {
     "female": "85ac6e686ba9e622ad55d102724c558e-female.wav",
     "male": "85ac6e686ba9e622ad55d102724c558e-male.wav"
   },
@@ -819,7 +819,7 @@
     "female": "58512210c5b4897fbd8cf2397f8c1850-female.wav",
     "male": "58512210c5b4897fbd8cf2397f8c1850-male.wav"
   },
-  "パン": {
+  "ぱん": {
     "female": "b5ea90ef10d3ac9f5cbb3f310c88d064-female.wav",
     "male": "b5ea90ef10d3ac9f5cbb3f310c88d064-male.wav"
   },
@@ -835,15 +835,15 @@
     "female": "b696ba2193736a15739becaed5ea3ca2-female.wav",
     "male": "b696ba2193736a15739becaed5ea3ca2-male.wav"
   },
-  "ジェイポップ": {
+  "じぇいぽっぷ": {
     "female": "c975ee1c6a2e2e4b85b4994fdceb4bc4-female.wav",
     "male": "c975ee1c6a2e2e4b85b4994fdceb4bc4-male.wav"
   },
-  "アニメ": {
+  "あにめ": {
     "female": "c0af3a12644bf8d464fd2cfc3ce6125d-female.wav",
     "male": "c0af3a12644bf8d464fd2cfc3ce6125d-male.wav"
   },
-  "ニュース": {
+  "にゅーす": {
     "female": "96b86e2f2f506d280673178a6112f79e-female.wav",
     "male": "96b86e2f2f506d280673178a6112f79e-male.wav"
   },
@@ -867,11 +867,11 @@
     "female": "a7fb6500eccacda55c68259685443278-female.wav",
     "male": "a7fb6500eccacda55c68259685443278-male.wav"
   },
-  "ジャズ": {
+  "じゃず": {
     "female": "bf034c1a0c243fde5be6fc6b4ad5fe06-female.wav",
     "male": "bf034c1a0c243fde5be6fc6b4ad5fe06-male.wav"
   },
-  "ロック": {
+  "ろっく": {
     "female": "675cdf10e1d66dca1319792b870ba784-female.wav",
     "male": "675cdf10e1d66dca1319792b870ba784-male.wav"
   },
@@ -879,11 +879,11 @@
     "female": "c099a464f9fe7fc8fd4d02c30a30bdc4-female.wav",
     "male": "c099a464f9fe7fc8fd4d02c30a30bdc4-male.wav"
   },
-  "サッカー": {
+  "さっかー": {
     "female": "1c070157b0b66a78f439aa0b163cfcd7-female.wav",
     "male": "1c070157b0b66a78f439aa0b163cfcd7-male.wav"
   },
-  "バスケットボール": {
+  "ばすけっとぼーる": {
     "female": "b72392498760a71d54b2bf78cd427c82-female.wav",
     "male": "b72392498760a71d54b2bf78cd427c82-male.wav"
   },
@@ -891,7 +891,7 @@
     "female": "eed3cdb322f02629d3da53b5c9c2dab1-female.wav",
     "male": "eed3cdb322f02629d3da53b5c9c2dab1-male.wav"
   },
-  "テレビ": {
+  "てれび": {
     "female": "fd7fcaf96c38cf6707c723c8ad1b87e2-female.wav",
     "male": "fd7fcaf96c38cf6707c723c8ad1b87e2-male.wav"
   },
@@ -951,7 +951,7 @@
     "female": "df551410e7c3f199fb095b83bfbf9da6-female.wav",
     "male": "df551410e7c3f199fb095b83bfbf9da6-male.wav"
   },
-  "トロント": {
+  "とろんと": {
     "female": "16d657b38e3ae0613d3bf766d90f2080-female.wav",
     "male": "16d657b38e3ae0613d3bf766d90f2080-male.wav"
   },
@@ -959,7 +959,7 @@
     "female": "99bfa2ff10f4dbaf7e532231c51a44dc-female.wav",
     "male": "99bfa2ff10f4dbaf7e532231c51a44dc-male.wav"
   },
-  "ニューヨーク": {
+  "にゅーよーく": {
     "female": "1a0c6e75254d704778f05f3cd4a0a42c-female.wav",
     "male": "1a0c6e75254d704778f05f3cd4a0a42c-male.wav"
   },
@@ -987,7 +987,7 @@
     "female": "db1e35839ef0707e686788cd5c570557-female.wav",
     "male": "db1e35839ef0707e686788cd5c570557-male.wav"
   },
-  "パスポート": {
+  "ぱすぽーと": {
     "female": "07e973527ab7d5c08be85cdafc5ec349-female.wav",
     "male": "07e973527ab7d5c08be85cdafc5ec349-male.wav"
   },
@@ -995,7 +995,7 @@
     "female": "018699cc8b2365d1151acdecc24886ec-female.wav",
     "male": "018699cc8b2365d1151acdecc24886ec-male.wav"
   },
-  "スマホ": {
+  "すまほ": {
     "female": "ebb0ec38c18399d424d38225d50022dd-female.wav",
     "male": "ebb0ec38c18399d424d38225d50022dd-male.wav"
   },
@@ -1075,7 +1075,7 @@
     "female": "711bc2a441c744581c55ba15ec44a174-female.wav",
     "male": "711bc2a441c744581c55ba15ec44a174-male.wav"
   },
-  "コート": {
+  "こーと": {
     "female": "029ed237abe2f3aebb0d3fd20f62ea52-female.wav",
     "male": "029ed237abe2f3aebb0d3fd20f62ea52-male.wav"
   },
@@ -1095,7 +1095,7 @@
     "female": "47546dc177c6d2a7322f650291360272-female.wav",
     "male": "47546dc177c6d2a7322f650291360272-male.wav"
   },
-  "デパート": {
+  "でぱーと": {
     "female": "0e294d6b52edf10007f7b09094611801-female.wav",
     "male": "0e294d6b52edf10007f7b09094611801-male.wav"
   },
@@ -1107,11 +1107,11 @@
     "female": "844d12f0e6ca9faebb5ae92f0e5e24a0-female.wav",
     "male": "844d12f0e6ca9faebb5ae92f0e5e24a0-male.wav"
   },
-  "バスてい": {
+  "ばすてい": {
     "female": "3dc8d9def1727758319db67a62a2ca33-female.wav",
     "male": "3dc8d9def1727758319db67a62a2ca33-male.wav"
   },
-  "コンビニ": {
+  "こんびに": {
     "female": "82bfc76940fb006b7a8d2521daa9aa47-female.wav",
     "male": "82bfc76940fb006b7a8d2521daa9aa47-male.wav"
   },
@@ -1119,31 +1119,27 @@
     "female": "3e2f1f32a50743186de798d7bbd5241a-female.wav",
     "male": "3e2f1f32a50743186de798d7bbd5241a-male.wav"
   },
-  "ブラジルじん": {
+  "ぶらじるじん": {
     "female": "f3bbd31c6c61fa1923278476d82f1615-female.wav",
     "male": "f3bbd31c6c61fa1923278476d82f1615-male.wav"
   },
-  "ブラジル": {
+  "ぶらじる": {
     "female": "2b9ee25f39772e1d9cdd028057076437-female.wav",
     "male": "2b9ee25f39772e1d9cdd028057076437-male.wav"
   },
-  "ベトナム": {
+  "べとなむ": {
     "female": "83e8cc26cb1c85423633a729408a67ad-female.wav",
     "male": "83e8cc26cb1c85423633a729408a67ad-male.wav"
   },
-  "ベトナムじん": {
+  "べとなむじん": {
     "female": "b61e59221b309ce39a24bddd57918f1c-female.wav",
     "male": "b61e59221b309ce39a24bddd57918f1c-male.wav"
   },
-  "アメリカじん": {
-    "female": "95faa8476224fd7267eae8fc75ecdf4c-female.wav",
-    "male": "95faa8476224fd7267eae8fc75ecdf4c-male.wav"
-  },
-  "カナダ": {
+  "かなだ": {
     "female": "c4a6bad3e3489d3fd5c4e41324241b53-female.wav",
     "male": "c4a6bad3e3489d3fd5c4e41324241b53-male.wav"
   },
-  "カナダじん": {
+  "かなだじん": {
     "female": "b2d70175d03294b9ae80be9f66a532f6-female.wav",
     "male": "b2d70175d03294b9ae80be9f66a532f6-male.wav"
   },
@@ -1151,11 +1147,11 @@
     "female": "4b28b0639c5668a1d499fd794c6f782a-female.wav",
     "male": "4b28b0639c5668a1d499fd794c6f782a-male.wav"
   },
-  "アメリカ": {
+  "あめりか": {
     "female": "5897b1bbd8800c968f7e467d8d0d3fc4-female.wav",
     "male": "5897b1bbd8800c968f7e467d8d0d3fc4-male.wav"
   },
-  "ケーキ": {
+  "けーき": {
     "female": "0182b4d3f6baeaaddc27d582b273b891-female.wav",
     "male": "0182b4d3f6baeaaddc27d582b273b891-male.wav"
   },
@@ -1163,7 +1159,7 @@
     "female": "b19ca85e627a381c23a7d2c466f82b93-female.wav",
     "male": "b19ca85e627a381c23a7d2c466f82b93-male.wav"
   },
-  "ピザ": {
+  "ぴざ": {
     "female": "17a89ce604dac81eb09f4f46c4f761fc-female.wav",
     "male": "17a89ce604dac81eb09f4f46c4f761fc-male.wav"
   },
@@ -1175,11 +1171,11 @@
     "female": "e577ae2f49252bf26ac9b579ac90224e-female.wav",
     "male": "e577ae2f49252bf26ac9b579ac90224e-male.wav"
   },
-  "サラダ": {
+  "さらだ": {
     "female": "c0ca816c9b873815238b09e5be0a3176-female.wav",
     "male": "c0ca816c9b873815238b09e5be0a3176-male.wav"
   },
-  "ラーメン": {
+  "らーめん": {
     "female": "34067f74cf380a318be4e98d03cb1fd8-female.wav",
     "male": "34067f74cf380a318be4e98d03cb1fd8-male.wav"
   },
@@ -1403,11 +1399,11 @@
     "female": "430072c3256b9ac20c86e1b94b71619a-female.wav",
     "male": "430072c3256b9ac20c86e1b94b71619a-male.wav"
   },
-  "テーブルの上に猫がいます": {
+  "てーぶるの上に猫がいます": {
     "female": "6cdc382b1430c3550fa87e337e3f6efc-female.wav",
     "male": "6cdc382b1430c3550fa87e337e3f6efc-male.wav"
   },
-  "彼の名前はリストの一番上に載っていた": {
+  "彼の名前はりすとの一番上に載っていた": {
     "female": "a8ffb6fe07bb31b267809d5c57d6ecde-female.wav",
     "male": "a8ffb6fe07bb31b267809d5c57d6ecde-male.wav"
   },
@@ -1451,7 +1447,7 @@
     "female": "db961e196149ce03dd7a923a33adfa78-female.wav",
     "male": "db961e196149ce03dd7a923a33adfa78-male.wav"
   },
-  "八がラッキーナンバーです": {
+  "八がらっきーなんばーです": {
     "female": "4cd22ea01b084e88e68e38105f3e2469-female.wav",
     "male": "4cd22ea01b084e88e68e38105f3e2469-male.wav"
   },
@@ -1459,7 +1455,7 @@
     "female": "4ce21483b9b36556fda92b4eaf16204a-female.wav",
     "male": "4ce21483b9b36556fda92b4eaf16204a-male.wav"
   },
-  "クッキーが八つあります": {
+  "くっきーが八つあります": {
     "female": "e4bdcc381de76282b97b829edda11b22-female.wav",
     "male": "e4bdcc381de76282b97b829edda11b22-male.wav"
   },
@@ -1511,7 +1507,7 @@
     "female": "2c50b930bf5c5c09fb223650ba784fb4-female.wav",
     "male": "2c50b930bf5c5c09fb223650ba784fb4-male.wav"
   },
-  "このホテルには九階建ての新館がある": {
+  "このほてるには九階建ての新館がある": {
     "female": "fd7abc98dae01efa605fbbe579fdbea9-female.wav",
     "male": "fd7abc98dae01efa605fbbe579fdbea9-male.wav"
   },
@@ -1527,7 +1523,7 @@
     "female": "a40eee5c093f3707c1cbed87746dbb01-female.wav",
     "male": "a40eee5c093f3707c1cbed87746dbb01-male.wav"
   },
-  "このレストランは街で一と言われるほど評判が良い": {
+  "このれすとらんは街で一と言われるほど評判が良い": {
     "female": "9183556ea4bb9ae8dbffa440d2e98b54-female.wav",
     "male": "9183556ea4bb9ae8dbffa440d2e98b54-male.wav"
   },
@@ -1579,7 +1575,7 @@
     "female": "91b7ae7b7ae6b69b70f42263d2a23c76-female.wav",
     "male": "91b7ae7b7ae6b69b70f42263d2a23c76-male.wav"
   },
-  "七はラッキーです": {
+  "七はらっきーです": {
     "female": "f9afc91256a1ee03231e21d2f780ce86-female.wav",
     "male": "f9afc91256a1ee03231e21d2f780ce86-male.wav"
   },
@@ -1623,7 +1619,7 @@
     "female": "118fa8c9e14660626818545f87ee179f-female.wav",
     "male": "118fa8c9e14660626818545f87ee179f-male.wav"
   },
-  "このプロジェクトを完成させるには少なくとも三人の専門家が必要だ": {
+  "このぷろじぇくとを完成させるには少なくとも三人の専門家が必要だ": {
     "female": "a859a07156b788301f67594ac414f677-female.wav",
     "male": "a859a07156b788301f67594ac414f677-male.wav"
   },
@@ -1647,7 +1643,7 @@
     "female": "5bf701c66ec66bfd9bf7ee5314b2cc6d-female.wav",
     "male": "5bf701c66ec66bfd9bf7ee5314b2cc6d-male.wav"
   },
-  "政府はガソリン税を来月から引き上げる方針を発表した": {
+  "政府はがそりん税を来月から引き上げる方針を発表した": {
     "female": "34a5e4a5b0751e869a104037cbd62d0e-female.wav",
     "male": "34a5e4a5b0751e869a104037cbd62d0e-male.wav"
   },
@@ -1695,7 +1691,7 @@
     "female": "7fa9b432211a1e553f09ec5e959b4eb5-female.wav",
     "male": "7fa9b432211a1e553f09ec5e959b4eb5-male.wav"
   },
-  "その分野で女性がリーダーの地位に就くのはまだ珍しいことだ": {
+  "その分野で女性がりーだーの地位に就くのはまだ珍しいことだ": {
     "female": "e06dabdfc91bf769db430db63340a887-female.wav",
     "male": "e06dabdfc91bf769db430db63340a887-male.wav"
   },
@@ -1711,7 +1707,7 @@
     "female": "2d1c986a441d6a0f89c4055f6d13503c-female.wav",
     "male": "2d1c986a441d6a0f89c4055f6d13503c-male.wav"
   },
-  "彼にビー玉のコレクションを見せてもらった": {
+  "彼にびー玉のこれくしょんを見せてもらった": {
     "female": "799a2b9a6d76ce94b3314e60519227b4-female.wav",
     "male": "799a2b9a6d76ce94b3314e60519227b4-male.wav"
   },
@@ -1799,7 +1795,7 @@
     "female": "b8923881e2adeb1126d33de944dc9e21-female.wav",
     "male": "b8923881e2adeb1126d33de944dc9e21-male.wav"
   },
-  "このセールの目玉商品はあっという間に売り切れた": {
+  "このせーるの目玉商品はあっという間に売り切れた": {
     "female": "4ff307e8fc73496b128beb035c0b2809-female.wav",
     "male": "4ff307e8fc73496b128beb035c0b2809-male.wav"
   },
@@ -1815,7 +1811,7 @@
     "female": "af8931ad0c1ddb295d73ae424ee64e10-female.wav",
     "male": "af8931ad0c1ddb295d73ae424ee64e10-male.wav"
   },
-  "このイベントは五日間にわたって開催される予定だ": {
+  "このいべんとは五日間にわたって開催される予定だ": {
     "female": "a346bc160d728480cca3cfc0de85f14c-female.wav",
     "male": "a346bc160d728480cca3cfc0de85f14c-male.wav"
   },
@@ -1831,7 +1827,7 @@
     "female": "684cf0924505758b923342e4a7f79822-female.wav",
     "male": "684cf0924505758b923342e4a7f79822-male.wav"
   },
-  "キャンプ場では火の取り扱いに十分気をつけてください": {
+  "きゃんぷ場では火の取り扱いに十分気をつけてください": {
     "female": "14c461ac0b3252960d61709996bd2a1f-female.wav",
     "male": "14c461ac0b3252960d61709996bd2a1f-male.wav"
   },
@@ -1839,7 +1835,7 @@
     "female": "a1874b0aa5dfa1c1fd26ea91540eaf53-female.wav",
     "male": "a1874b0aa5dfa1c1fd26ea91540eaf53-male.wav"
   },
-  "このチームは五年連続で優勝を果たしている": {
+  "このちーむは五年連続で優勝を果たしている": {
     "female": "3e1e7738ffe996174bb1bae5e2348fa5-female.wav",
     "male": "3e1e7738ffe996174bb1bae5e2348fa5-male.wav"
   },
@@ -1847,7 +1843,7 @@
     "female": "1f673eed6cce6610bd10772f8583421e-female.wav",
     "male": "1f673eed6cce6610bd10772f8583421e-male.wav"
   },
-  "このパズルには五つのピースが欠けている": {
+  "このぱずるには五つのぴーすが欠けている": {
     "female": "b21bd175f9b813d9a62d47c21e75f024-female.wav",
     "male": "b21bd175f9b813d9a62d47c21e75f024-male.wav"
   },
@@ -1915,19 +1911,19 @@
     "female": "7ca31e61264d9ea50728eff9d8707ad8-female.wav",
     "male": "7ca31e61264d9ea50728eff9d8707ad8-male.wav"
   },
-  "ホテルに泊まります": {
+  "ほてるに泊まります": {
     "female": "53297fafc7eacb3981bb517f7f23d3da-female.wav",
     "male": "53297fafc7eacb3981bb517f7f23d3da-male.wav"
   },
-  "このホテルは上質なサービスで高く評価されている": {
+  "このほてるは上質なさーびすで高く評価されている": {
     "female": "6cdd4898df093a085229da68420c67c0-female.wav",
     "male": "6cdd4898df093a085229da68420c67c0-male.wav"
   },
-  "データを入力します": {
+  "でーたを入力します": {
     "female": "8f5be0e4522e817a2490e26a834fbffd-female.wav",
     "male": "8f5be0e4522e817a2490e26a834fbffd-male.wav"
   },
-  "このシステムは音声入力にも対応している": {
+  "このしすてむは音声入力にも対応している": {
     "female": "697e6a8e0fae1510621a16998e696ed4-female.wav",
     "male": "697e6a8e0fae1510621a16998e696ed4-male.wav"
   },
@@ -1975,7 +1971,7 @@
     "female": "48da87cc5e64869c28de739fe159ea48-female.wav",
     "male": "48da87cc5e64869c28de739fe159ea48-male.wav"
   },
-  "夕べのニュースは多くの人々に衝撃を与えた": {
+  "夕べのにゅーすは多くの人々に衝撃を与えた": {
     "female": "23051ea84fb778246d48c54654b38d75-female.wav",
     "male": "23051ea84fb778246d48c54654b38d75-male.wav"
   },
@@ -2031,7 +2027,7 @@
     "female": "16880ce70b271d91a2ee759fc1ce35ac-female.wav",
     "male": "16880ce70b271d91a2ee759fc1ce35ac-male.wav"
   },
-  "彼の一日はいつも早朝のジョギングから始まる": {
+  "彼の一日はいつも早朝のじょぎんぐから始まる": {
     "female": "6f2d83cd6b213f7f8c938aad04f37c6a-female.wav",
     "male": "6f2d83cd6b213f7f8c938aad04f37c6a-male.wav"
   },
@@ -2039,7 +2035,7 @@
     "female": "ca2daa4dbf985b43610aef1ce4a7c3cc-female.wav",
     "male": "ca2daa4dbf985b43610aef1ce4a7c3cc-male.wav"
   },
-  "このランチは千円以下で食べられるのでとても人気だ": {
+  "このらんちは千円以下で食べられるのでとても人気だ": {
     "female": "e5c13ce86b3efe221c683890676f5235-female.wav",
     "male": "e5c13ce86b3efe221c683890676f5235-male.wav"
   },
@@ -2047,7 +2043,7 @@
     "female": "c6b32c6aa5370da33d9f36f63aed464b-female.wav",
     "male": "c6b32c6aa5370da33d9f36f63aed464b-male.wav"
   },
-  "このスープは玉ねぎをじっくり炒めることで甘みが増す": {
+  "このすーぷは玉ねぎをじっくり炒めることで甘みが増す": {
     "female": "96638dd7b8c414a44600dcf4481e79f4-female.wav",
     "male": "96638dd7b8c414a44600dcf4481e79f4-male.wav"
   },
@@ -2055,7 +2051,7 @@
     "female": "4f91124d3567952e81c17e1be5a5b598-female.wav",
     "male": "4f91124d3567952e81c17e1be5a5b598-male.wav"
   },
-  "そのニュースは多くの人々に大きな衝撃を与えた": {
+  "そのにゅーすは多くの人々に大きな衝撃を与えた": {
     "female": "3c02ec5a468120d1bf7d16d6de5d602b-female.wav",
     "male": "3c02ec5a468120d1bf7d16d6de5d602b-male.wav"
   },
@@ -2135,7 +2131,7 @@
     "female": "87a1cafd7a732315146f2677d536dafc-female.wav",
     "male": "87a1cafd7a732315146f2677d536dafc-male.wav"
   },
-  "このイベントは七日間続く予定になっている": {
+  "このいべんとは七日間続く予定になっている": {
     "female": "e64e446f8cfcf5ad949d28e5522b80aa-female.wav",
     "male": "e64e446f8cfcf5ad949d28e5522b80aa-male.wav"
   },
@@ -2143,7 +2139,7 @@
     "female": "2071d3f6389dfa0dd7ec7a2acc5629c4-female.wav",
     "male": "2071d3f6389dfa0dd7ec7a2acc5629c4-male.wav"
   },
-  "このパズルには六つのピースが不足している": {
+  "このぱずるには六つのぴーすが不足している": {
     "female": "81de10d1c26c0c6d68c686f0176bad71-female.wav",
     "male": "81de10d1c26c0c6d68c686f0176bad71-male.wav"
   },
@@ -2151,7 +2147,7 @@
     "female": "6b1d2ecf0737eb391bf52af1cbcabd6f-female.wav",
     "male": "6b1d2ecf0737eb391bf52af1cbcabd6f-male.wav"
   },
-  "彼は十六歳にしてすでにプロとして活躍している": {
+  "彼は十六歳にしてすでにぷろとして活躍している": {
     "female": "b1a7a18980483184b80dd8571dd98808-female.wav",
     "male": "b1a7a18980483184b80dd8571dd98808-male.wav"
   },
@@ -2167,7 +2163,7 @@
     "female": "34d6ec7b06b120d8253739a1fc0e96d3-female.wav",
     "male": "34d6ec7b06b120d8253739a1fc0e96d3-male.wav"
   },
-  "彼女はテーブルの上に六つのカップを並べた": {
+  "彼女はてーぶるの上に六つのかっぷを並べた": {
     "female": "d8559b480a2c91a8f6b4d437bfc252d0-female.wav",
     "male": "d8559b480a2c91a8f6b4d437bfc252d0-male.wav"
   },
@@ -2199,7 +2195,7 @@
     "female": "e2b25d780075f89b73ddfd6b6088d3f8-female.wav",
     "male": "e2b25d780075f89b73ddfd6b6088d3f8-male.wav"
   },
-  "十日までにレポートを提出しなければならない": {
+  "十日までにれぽーとを提出しなければならない": {
     "female": "224452755b727f1f843e40508f019168-female.wav",
     "male": "224452755b727f1f843e40508f019168-male.wav"
   },
@@ -2215,7 +2211,7 @@
     "female": "c2c31f2e6d97912598b89841250597b0-female.wav",
     "male": "c2c31f2e6d97912598b89841250597b0-male.wav"
   },
-  "このイベントには千人を超える人々が集まった": {
+  "このいべんとには千人を超える人々が集まった": {
     "female": "12e1dd2b3e089fc27f2030fde67d2fe1-female.wav",
     "male": "12e1dd2b3e089fc27f2030fde67d2fe1-male.wav"
   },
@@ -2339,19 +2335,19 @@
     "female": "92e2d77f8743f3c8d530890af92ccfcc-female.wav",
     "male": "92e2d77f8743f3c8d530890af92ccfcc-male.wav"
   },
-  "彼はアメリカ人です": {
+  "彼はあめりか人です": {
     "female": "940e76cbf1aa6b6a4df4d25276f8c622-female.wav",
     "male": "940e76cbf1aa6b6a4df4d25276f8c622-male.wav"
   },
-  "このプロジェクトには多くのアメリカ人の専門家が関わっている": {
+  "このぷろじぇくとには多くのあめりか人の専門家が関わっている": {
     "female": "88075b8acad6561fe4abddf1cbf1654a-female.wav",
     "male": "88075b8acad6561fe4abddf1cbf1654a-male.wav"
   },
-  "リンゴが好きです": {
+  "りんごが好きです": {
     "female": "ea3fa9496698bf2cd5ef0e12a45a8b21-female.wav",
     "male": "ea3fa9496698bf2cd5ef0e12a45a8b21-male.wav"
   },
-  "この地域で採れるリンゴは甘みが強いことで有名だ": {
+  "この地域で採れるりんごは甘みが強いことで有名だ": {
     "female": "89191897c91c2fe776a9672be9773e40-female.wav",
     "male": "89191897c91c2fe776a9672be9773e40-male.wav"
   },
@@ -2371,11 +2367,11 @@
     "female": "92a8dd17c3b901adc53bda684f0c288e-female.wav",
     "male": "92a8dd17c3b901adc53bda684f0c288e-male.wav"
   },
-  "彼女はイギリス人です": {
+  "彼女はいぎりす人です": {
     "female": "1a14433f134a6b7f1b075138c665884a-female.wav",
     "male": "1a14433f134a6b7f1b075138c665884a-male.wav"
   },
-  "このクラブにはイギリス人のメンバーが多く在籍している": {
+  "このくらぶにはいぎりす人のめんばーが多く在籍している": {
     "female": "f2619b46a8b194f9b3849a30955b1004-female.wav",
     "male": "f2619b46a8b194f9b3849a30955b1004-male.wav"
   },
@@ -2383,7 +2379,7 @@
     "female": "213fb9c9163a838107eefc34e2c64abb-female.wav",
     "male": "213fb9c9163a838107eefc34e2c64abb-male.wav"
   },
-  "悪天候のためそのイベントは急遽中止された": {
+  "悪天候のためそのいべんとは急遽中止された": {
     "female": "e8de584dff5503a62fe3df31c49c4670-female.wav",
     "male": "e8de584dff5503a62fe3df31c49c4670-male.wav"
   },
@@ -2403,11 +2399,11 @@
     "female": "ed347eb6e32af52cac431b9bf6c9e88b-female.wav",
     "male": "ed347eb6e32af52cac431b9bf6c9e88b-male.wav"
   },
-  "コーヒーを飲みます": {
+  "こーひーを飲みます": {
     "female": "40cb9b6dfdbfa8e6542f55377beee441-female.wav",
     "male": "40cb9b6dfdbfa8e6542f55377beee441-male.wav"
   },
-  "このカフェのコーヒーは豆の香りが際立っていると評判だ": {
+  "このかふぇのこーひーは豆の香りが際立っていると評判だ": {
     "female": "33392a1c4170e5e48627662e411b9afc-female.wav",
     "male": "33392a1c4170e5e48627662e411b9afc-male.wav"
   },
@@ -2443,15 +2439,11 @@
     "female": "88556c6f37a2950b35962b0f45a98ef2-female.wav",
     "male": "88556c6f37a2950b35962b0f45a98ef2-male.wav"
   },
-  "なまビール": {
-    "female": "ec35f44fb3599e8d1898c51a4e751b97-female.wav",
-    "male": "ec35f44fb3599e8d1898c51a4e751b97-male.wav"
-  },
-  "生ビールをください": {
+  "生びーるをください": {
     "female": "b2b36550c0b00839b248c243065ff0c8-female.wav",
     "male": "b2b36550c0b00839b248c243065ff0c8-male.wav"
   },
-  "このお店の生ビールはいつも新鮮でとても美味しい": {
+  "このお店の生びーるはいつも新鮮でとても美味しい": {
     "female": "351c8f1dbcd6859a55984e58a5ff3f2b-female.wav",
     "male": "351c8f1dbcd6859a55984e58a5ff3f2b-male.wav"
   },
@@ -2511,11 +2503,11 @@
     "female": "0cdcbbd8a5e86f1a1b9963ab164e9f44-female.wav",
     "male": "0cdcbbd8a5e86f1a1b9963ab164e9f44-male.wav"
   },
-  "彼はフランス人です": {
+  "彼はふらんす人です": {
     "female": "3310e2fe845764b29247016e57b6704e-female.wav",
     "male": "3310e2fe845764b29247016e57b6704e-male.wav"
   },
-  "このレストランのシェフは本格的なフランス人料理人だ": {
+  "このれすとらんのしぇふは本格的なふらんす人料理人だ": {
     "female": "c32865aee1e81abbb439b9e29a9c521c-female.wav",
     "male": "c32865aee1e81abbb439b9e29a9c521c-male.wav"
   },
@@ -2523,7 +2515,7 @@
     "female": "7dd0cff2f485f8ebef1cef2ab2792303-female.wav",
     "male": "7dd0cff2f485f8ebef1cef2ab2792303-male.wav"
   },
-  "彼のライブ演奏は生ならではの迫力に満ちていた": {
+  "彼のらいぶ演奏は生ならではの迫力に満ちていた": {
     "female": "3e3094a5d9592ed183e7587208bce813-female.wav",
     "male": "3e3094a5d9592ed183e7587208bce813-male.wav"
   },
@@ -2539,7 +2531,7 @@
     "female": "c567424fdc9f240ac4446ea1394b3187-female.wav",
     "male": "c567424fdc9f240ac4446ea1394b3187-male.wav"
   },
-  "このセーターは上質な毛から作られている": {
+  "このせーたーは上質な毛から作られている": {
     "female": "7f7e62af29da9283f6b1cb7c15f7c667-female.wav",
     "male": "7f7e62af29da9283f6b1cb7c15f7c667-male.wav"
   },
@@ -2599,11 +2591,11 @@
     "female": "d6a0df48d0cc4f050e61a822cb766dbc-female.wav",
     "male": "d6a0df48d0cc4f050e61a822cb766dbc-male.wav"
   },
-  "ビー玉で遊びます": {
+  "びー玉で遊びます": {
     "female": "c050a1c93b850d7f6d7f207d83c71add-female.wav",
     "male": "c050a1c93b850d7f6d7f207d83c71add-male.wav"
   },
-  "彼は子供の頃に集めたビー玉のコレクションを今も大切にしている": {
+  "彼は子供の頃に集めたびー玉のこれくしょんを今も大切にしている": {
     "female": "a3e34cbaee9ae5e0060646d7ff07f914-female.wav",
     "male": "a3e34cbaee9ae5e0060646d7ff07f914-male.wav"
   },
@@ -2619,7 +2611,7 @@
     "female": "f1f249e648d40611c130913de5265e28-female.wav",
     "male": "f1f249e648d40611c130913de5265e28-male.wav"
   },
-  "彼のお母さんは地域のボランティア活動に熱心に取り組んでいる": {
+  "彼のお母さんは地域のぼらんてぃあ活動に熱心に取り組んでいる": {
     "female": "63684d4c9e8c601e97a21e749b1f62ff-female.wav",
     "male": "63684d4c9e8c601e97a21e749b1f62ff-male.wav"
   },
@@ -2651,7 +2643,7 @@
     "female": "50f0b184c5ad2eea27b30222c8b35d58-female.wav",
     "male": "50f0b184c5ad2eea27b30222c8b35d58-male.wav"
   },
-  "今回のプロジェクトは今までで最も難しい挑戦だった": {
+  "今回のぷろじぇくとは今までで最も難しい挑戦だった": {
     "female": "e6abeb4fb9b0f62888f3fc11380ae2d7-female.wav",
     "male": "e6abeb4fb9b0f62888f3fc11380ae2d7-male.wav"
   },
@@ -2683,7 +2675,7 @@
     "female": "74e056a2353d5e713bb3032ef4d521b2-female.wav",
     "male": "74e056a2353d5e713bb3032ef4d521b2-male.wav"
   },
-  "このイベントには十万人を超える来場者が集まった": {
+  "このいべんとには十万人を超える来場者が集まった": {
     "female": "c92a40a079ac5f04a6f020e91f679435-female.wav",
     "male": "c92a40a079ac5f04a6f020e91f679435-male.wav"
   },
@@ -2699,11 +2691,11 @@
     "female": "677a681afcd7c52f1391fd1fa0fc78dd-female.wav",
     "male": "677a681afcd7c52f1391fd1fa0fc78dd-male.wav"
   },
-  "テーブルの上にあります": {
+  "てーぶるの上にあります": {
     "female": "98d394683ea2e35a84f660d66cefe8b9-female.wav",
     "male": "98d394683ea2e35a84f660d66cefe8b9-male.wav"
   },
-  "彼の名前はテーブルの上に置かれたリストに載っていた": {
+  "彼の名前はてーぶるの上に置かれたりすとに載っていた": {
     "female": "283382e8cbce7a0fa542b49002606e44-female.wav",
     "male": "283382e8cbce7a0fa542b49002606e44-male.wav"
   },
@@ -2719,11 +2711,11 @@
     "female": "78a099ba9cc06f8c38d1a553bbe4f71b-female.wav",
     "male": "78a099ba9cc06f8c38d1a553bbe4f71b-male.wav"
   },
-  "シアトル市に住んでいます": {
+  "しあとる市に住んでいます": {
     "female": "45b196e9ac11690669dd9ab41a31c1d2-female.wav",
     "male": "45b196e9ac11690669dd9ab41a31c1d2-male.wav"
   },
-  "シアトル市はテクノロジー産業の中心地として知られている": {
+  "しあとる市はてくのろじー産業の中心地として知られている": {
     "female": "40a2f296d18f41c246fef01cf9999357-female.wav",
     "male": "40a2f296d18f41c246fef01cf9999357-male.wav"
   },
@@ -2755,7 +2747,7 @@
     "female": "479e8c8a3a7fd6bae438075be1b6622e-female.wav",
     "male": "479e8c8a3a7fd6bae438075be1b6622e-male.wav"
   },
-  "この工場には十台以上の生産ラインが稼働している": {
+  "この工場には十台以上の生産らいんが稼働している": {
     "female": "4198bca1a4ee6ca8937b12fa0bf2be23-female.wav",
     "male": "4198bca1a4ee6ca8937b12fa0bf2be23-male.wav"
   },
@@ -2763,11 +2755,11 @@
     "female": "3895c6f4db0b7d620f31fbacd8e47f4f-female.wav",
     "male": "3895c6f4db0b7d620f31fbacd8e47f4f-male.wav"
   },
-  "このイベントには一万人を超える人々が参加した": {
+  "このいべんとには一万人を超える人々が参加した": {
     "female": "fc2c7b24d257189d73aa57eeff6ba7c8-female.wav",
     "male": "fc2c7b24d257189d73aa57eeff6ba7c8-male.wav"
   },
-  "万が一の事態に備えて常に予備プランを持っておくべきだ": {
+  "万が一の事態に備えて常に予備ぷらんを持っておくべきだ": {
     "female": "23be2806659605338a5f43d1a04ca123-female.wav",
     "male": "23be2806659605338a5f43d1a04ca123-male.wav"
   },
@@ -2819,7 +2811,7 @@
     "female": "57dfac63256cd825facb7f115ec17857-female.wav",
     "male": "57dfac63256cd825facb7f115ec17857-male.wav"
   },
-  "ドアを引きます": {
+  "どあを引きます": {
     "female": "efb503fe4165d6b56aebd9b00bc053d8-female.wav",
     "male": "efb503fe4165d6b56aebd9b00bc053d8-male.wav"
   },
@@ -2831,7 +2823,7 @@
     "female": "2a3ac109d0693ea81dbdedd9f657eb89-female.wav",
     "male": "2a3ac109d0693ea81dbdedd9f657eb89-male.wav"
   },
-  "そのニュースはあっという間に世界中に広がった": {
+  "そのにゅーすはあっという間に世界中に広がった": {
     "female": "297e8e6ba7020c36d3a8c338d7abbee4-female.wav",
     "male": "297e8e6ba7020c36d3a8c338d7abbee4-male.wav"
   },
@@ -2867,11 +2859,11 @@
     "female": "6f973b8082c53e0866736761b130518d-female.wav",
     "male": "6f973b8082c53e0866736761b130518d-male.wav"
   },
-  "ベッドの下にあります": {
+  "べっどの下にあります": {
     "female": "7a6076c2a095878fbe4183ed7b6f3ae0-female.wav",
     "male": "7a6076c2a095878fbe4183ed7b6f3ae0-male.wav"
   },
-  "彼女はベッドの下に大切な思い出の品を隠していた": {
+  "彼女はべっどの下に大切な思い出の品を隠していた": {
     "female": "7b720f0dd91c7a389ef840d41db0d958-female.wav",
     "male": "7b720f0dd91c7a389ef840d41db0d958-male.wav"
   },
@@ -2927,7 +2919,7 @@
     "female": "6aec956acd22cff99e22d76bfcddca03-female.wav",
     "male": "6aec956acd22cff99e22d76bfcddca03-male.wav"
   },
-  "彼は新年早々に大きなニュースを発表した": {
+  "彼は新年早々に大きなにゅーすを発表した": {
     "female": "c59143c29a8c26df2102dfc1d338a3dd-female.wav",
     "male": "c59143c29a8c26df2102dfc1d338a3dd-male.wav"
   },
@@ -3019,7 +3011,7 @@
     "female": "9df4a39f28833be974b29eca2ec7a920-female.wav",
     "male": "9df4a39f28833be974b29eca2ec7a920-male.wav"
   },
-  "このプロジェクトは年内に必ず完了させる必要がある": {
+  "このぷろじぇくとは年内に必ず完了させる必要がある": {
     "female": "77991c5a4d9daea5d3d1870b37e597f0-female.wav",
     "male": "77991c5a4d9daea5d3d1870b37e597f0-male.wav"
   },
@@ -3183,7 +3175,7 @@
     "female": "ef0f735eae0398d56f725b5a2dc1e566-female.wav",
     "male": "ef0f735eae0398d56f725b5a2dc1e566-male.wav"
   },
-  "この本は五百ページを超える大作だ": {
+  "この本は五百ぺーじを超える大作だ": {
     "female": "32b0076fcdb5f14247d09baa8ee9bdd5-female.wav",
     "male": "32b0076fcdb5f14247d09baa8ee9bdd5-male.wav"
   },
@@ -3227,7 +3219,7 @@
     "female": "7cdb6c677c62efb74fc9b059f000d1d1-female.wav",
     "male": "7cdb6c677c62efb74fc9b059f000d1d1-male.wav"
   },
-  "彼は四十代になってからキャリアを大きく転換させた": {
+  "彼は四十代になってからきゃりあを大きく転換させた": {
     "female": "fd64da0ad68f60d3e86ddd293dc4783f-female.wav",
     "male": "fd64da0ad68f60d3e86ddd293dc4783f-male.wav"
   },
@@ -3239,7 +3231,7 @@
     "female": "83c8ba166a17778eb7e4575d26075f88-female.wav",
     "male": "83c8ba166a17778eb7e4575d26075f88-male.wav"
   },
-  "この施設には四百人以上を収容できるホールがある": {
+  "この施設には四百人以上を収容できるほーるがある": {
     "female": "b1f83afff4fed14b0a44cd9ec8d143e3-female.wav",
     "male": "b1f83afff4fed14b0a44cd9ec8d143e3-male.wav"
   },
@@ -3275,7 +3267,7 @@
     "female": "e524fc3645cb9b07e006b295f0436696-female.wav",
     "male": "e524fc3645cb9b07e006b295f0436696-male.wav"
   },
-  "このイベントには四千人を超える人々が来場した": {
+  "このいべんとには四千人を超える人々が来場した": {
     "female": "dbac39f236c9197ac25c058c1ab73ce0-female.wav",
     "male": "dbac39f236c9197ac25c058c1ab73ce0-male.wav"
   },
@@ -3331,7 +3323,7 @@
     "female": "f80662016fe8884435003980b118c6b9-female.wav",
     "male": "f80662016fe8884435003980b118c6b9-male.wav"
   },
-  "このホールには百万人以上の人が訪れたことがある": {
+  "このほーるには百万人以上の人が訪れたことがある": {
     "female": "8d2095e1cc549e2e33845d963ab44b4d-female.wav",
     "male": "8d2095e1cc549e2e33845d963ab44b4d-male.wav"
   },
@@ -3343,7 +3335,7 @@
     "female": "06e74867e2affb37d295cb7c6aac9cd1-female.wav",
     "male": "06e74867e2affb37d295cb7c6aac9cd1-male.wav"
   },
-  "かき氷は夏の暑さをしのぐ定番のデザートだ": {
+  "かき氷は夏の暑さをしのぐ定番のでざーとだ": {
     "female": "7786db6a4acd38775e26b8397880c878-female.wav",
     "male": "7786db6a4acd38775e26b8397880c878-male.wav"
   },
@@ -3483,7 +3475,7 @@
     "female": "f41f40639f4788661a3bb62c73447e35-female.wav",
     "male": "f41f40639f4788661a3bb62c73447e35-male.wav"
   },
-  "このホールにはこれまで百万人以上が訪れている": {
+  "このほーるにはこれまで百万人以上が訪れている": {
     "female": "67c146a9260224bef211b22503a5f01b-female.wav",
     "male": "67c146a9260224bef211b22503a5f01b-male.wav"
   },
@@ -3551,23 +3543,23 @@
     "female": "7c1f1c8e50584cf3b83f2c710745007b-female.wav",
     "male": "7c1f1c8e50584cf3b83f2c710745007b-male.wav"
   },
-  "北アメリカに住んでいます": {
+  "北あめりかに住んでいます": {
     "female": "d91f60af2df3835f610b9befad50d577-female.wav",
     "male": "d91f60af2df3835f610b9befad50d577-male.wav"
   },
-  "北アメリカ大陸は多様な気候と地形で知られている": {
+  "北あめりか大陸は多様な気候と地形で知られている": {
     "female": "978fa42d4bae44c01babfd30b46e18c7-female.wav",
     "male": "978fa42d4bae44c01babfd30b46e18c7-male.wav"
   },
-  "ノート": {
+  "のーと": {
     "female": "abef0e314604fb4d31788eebe813a991-female.wav",
     "male": "abef0e314604fb4d31788eebe813a991-male.wav"
   },
-  "ノートを買いました": {
+  "のーとを買いました": {
     "female": "64badda13fa918f616717b3b6ece17c0-female.wav",
     "male": "64badda13fa918f616717b3b6ece17c0-male.wav"
   },
-  "彼女は講義の内容を細かくノートに書き留めている": {
+  "彼女は講義の内容を細かくのーとに書き留めている": {
     "female": "a8b5c602ce25aababb9736422d79806c-female.wav",
     "male": "a8b5c602ce25aababb9736422d79806c-male.wav"
   },
@@ -3627,7 +3619,7 @@
     "female": "d1a30dd74b474aedabbdc72ac0538b4c-female.wav",
     "male": "d1a30dd74b474aedabbdc72ac0538b4c-male.wav"
   },
-  "このサービスはシステムの都合により一時休止することになった": {
+  "このさーびすはしすてむの都合により一時休止することになった": {
     "female": "9782666dda151aaf0384d6dce16f7898-female.wav",
     "male": "9782666dda151aaf0384d6dce16f7898-male.wav"
   },
@@ -3719,7 +3711,7 @@
     "female": "bda9c83d571c028e2e26b9892a6995e8-female.wav",
     "male": "bda9c83d571c028e2e26b9892a6995e8-male.wav"
   },
-  "彼は日系二世として独自の文化的アイデンティティを持っている": {
+  "彼は日系二世として独自の文化的あいでんてぃてぃを持っている": {
     "female": "91c9919760b6560409ab627270d29c8f-female.wav",
     "male": "91c9919760b6560409ab627270d29c8f-male.wav"
   },
@@ -3827,11 +3819,11 @@
     "female": "3b4b0a8072a623d35866bf490cdc33f1-female.wav",
     "male": "3b4b0a8072a623d35866bf490cdc33f1-male.wav"
   },
-  "テレビを見ます": {
+  "てれびを見ます": {
     "female": "6c3cd427ff65c0c3243800e44a395983-female.wav",
     "male": "6c3cd427ff65c0c3243800e44a395983-male.wav"
   },
-  "彼はそのニュースをテレビで初めて知ったそうだ": {
+  "彼はそのにゅーすをてれびで初めて知ったそうだ": {
     "female": "3da01061651eaa42dc0c33d44c370c71-female.wav",
     "male": "3da01061651eaa42dc0c33d44c370c71-male.wav"
   },
@@ -4323,7 +4315,7 @@
     "female": "27d6207311b62b97f039e61346c3bb3a-female.wav",
     "male": "27d6207311b62b97f039e61346c3bb3a-male.wav"
   },
-  "彼女は体力をつけるため毎朝ジョギングをしている": {
+  "彼女は体力をつけるため毎朝じょぎんぐをしている": {
     "female": "6a1697f6771fbc796332d107b95555b6-female.wav",
     "male": "6a1697f6771fbc796332d107b95555b6-male.wav"
   },
@@ -4355,7 +4347,7 @@
     "female": "5e12578e9b993e9b1ad83667b3988aac-female.wav",
     "male": "5e12578e9b993e9b1ad83667b3988aac-male.wav"
   },
-  "パンを一斤買いました": {
+  "ぱんを一斤買いました": {
     "female": "ed644ca885b483a03c30557a59ea44ca-female.wav",
     "male": "ed644ca885b483a03c30557a59ea44ca-male.wav"
   },
@@ -4431,11 +4423,11 @@
     "female": "559d7a18b60302281015fb9ece545e6d-female.wav",
     "male": "559d7a18b60302281015fb9ece545e6d-male.wav"
   },
-  "コンビニに行きます": {
+  "こんびにに行きます": {
     "female": "82c4be5e55e09f08f0c0fdf6b6c8d6f4-female.wav",
     "male": "82c4be5e55e09f08f0c0fdf6b6c8d6f4-male.wav"
   },
-  "このコンビニは二十四時間営業で地域の人々に重宝されている": {
+  "このこんびには二十四時間営業で地域の人々に重宝されている": {
     "female": "ce7aff6891ca8fb88163306548af08a6-female.wav",
     "male": "ce7aff6891ca8fb88163306548af08a6-male.wav"
   },
@@ -4475,11 +4467,11 @@
     "female": "c79dc33000b4f42e6570de694ed0e1ec-female.wav",
     "male": "c79dc33000b4f42e6570de694ed0e1ec-male.wav"
   },
-  "デパートに行きます": {
+  "でぱーとに行きます": {
     "female": "2375beb78caa0ba98783a0c3fb61c95d-female.wav",
     "male": "2375beb78caa0ba98783a0c3fb61c95d-male.wav"
   },
-  "あのデパートは長年地域のランドマークとして親しまれてきた": {
+  "あのでぱーとは長年地域のらんどまーくとして親しまれてきた": {
     "female": "30128730132effcdca2b8d72c9c666c8-female.wav",
     "male": "30128730132effcdca2b8d72c9c666c8-male.wav"
   },
@@ -4547,7 +4539,7 @@
     "female": "2b23bbc2b2b2e92128ccddf5ff24ac96-female.wav",
     "male": "2b23bbc2b2b2e92128ccddf5ff24ac96-male.wav"
   },
-  "彼は毎日欠かさずジョギングをすることを習慣にしている": {
+  "彼は毎日欠かさずじょぎんぐをすることを習慣にしている": {
     "female": "bf7a449765f5a8781fa76e86d96c5603-female.wav",
     "male": "bf7a449765f5a8781fa76e86d96c5603-male.wav"
   },
@@ -4615,7 +4607,7 @@
     "female": "85a50f6de4167d2d226f882efc96ca11-female.wav",
     "male": "85a50f6de4167d2d226f882efc96ca11-male.wav"
   },
-  "この林道は地元の人しか知らない静かな散歩コースだ": {
+  "この林道は地元の人しか知らない静かな散歩こーすだ": {
     "female": "2dcd8f7e8ba0617b6427e81be59cd604-female.wav",
     "male": "2dcd8f7e8ba0617b6427e81be59cd604-male.wav"
   },
@@ -4683,7 +4675,7 @@
     "female": "1cb3d5be1219968b19649311e2b64885-female.wav",
     "male": "1cb3d5be1219968b19649311e2b64885-male.wav"
   },
-  "このネックレスは純金で作られている": {
+  "このねっくれすは純金で作られている": {
     "female": "736a841611a618abeee689b8eaf3f9ff-female.wav",
     "male": "736a841611a618abeee689b8eaf3f9ff-male.wav"
   },
@@ -4731,7 +4723,7 @@
     "female": "11bd022ec001376db093285821f43c9a-female.wav",
     "male": "11bd022ec001376db093285821f43c9a-male.wav"
   },
-  "この会社の本社は来年新しいビルに移転する予定だ": {
+  "この会社の本社は来年新しいびるに移転する予定だ": {
     "female": "c18dd07320adc87099359dea59dc108a-female.wav",
     "male": "c18dd07320adc87099359dea59dc108a-male.wav"
   },
@@ -4755,7 +4747,7 @@
     "female": "86da922de3ea0fd5c024c83ee472613b-female.wav",
     "male": "86da922de3ea0fd5c024c83ee472613b-male.wav"
   },
-  "このプロジェクトが完成するまで何日かかるか正確には分からない": {
+  "このぷろじぇくとが完成するまで何日かかるか正確には分からない": {
     "female": "e65fd80f7bff8bbd23919fa687ef1699-female.wav",
     "male": "e65fd80f7bff8bbd23919fa687ef1699-male.wav"
   },
@@ -4967,7 +4959,7 @@
     "female": "2852198226a06dccb3fb39d9426f7605-female.wav",
     "male": "2852198226a06dccb3fb39d9426f7605-male.wav"
   },
-  "来月から新しいプロジェクトが始まる予定です": {
+  "来月から新しいぷろじぇくとが始まる予定です": {
     "female": "555b66a9fd99141f57a67855c48056a2-female.wav",
     "male": "555b66a9fd99141f57a67855c48056a2-male.wav"
   },
@@ -5035,7 +5027,7 @@
     "female": "ff7b085d0a0017c3a4b95448e41e08d9-female.wav",
     "male": "ff7b085d0a0017c3a4b95448e41e08d9-male.wav"
   },
-  "彼は三十代になってからキャリアを大きく転換させた": {
+  "彼は三十代になってからきゃりあを大きく転換させた": {
     "female": "62e39da412af25245512e397a269623a-female.wav",
     "male": "62e39da412af25245512e397a269623a-male.wav"
   },
@@ -5119,7 +5111,7 @@
     "female": "797556a466c55cf3dd2f5a56dda9b126-female.wav",
     "male": "797556a466c55cf3dd2f5a56dda9b126-male.wav"
   },
-  "大雨の影響で電車のダイヤが大きく乱れている": {
+  "大雨の影響で電車のだいやが大きく乱れている": {
     "female": "4ab0f48c80cf6b2d35655f5a841ff51d-female.wav",
     "male": "4ab0f48c80cf6b2d35655f5a841ff51d-male.wav"
   },
@@ -5227,7 +5219,7 @@
     "female": "f7fb04a87218d8841c74347a953ea14d-female.wav",
     "male": "f7fb04a87218d8841c74347a953ea14d-male.wav"
   },
-  "彼女は水色のワンピースがとてもよく似合っていた": {
+  "彼女は水色のわんぴーすがとてもよく似合っていた": {
     "female": "51967becf2be20909ec66d26e7412072-female.wav",
     "male": "51967becf2be20909ec66d26e7412072-male.wav"
   },
@@ -5251,7 +5243,7 @@
     "female": "7cc68ff7b82f5da0855c79a9d2d267c9-female.wav",
     "male": "7cc68ff7b82f5da0855c79a9d2d267c9-male.wav"
   },
-  "この建物はシンプルな四角形をベースに設計されている": {
+  "この建物はしんぷるな四角形をべーすに設計されている": {
     "female": "a353cebfaa4718769bd0904aaf1c2e8a-female.wav",
     "male": "a353cebfaa4718769bd0904aaf1c2e8a-male.wav"
   },
@@ -5315,7 +5307,7 @@
     "female": "1ccbab1a91d347bc3d4a2f5f5cc716b8-female.wav",
     "male": "1ccbab1a91d347bc3d4a2f5f5cc716b8-male.wav"
   },
-  "そのイベントには何千人もの人々が詰めかけた": {
+  "そのいべんとには何千人もの人々が詰めかけた": {
     "female": "02efdcf15ec4cbbc3d253027c0232127-female.wav",
     "male": "02efdcf15ec4cbbc3d253027c0232127-male.wav"
   },
@@ -5647,7 +5639,7 @@
     "female": "4a25056b130e4853578113c263016b39-female.wav",
     "male": "4a25056b130e4853578113c263016b39-male.wav"
   },
-  "この地域は西ヨーロッパの文化を色濃く受け継いでいる": {
+  "この地域は西よーろっぱの文化を色濃く受け継いでいる": {
     "female": "e9a22c40ea6b8f6a635c7bc878f579f8-female.wav",
     "male": "e9a22c40ea6b8f6a635c7bc878f579f8-male.wav"
   },
@@ -5683,7 +5675,7 @@
     "female": "f035644db81b8f9a2e52ddbe6686bec5-female.wav",
     "male": "f035644db81b8f9a2e52ddbe6686bec5-male.wav"
   },
-  "このイベントが何月に開催されるのかまだ発表されていない": {
+  "このいべんとが何月に開催されるのかまだ発表されていない": {
     "female": "8063266f7aa81f9c16fe4c97cdc41e19-female.wav",
     "male": "8063266f7aa81f9c16fe4c97cdc41e19-male.wav"
   },
@@ -5707,7 +5699,7 @@
     "female": "ea2ff600dd91505012273cc1c9108122-female.wav",
     "male": "ea2ff600dd91505012273cc1c9108122-male.wav"
   },
-  "このパンは地元で収穫された麦から作られている": {
+  "このぱんは地元で収穫された麦から作られている": {
     "female": "760b4c5247c19adb9c8f7fdd669a04bf-female.wav",
     "male": "760b4c5247c19adb9c8f7fdd669a04bf-male.wav"
   },
@@ -5739,7 +5731,7 @@
     "female": "38ea9bff8e657cf6d2800a35ca4d1dd4-female.wav",
     "male": "38ea9bff8e657cf6d2800a35ca4d1dd4-male.wav"
   },
-  "このセーターは上質な毛糸から丁寧に編まれている": {
+  "このせーたーは上質な毛糸から丁寧に編まれている": {
     "female": "0e4ddd4bcc97740d386005fb39d37534-female.wav",
     "male": "0e4ddd4bcc97740d386005fb39d37534-male.wav"
   },
@@ -5835,15 +5827,11 @@
     "female": "65b5db0214e4e1b66c0c7ae7f29af1fe-female.wav",
     "male": "65b5db0214e4e1b66c0c7ae7f29af1fe-male.wav"
   },
-  "カバン": {
-    "female": "a865f3e8188e2aaccc4124b86f0a54df-female.wav",
-    "male": "a865f3e8188e2aaccc4124b86f0a54df-male.wav"
-  },
-  "カバンを買いました": {
+  "かばんを買いました": {
     "female": "449c43e431c0dc3b7e82ef40c277ae86-female.wav",
     "male": "449c43e431c0dc3b7e82ef40c277ae86-male.wav"
   },
-  "彼女のカバンにはいつも仕事道具がぎっしり詰まっている": {
+  "彼女のかばんにはいつも仕事道具がぎっしり詰まっている": {
     "female": "7b9922830f3e409b03b1bf4918d1ff1b-female.wav",
     "male": "7b9922830f3e409b03b1bf4918d1ff1b-male.wav"
   },
@@ -5903,7 +5891,7 @@
     "female": "edd8958be2fade3da0769d90125f76a6-female.wav",
     "male": "edd8958be2fade3da0769d90125f76a6-male.wav"
   },
-  "このイベントは両日とも大盛況のうちに終了した": {
+  "このいべんとは両日とも大盛況のうちに終了した": {
     "female": "0147c5e737e7e11423702fd9e60ab304-female.wav",
     "male": "0147c5e737e7e11423702fd9e60ab304-male.wav"
   },
@@ -6043,19 +6031,19 @@
     "female": "e560958902c705e5bab5aef2f9eb7397-female.wav",
     "male": "e560958902c705e5bab5aef2f9eb7397-male.wav"
   },
-  "このプロジェクトは当初とは全く違う方向に進んでしまった": {
+  "このぷろじぇくとは当初とは全く違う方向に進んでしまった": {
     "female": "76e4e91d7cda9c57865285115ba9c543-female.wav",
     "male": "76e4e91d7cda9c57865285115ba9c543-male.wav"
   },
-  "ドル": {
+  "どる": {
     "female": "2be727ac05c47e898e23cae1fd93606a-female.wav",
     "male": "2be727ac05c47e898e23cae1fd93606a-male.wav"
   },
-  "百ドルです": {
+  "百どるです": {
     "female": "04bb9645bf5e0a28907c1155ecde0d68-female.wav",
     "male": "04bb9645bf5e0a28907c1155ecde0d68-male.wav"
   },
-  "円安の影響でドル建ての取引が増加している": {
+  "円安の影響でどる建ての取引が増加している": {
     "female": "1a9d41ac17df991be29a020e0d718636-female.wav",
     "male": "1a9d41ac17df991be29a020e0d718636-male.wav"
   },
@@ -6119,11 +6107,11 @@
     "female": "22c184184ad07c532ca5364510ec7c40-female.wav",
     "male": "22c184184ad07c532ca5364510ec7c40-male.wav"
   },
-  "元パートナーです": {
+  "元ぱーとなーです": {
     "female": "7fbbc2e577beee1a15e8f512d394dfea-female.wav",
     "male": "7fbbc2e577beee1a15e8f512d394dfea-male.wav"
   },
-  "彼女は元パートナーとの関係を穏やかに終わらせることができた": {
+  "彼女は元ぱーとなーとの関係を穏やかに終わらせることができた": {
     "female": "04b11f2fe6669d707e81934aaabfc998-female.wav",
     "male": "04b11f2fe6669d707e81934aaabfc998-male.wav"
   },
@@ -6195,7 +6183,7 @@
     "female": "ab20947ab8abee22a5bc012333285151-female.wav",
     "male": "ab20947ab8abee22a5bc012333285151-male.wav"
   },
-  "彼は四十二歳にしてキャリアの新たな一歩を踏み出した": {
+  "彼は四十二歳にしてきゃりあの新たな一歩を踏み出した": {
     "female": "a7840a66cb64e9a8a712de991cb106fd-female.wav",
     "male": "a7840a66cb64e9a8a712de991cb106fd-male.wav"
   },
@@ -6219,7 +6207,7 @@
     "female": "b963e2109b5ae1dad44c2e18790bb4d1-female.wav",
     "male": "b963e2109b5ae1dad44c2e18790bb4d1-male.wav"
   },
-  "彼は全力を尽くしてそのプロジェクトを成功させた": {
+  "彼は全力を尽くしてそのぷろじぇくとを成功させた": {
     "female": "2579a3005432f2286a71ecb952a9af60-female.wav",
     "male": "2579a3005432f2286a71ecb952a9af60-male.wav"
   },
@@ -6359,7 +6347,7 @@
     "female": "cd9f1cdb91c6423d4976b45b2a5600a0-female.wav",
     "male": "cd9f1cdb91c6423d4976b45b2a5600a0-male.wav"
   },
-  "このパスワードには小文字と大文字の両方を含める必要がある": {
+  "このぱすわーどには小文字と大文字の両方を含める必要がある": {
     "female": "2934ff62d33df7905bbfa8b25e316fe3-female.wav",
     "male": "2934ff62d33df7905bbfa8b25e316fe3-male.wav"
   },
@@ -6419,7 +6407,7 @@
     "female": "68b9ee26086cfa33c1d03dd94b12e971-female.wav",
     "male": "68b9ee26086cfa33c1d03dd94b12e971-male.wav"
   },
-  "このニュースは全国の人々に大きな衝撃を与えた": {
+  "このにゅーすは全国の人々に大きな衝撃を与えた": {
     "female": "8b1462e7384829a7ba4aab575c176df7-female.wav",
     "male": "8b1462e7384829a7ba4aab575c176df7-male.wav"
   },
@@ -6487,7 +6475,7 @@
     "female": "13a7f07c092962350c41a8c722768b33-female.wav",
     "male": "13a7f07c092962350c41a8c722768b33-male.wav"
   },
-  "彼のお姉さんは有名なデザイナーとして活躍している": {
+  "彼のお姉さんは有名なでざいなーとして活躍している": {
     "female": "bfd852fc05459ef69cb6af335f0ac2f5-female.wav",
     "male": "bfd852fc05459ef69cb6af335f0ac2f5-male.wav"
   },
@@ -6499,7 +6487,7 @@
     "female": "c0e097e41825d9e987e6e41dc2bf3d25-female.wav",
     "male": "c0e097e41825d9e987e6e41dc2bf3d25-male.wav"
   },
-  "このプロジェクトは着実に一歩ずつ前進している": {
+  "このぷろじぇくとは着実に一歩ずつ前進している": {
     "female": "8ddad60d1f0cff4dfa29f203df39f068-female.wav",
     "male": "8ddad60d1f0cff4dfa29f203df39f068-male.wav"
   },
@@ -6511,7 +6499,7 @@
     "female": "ef2b527049f8c7c4fb6dbc8342b0f26a-female.wav",
     "male": "ef2b527049f8c7c4fb6dbc8342b0f26a-male.wav"
   },
-  "このイベントには一千人を超える人々が参加した": {
+  "このいべんとには一千人を超える人々が参加した": {
     "female": "c50a0bb51685584e6de3b02b71d7f5de-female.wav",
     "male": "c50a0bb51685584e6de3b02b71d7f5de-male.wav"
   },
@@ -6587,7 +6575,7 @@
     "female": "523c68e4d02f51d42a73a61bfaaaf337-female.wav",
     "male": "523c68e4d02f51d42a73a61bfaaaf337-male.wav"
   },
-  "このレストランは上質な豚肉を使った料理で評判だ": {
+  "このれすとらんは上質な豚肉を使った料理で評判だ": {
     "female": "97124a14966e7e94073a49573de175cb-female.wav",
     "male": "97124a14966e7e94073a49573de175cb-male.wav"
   },
@@ -6663,7 +6651,7 @@
     "female": "c9be0f27689571112b66a8a7843449a7-female.wav",
     "male": "c9be0f27689571112b66a8a7843449a7-male.wav"
   },
-  "このセーターは上質な羊毛から丁寧に作られている": {
+  "このせーたーは上質な羊毛から丁寧に作られている": {
     "female": "88d142a6c6917184c075568254a22d07-female.wav",
     "male": "88d142a6c6917184c075568254a22d07-male.wav"
   },
@@ -6743,19 +6731,19 @@
     "female": "f64c13587c57a4268933ff352febd078-female.wav",
     "male": "f64c13587c57a4268933ff352febd078-male.wav"
   },
-  "バターがない場合はオリーブオイルで代用することもできる": {
+  "ばたーがない場合はおりーぶおいるで代用することもできる": {
     "female": "8d6bc9b9d840cffd6921735d4f6b09d2-female.wav",
     "male": "8d6bc9b9d840cffd6921735d4f6b09d2-male.wav"
   },
-  "タクシー": {
+  "たくしー": {
     "female": "245cb61e670306744ad91e9da9a0baeb-female.wav",
     "male": "245cb61e670306744ad91e9da9a0baeb-male.wav"
   },
-  "タクシーに乗ります": {
+  "たくしーに乗ります": {
     "female": "e965d552ee570cc1462436d83dbf26db-female.wav",
     "male": "e965d552ee570cc1462436d83dbf26db-male.wav"
   },
-  "雨の日はタクシーを見つけるのが特に難しくなる": {
+  "雨の日はたくしーを見つけるのが特に難しくなる": {
     "female": "d804925dde2b0b1bed5351f198521985-female.wav",
     "male": "d804925dde2b0b1bed5351f198521985-male.wav"
   },
@@ -6815,7 +6803,7 @@
     "female": "7e9ff064af516e4bafdc786fceac7708-female.wav",
     "male": "7e9ff064af516e4bafdc786fceac7708-male.wav"
   },
-  "このホールには三百人以上を収容できる座席がある": {
+  "このほーるには三百人以上を収容できる座席がある": {
     "female": "2c1317e254bf5f540d7c367ced14f20f-female.wav",
     "male": "2c1317e254bf5f540d7c367ced14f20f-male.wav"
   },
@@ -6827,7 +6815,7 @@
     "female": "7dcf49cccddf0b4a75603eb13c6206ac-female.wav",
     "male": "7dcf49cccddf0b4a75603eb13c6206ac-male.wav"
   },
-  "彼女はそのレシピに少し塩を足すことを提案した": {
+  "彼女はそのれしぴに少し塩を足すことを提案した": {
     "female": "4e89cbdf3e40cfc709a64e17c6d953bb-female.wav",
     "male": "4e89cbdf3e40cfc709a64e17c6d953bb-male.wav"
   },
@@ -7071,7 +7059,7 @@
     "female": "701eadee7a585b4ba6a9651290e2e53a-female.wav",
     "male": "701eadee7a585b4ba6a9651290e2e53a-male.wav"
   },
-  "このパスワードには大文字と小文字の両方を含める必要がある": {
+  "このぱすわーどには大文字と小文字の両方を含める必要がある": {
     "female": "a99cf2c54abf4db44ad18cfe06169d90-female.wav",
     "male": "a99cf2c54abf4db44ad18cfe06169d90-male.wav"
   },
@@ -7115,7 +7103,7 @@
     "female": "d40445ece5787360b26ddc2f90566a39-female.wav",
     "male": "d40445ece5787360b26ddc2f90566a39-male.wav"
   },
-  "西ヨーロッパに行きます": {
+  "西よーろっぱに行きます": {
     "female": "2e245c07d54f758f8646345d72fdd1e1-female.wav",
     "male": "2e245c07d54f758f8646345d72fdd1e1-male.wav"
   },
@@ -7151,7 +7139,7 @@
     "female": "d6c5aa3e541deba347de3b0ef32f96a3-female.wav",
     "male": "d6c5aa3e541deba347de3b0ef32f96a3-male.wav"
   },
-  "彼らは厳しい冬休みの間スキー場で働いていた": {
+  "彼らは厳しい冬休みの間すきー場で働いていた": {
     "female": "e77a0e2fcfe205915488f7664d345403-female.wav",
     "male": "e77a0e2fcfe205915488f7664d345403-male.wav"
   },
@@ -7159,7 +7147,7 @@
     "female": "cd6e008e093234e5b9e595c0bc938683-female.wav",
     "male": "cd6e008e093234e5b9e595c0bc938683-male.wav"
   },
-  "羊毛のセーターです": {
+  "羊毛のせーたーです": {
     "female": "c83c0938e0225a1fab61d0d7fbe44a43-female.wav",
     "male": "c83c0938e0225a1fab61d0d7fbe44a43-male.wav"
   },
@@ -7387,11 +7375,11 @@
     "female": "a8301befff40e2768cecdbb33da904b0-female.wav",
     "male": "a8301befff40e2768cecdbb33da904b0-male.wav"
   },
-  "東アジアに住んでいます": {
+  "東あじあに住んでいます": {
     "female": "4a742b3e68552c48bad54fb8171c3321-female.wav",
     "male": "4a742b3e68552c48bad54fb8171c3321-male.wav"
   },
-  "東アジア地域の経済成長は世界的にも注目されている": {
+  "東あじあ地域の経済成長は世界的にも注目されている": {
     "female": "0d334a6166d8227c7d2bb1705fbd524a-female.wav",
     "male": "0d334a6166d8227c7d2bb1705fbd524a-male.wav"
   },
@@ -7471,7 +7459,7 @@
     "female": "fd54ffbdaa691f7ec7553b5234106733-female.wav",
     "male": "fd54ffbdaa691f7ec7553b5234106733-male.wav"
   },
-  "彼は自由な発想で新しいアイデアを次々と生み出している": {
+  "彼は自由な発想で新しいあいであを次々と生み出している": {
     "female": "b50f49e019dce3d086b6f3a4d8798769-female.wav",
     "male": "b50f49e019dce3d086b6f3a4d8798769-male.wav"
   },
@@ -7531,7 +7519,7 @@
     "female": "399cadf6b6f45226c1bb8cf5b173a1db-female.wav",
     "male": "399cadf6b6f45226c1bb8cf5b173a1db-male.wav"
   },
-  "このプロジェクトは複数の部署が組んで進めている": {
+  "このぷろじぇくとは複数の部署が組んで進めている": {
     "female": "c13bfde2540e8549fc0a12afec6a2ceb-female.wav",
     "male": "c13bfde2540e8549fc0a12afec6a2ceb-male.wav"
   },
@@ -7539,7 +7527,7 @@
     "female": "7998b7f05d36b2911d182af9bec05471-female.wav",
     "male": "7998b7f05d36b2911d182af9bec05471-male.wav"
   },
-  "手作りのケーキです": {
+  "手作りのけーきです": {
     "female": "7b9e4083acb9f3f6890bbd1045b61218-female.wav",
     "male": "7b9e4083acb9f3f6890bbd1045b61218-male.wav"
   },
@@ -7595,7 +7583,7 @@
     "female": "e16b5ad7fafdce2755b67e519c1c315b-female.wav",
     "male": "e16b5ad7fafdce2755b67e519c1c315b-male.wav"
   },
-  "彼のキャリアはその決断をきっかけに大きく変わった": {
+  "彼のきゃりあはその決断をきっかけに大きく変わった": {
     "female": "f7a14f168e0efb63e5a7d16e9292efa8-female.wav",
     "male": "f7a14f168e0efb63e5a7d16e9292efa8-male.wav"
   },
@@ -7731,11 +7719,11 @@
     "female": "357745426dee296ceb882cfb739c0b6f-female.wav",
     "male": "357745426dee296ceb882cfb739c0b6f-male.wav"
   },
-  "ナポレオン三世について学びます": {
+  "なぽれおん三世について学びます": {
     "female": "99d580ebea8d96339087398dbcbb092b-female.wav",
     "male": "99d580ebea8d96339087398dbcbb092b-male.wav"
   },
-  "ナポレオン三世の統治はフランスの近代化に大きく寄与したと言われている": {
+  "なぽれおん三世の統治はふらんすの近代化に大きく寄与したと言われている": {
     "female": "1cf055401de973e85fc664082c4d3c0d-female.wav",
     "male": "1cf055401de973e85fc664082c4d3c0d-male.wav"
   },
@@ -7843,7 +7831,7 @@
     "female": "282226d17daf0e92f1d39d6342103e72-female.wav",
     "male": "282226d17daf0e92f1d39d6342103e72-male.wav"
   },
-  "このベーカリーでは毎朝一斤ずつ焼き立てのパンが並べられる": {
+  "このべーかりーでは毎朝一斤ずつ焼き立てのぱんが並べられる": {
     "female": "3c2c78ba3ab867597e9160a98dd542ae-female.wav",
     "male": "3c2c78ba3ab867597e9160a98dd542ae-male.wav"
   },
@@ -8003,7 +7991,7 @@
     "female": "cbfe83483773c59e885f68aefa4626aa-female.wav",
     "male": "cbfe83483773c59e885f68aefa4626aa-male.wav"
   },
-  "彼のスピーチにはいくつか欠点があるように感じた": {
+  "彼のすぴーちにはいくつか欠点があるように感じた": {
     "female": "7eb48490126f936b77b4c9acc44c3881-female.wav",
     "male": "7eb48490126f936b77b4c9acc44c3881-male.wav"
   },
@@ -8035,7 +8023,7 @@
     "female": "c8a15c4ca4e93e2d6f7fa64ff71a8b9d-female.wav",
     "male": "c8a15c4ca4e93e2d6f7fa64ff71a8b9d-male.wav"
   },
-  "彼は南アフリカで数年間ボランティア活動に従事していた": {
+  "彼は南あふりかで数年間ぼらんてぃあ活動に従事していた": {
     "female": "dd84d496f23b22e4588413d5f4606237-female.wav",
     "male": "dd84d496f23b22e4588413d5f4606237-male.wav"
   },
@@ -8067,7 +8055,7 @@
     "female": "f52398ec22beca88c57caf8bad0a6664-female.wav",
     "male": "f52398ec22beca88c57caf8bad0a6664-male.wav"
   },
-  "この会社は強力な競争力を武器に市場でシェアを拡大している": {
+  "この会社は強力な競争力を武器に市場でしぇあを拡大している": {
     "female": "c5ff0a4eecc0335d47658b9aab672d8a-female.wav",
     "male": "c5ff0a4eecc0335d47658b9aab672d8a-male.wav"
   },
@@ -8119,7 +8107,7 @@
     "female": "f18962884fdd782f333058fff8d3a2bc-female.wav",
     "male": "f18962884fdd782f333058fff8d3a2bc-male.wav"
   },
-  "このシステムの仕組みは思ったより複雑だと感じた": {
+  "このしすてむの仕組みは思ったより複雑だと感じた": {
     "female": "5661fec7b8096bb363c5570afd30cb1c-female.wav",
     "male": "5661fec7b8096bb363c5570afd30cb1c-male.wav"
   },
@@ -8299,7 +8287,7 @@
     "female": "8291a8370a42c3ba35f7f38adf4b3ea4-female.wav",
     "male": "8291a8370a42c3ba35f7f38adf4b3ea4-male.wav"
   },
-  "彼はその仕事をチームで分けて進めることを提案した": {
+  "彼はその仕事をちーむで分けて進めることを提案した": {
     "female": "4ec29eca147c2ddfaafcdd559be31c41-female.wav",
     "male": "4ec29eca147c2ddfaafcdd559be31c41-male.wav"
   },
@@ -8411,11 +8399,11 @@
     "female": "1052d98440af644cfae8f434f879326b-female.wav",
     "male": "1052d98440af644cfae8f434f879326b-male.wav"
   },
-  "パンを二斤買いました": {
+  "ぱんを二斤買いました": {
     "female": "d0e480c689b9339d9f622a8686156384-female.wav",
     "male": "d0e480c689b9339d9f622a8686156384-male.wav"
   },
-  "このベーカリーでは注文すれば二斤単位でも購入できる": {
+  "このべーかりーでは注文すれば二斤単位でも購入できる": {
     "female": "f2ea08ff0d51d5870508c7b2a2e422fb-female.wav",
     "male": "f2ea08ff0d51d5870508c7b2a2e422fb-male.wav"
   },
@@ -8511,7 +8499,7 @@
     "female": "aad2e38c18c337789195f992920a06fb-female.wav",
     "male": "aad2e38c18c337789195f992920a06fb-male.wav"
   },
-  "彼は週末になるといつも山にハイキングに出かける": {
+  "彼は週末になるといつも山にはいきんぐに出かける": {
     "female": "2463ea27d6cea742dd1dc9282605d19a-female.wav",
     "male": "2463ea27d6cea742dd1dc9282605d19a-male.wav"
   },
@@ -8543,7 +8531,7 @@
     "female": "1b36a6a355f860036002a9ae5faf58b4-female.wav",
     "male": "1b36a6a355f860036002a9ae5faf58b4-male.wav"
   },
-  "年末までに全てのプロジェクトを完了させる必要がある": {
+  "年末までに全てのぷろじぇくとを完了させる必要がある": {
     "female": "68b15c6fedcb7683b0d427db741028b7-female.wav",
     "male": "68b15c6fedcb7683b0d427db741028b7-male.wav"
   },
@@ -8603,7 +8591,7 @@
     "female": "9ccc34304ef5e0c840653e8adf5e9bf7-female.wav",
     "male": "9ccc34304ef5e0c840653e8adf5e9bf7-male.wav"
   },
-  "彼女は全米オープンで見事な優勝を果たした": {
+  "彼女は全米おーぷんで見事な優勝を果たした": {
     "female": "6137ae0a3e4bdf0bfadec32e88af6ef4-female.wav",
     "male": "6137ae0a3e4bdf0bfadec32e88af6ef4-male.wav"
   },
@@ -8723,7 +8711,7 @@
     "female": "ac0537b663c17feae8fc10510c717579-female.wav",
     "male": "ac0537b663c17feae8fc10510c717579-male.wav"
   },
-  "この事件は支局のスタッフによって最初に報告された": {
+  "この事件は支局のすたっふによって最初に報告された": {
     "female": "4c81f6f9433c874fb794e5eca34ff639-female.wav",
     "male": "4c81f6f9433c874fb794e5eca34ff639-male.wav"
   },
@@ -8851,7 +8839,7 @@
     "female": "faa7f096ae0c45ae6dd1767e6628d8ee-female.wav",
     "male": "faa7f096ae0c45ae6dd1767e6628d8ee-male.wav"
   },
-  "この工場は再生可能エネルギーによる電力を利用している": {
+  "この工場は再生可能えねるぎーによる電力を利用している": {
     "female": "63764989c31f5467ac8b204a7671f64a-female.wav",
     "male": "63764989c31f5467ac8b204a7671f64a-male.wav"
   },
@@ -8875,7 +8863,7 @@
     "female": "7786e2218bb051f6c41cc1245c7631f8-female.wav",
     "male": "7786e2218bb051f6c41cc1245c7631f8-male.wav"
   },
-  "彼女の絵文字の使い方はいつもメッセージを親しみやすくしている": {
+  "彼女の絵文字の使い方はいつもめっせーじを親しみやすくしている": {
     "female": "4792201393495d1d09082384e1e4256b-female.wav",
     "male": "4792201393495d1d09082384e1e4256b-male.wav"
   },
@@ -8899,11 +8887,11 @@
     "female": "dc094ef4ff705a9613bf8a952d25fe39-female.wav",
     "male": "dc094ef4ff705a9613bf8a952d25fe39-male.wav"
   },
-  "このイベントの入場は事前予約が必須となっている": {
+  "このいべんとの入場は事前予約が必須となっている": {
     "female": "d7770e2deddc96c96d106409200db1c5-female.wav",
     "male": "d7770e2deddc96c96d106409200db1c5-male.wav"
   },
-  "彼は毎朝欠かさずジョギングをすることを習慣にしている": {
+  "彼は毎朝欠かさずじょぎんぐをすることを習慣にしている": {
     "female": "0b48932e5c67c7a108b675c28e2d3618-female.wav",
     "male": "0b48932e5c67c7a108b675c28e2d3618-male.wav"
   },
@@ -8971,7 +8959,7 @@
     "female": "6b90851c6d0e30fe7aa56eb33b3b59ea-female.wav",
     "male": "6b90851c6d0e30fe7aa56eb33b3b59ea-male.wav"
   },
-  "この車のエンジンは驚くほどの馬力を誇っている": {
+  "この車のえんじんは驚くほどの馬力を誇っている": {
     "female": "c8b689c73c3bb3cfabeb642469598573-female.wav",
     "male": "c8b689c73c3bb3cfabeb642469598573-male.wav"
   },
@@ -9039,7 +9027,7 @@
     "female": "211027deb89b3dd27b9e31a6bc926b8f-female.wav",
     "male": "211027deb89b3dd27b9e31a6bc926b8f-male.wav"
   },
-  "このドレスは上質な生地を使って丁寧に仕立てられている": {
+  "このどれすは上質な生地を使って丁寧に仕立てられている": {
     "female": "ac2a3f2f4c9852cbec6914c0416ca016-female.wav",
     "male": "ac2a3f2f4c9852cbec6914c0416ca016-male.wav"
   },
@@ -9119,7 +9107,7 @@
     "female": "48d01d97d889d022ac4d2e35060e639e-female.wav",
     "male": "48d01d97d889d022ac4d2e35060e639e-male.wav"
   },
-  "彼女は心身のバランスを保つことを何より大切にしている": {
+  "彼女は心身のばらんすを保つことを何より大切にしている": {
     "female": "c6873574cac7d72da3a0c579f8db52e7-female.wav",
     "male": "c6873574cac7d72da3a0c579f8db52e7-male.wav"
   },
@@ -9247,7 +9235,7 @@
     "female": "1364d25972198ab2db6b36c962a504af-female.wav",
     "male": "1364d25972198ab2db6b36c962a504af-male.wav"
   },
-  "彼はそのコンテストで二番の成績を収めた": {
+  "彼はそのこんてすとで二番の成績を収めた": {
     "female": "54bc4774b19efcefc7bb7988b70c46c9-female.wav",
     "male": "54bc4774b19efcefc7bb7988b70c46c9-male.wav"
   },
@@ -9307,7 +9295,7 @@
     "female": "35f56ffcb2f837ac82ac93926cb91054-female.wav",
     "male": "35f56ffcb2f837ac82ac93926cb91054-male.wav"
   },
-  "あの投手は今シーズン驚異的な成績を残している": {
+  "あの投手は今しーずん驚異的な成績を残している": {
     "female": "06c49b2b9131713a31848b398fb0c2a4-female.wav",
     "male": "06c49b2b9131713a31848b398fb0c2a4-male.wav"
   },
@@ -9447,7 +9435,7 @@
     "female": "608240a43f96c384b473a76e400e6bc2-female.wav",
     "male": "608240a43f96c384b473a76e400e6bc2-male.wav"
   },
-  "彼女は円いテーブルを囲んでみんなと語り合った": {
+  "彼女は円いてーぶるを囲んでみんなと語り合った": {
     "female": "7d3b5ed4cd38934249b0c24a16d27765-female.wav",
     "male": "7d3b5ed4cd38934249b0c24a16d27765-male.wav"
   },
@@ -9471,7 +9459,7 @@
     "female": "3129cf283a72eda7ab257342db9df527-female.wav",
     "male": "3129cf283a72eda7ab257342db9df527-male.wav"
   },
-  "彼は海外で数年間ボランティア活動に従事していた": {
+  "彼は海外で数年間ぼらんてぃあ活動に従事していた": {
     "female": "08021608ad1c170cd7a7608a06657d24-female.wav",
     "male": "08021608ad1c170cd7a7608a06657d24-male.wav"
   },
@@ -9527,7 +9515,7 @@
     "female": "aae546ebbb4edb1ab86d72ac577790c5-female.wav",
     "male": "aae546ebbb4edb1ab86d72ac577790c5-male.wav"
   },
-  "南アフリカに行きます": {
+  "南あふりかに行きます": {
     "female": "ff4b945c4e2d9add91a5d375a25028c0-female.wav",
     "male": "ff4b945c4e2d9add91a5d375a25028c0-male.wav"
   },
@@ -9563,7 +9551,7 @@
     "female": "f6e4f4ba9fab27f431f561afafb03234-female.wav",
     "male": "f6e4f4ba9fab27f431f561afafb03234-male.wav"
   },
-  "彼女はその科目で常にトップの成績を維持している": {
+  "彼女はその科目で常にとっぷの成績を維持している": {
     "female": "9caf44b8c278300fa53bfd19daaa9324-female.wav",
     "male": "9caf44b8c278300fa53bfd19daaa9324-male.wav"
   },
@@ -9591,7 +9579,7 @@
     "female": "14815a9abe9430d642e474b72954a36f-female.wav",
     "male": "14815a9abe9430d642e474b72954a36f-male.wav"
   },
-  "彼女は身体のバランスを保つことを何より大切にしている": {
+  "彼女は身体のばらんすを保つことを何より大切にしている": {
     "female": "cad2d56ec2b234569eebcd0d6edd2e40-female.wav",
     "male": "cad2d56ec2b234569eebcd0d6edd2e40-male.wav"
   },
@@ -9627,7 +9615,7 @@
     "female": "142e4beeb044fb714b62d62603254e7a-female.wav",
     "male": "142e4beeb044fb714b62d62603254e7a-male.wav"
   },
-  "その試合は両チームとも譲らず引き分けに終わった": {
+  "その試合は両ちーむとも譲らず引き分けに終わった": {
     "female": "aafaa0d1a76be39b77af2f72f56a114c-female.wav",
     "male": "aafaa0d1a76be39b77af2f72f56a114c-male.wav"
   },
@@ -9695,7 +9683,7 @@
     "female": "8920ac8689811b3ed04551ad1ebad146-female.wav",
     "male": "8920ac8689811b3ed04551ad1ebad146-male.wav"
   },
-  "彼女はその古いレコード店で貴重な一枚を見つけて買った": {
+  "彼女はその古いれこーど店で貴重な一枚を見つけて買った": {
     "female": "1486692bef1680812d21d3d072c297ea-female.wav",
     "male": "1486692bef1680812d21d3d072c297ea-male.wav"
   },
@@ -9755,7 +9743,7 @@
     "female": "e6e0214b7359fdf564cda8d39dd9a5ec-female.wav",
     "male": "e6e0214b7359fdf564cda8d39dd9a5ec-male.wav"
   },
-  "締め切りが近づくにつれて彼のプレッシャーは増していった": {
+  "締め切りが近づくにつれて彼のぷれっしゃーは増していった": {
     "female": "bc84dd18dd17dff816dee1ba20cd87c7-female.wav",
     "male": "bc84dd18dd17dff816dee1ba20cd87c7-male.wav"
   },
@@ -9855,11 +9843,11 @@
     "female": "7e1ecc93589621b52bde876bf305fca9-female.wav",
     "male": "7e1ecc93589621b52bde876bf305fca9-male.wav"
   },
-  "ボールを投げます": {
+  "ぼーるを投げます": {
     "female": "23a23e551cc8eeaa965a4be7a51d9f47-female.wav",
     "male": "23a23e551cc8eeaa965a4be7a51d9f47-male.wav"
   },
-  "あの投手は驚異的なスピードでボールを投げることで有名だ": {
+  "あの投手は驚異的なすぴーどでぼーるを投げることで有名だ": {
     "female": "4bea00301e71da3a5ce9c981824dc87a-female.wav",
     "male": "4bea00301e71da3a5ce9c981824dc87a-male.wav"
   },
@@ -9867,7 +9855,7 @@
     "female": "7e71e99362ac1e91acead9c48a99d7f5-female.wav",
     "male": "7e71e99362ac1e91acead9c48a99d7f5-male.wav"
   },
-  "ハンドルを回します": {
+  "はんどるを回します": {
     "female": "ac7a8152f6af6fd2acd828b0ef6c58ad-female.wav",
     "male": "ac7a8152f6af6fd2acd828b0ef6c58ad-male.wav"
   },
@@ -9887,7 +9875,7 @@
     "female": "74b7420ce2f89c233565bcb3fce515cf-female.wav",
     "male": "74b7420ce2f89c233565bcb3fce515cf-male.wav"
   },
-  "カメラを向けます": {
+  "かめらを向けます": {
     "female": "7498e4a75fbf68cd20c4bca456ba97ed-female.wav",
     "male": "7498e4a75fbf68cd20c4bca456ba97ed-male.wav"
   },
@@ -9911,7 +9899,7 @@
     "female": "33f8b9de8d9054f6d66ad24b05ab4df2-female.wav",
     "male": "33f8b9de8d9054f6d66ad24b05ab4df2-male.wav"
   },
-  "この地域は水道インフラの老朽化が深刻な問題になっている": {
+  "この地域は水道いんふらの老朽化が深刻な問題になっている": {
     "female": "93637e4554bc94b991152d2e5348c1d6-female.wav",
     "male": "93637e4554bc94b991152d2e5348c1d6-male.wav"
   },
@@ -9995,7 +9983,7 @@
     "female": "753f58e07c8bdcd2bdda169524e93fb9-female.wav",
     "male": "753f58e07c8bdcd2bdda169524e93fb9-male.wav"
   },
-  "研究チームはその分野で画期的な発見を発表した": {
+  "研究ちーむはその分野で画期的な発見を発表した": {
     "female": "9405015c7c5456e83d6c4d9f5e3fba56-female.wav",
     "male": "9405015c7c5456e83d6c4d9f5e3fba56-male.wav"
   },
@@ -10159,7 +10147,7 @@
     "female": "0b3c8362142f7248e9ede20c030ba637-female.wav",
     "male": "0b3c8362142f7248e9ede20c030ba637-male.wav"
   },
-  "この二つのデータを対比すると驚くべき違いが見えてくる": {
+  "この二つのでーたを対比すると驚くべき違いが見えてくる": {
     "female": "37445cb1000ed95d5c1f3fca3b52dfa8-female.wav",
     "male": "37445cb1000ed95d5c1f3fca3b52dfa8-male.wav"
   },
@@ -10167,7 +10155,7 @@
     "female": "d3daab4021d99816c8cd9c00d4286be7-female.wav",
     "male": "d3daab4021d99816c8cd9c00d4286be7-male.wav"
   },
-  "三ヶ月かかります": {
+  "三ゖ月かかります": {
     "female": "2f7d82623f690a301b2b93366ea91c6f-female.wav",
     "male": "2f7d82623f690a301b2b93366ea91c6f-male.wav"
   },
@@ -10291,7 +10279,7 @@
     "female": "82882fbcc8d43821315336d850cc7852-female.wav",
     "male": "82882fbcc8d43821315336d850cc7852-male.wav"
   },
-  "ちょうど良いタイミングで彼が現れた": {
+  "ちょうど良いたいみんぐで彼が現れた": {
     "female": "6059ce55473b52c437251d1e29aeb16c-female.wav",
     "male": "6059ce55473b52c437251d1e29aeb16c-male.wav"
   },
@@ -10351,7 +10339,7 @@
     "female": "14a437fbf526f7aec025e5e4bc2f9963-female.wav",
     "male": "14a437fbf526f7aec025e5e4bc2f9963-male.wav"
   },
-  "この地域では乾燥した季節になると火事のリスクが高まる": {
+  "この地域では乾燥した季節になると火事のりすくが高まる": {
     "female": "a670d0c06e26e88a12bcc0734a987eb9-female.wav",
     "male": "a670d0c06e26e88a12bcc0734a987eb9-male.wav"
   },
@@ -10375,7 +10363,7 @@
     "female": "2a32f5a7f726cf28fcf4b9ca1c68e152-female.wav",
     "male": "2a32f5a7f726cf28fcf4b9ca1c68e152-male.wav"
   },
-  "このスーパーでは新商品の試食コーナーが常設されている": {
+  "このすーぱーでは新商品の試食こーなーが常設されている": {
     "female": "d9783848109a7c58f239a214153ebd26-female.wav",
     "male": "d9783848109a7c58f239a214153ebd26-male.wav"
   },
@@ -10395,15 +10383,15 @@
     "female": "ac98ae1be3225cf3ef96f3d3a897d078-female.wav",
     "male": "ac98ae1be3225cf3ef96f3d3a897d078-male.wav"
   },
-  "ガラス": {
+  "がらす": {
     "female": "78c6d16b6b25b3eb3af3842b18568f99-female.wav",
     "male": "78c6d16b6b25b3eb3af3842b18568f99-male.wav"
   },
-  "ガラスの窓です": {
+  "がらすの窓です": {
     "female": "23b3a96b4886644c25fa13c7a5f498b6-female.wav",
     "male": "23b3a96b4886644c25fa13c7a5f498b6-male.wav"
   },
-  "このビルの外壁はすべてガラスで覆われている": {
+  "このびるの外壁はすべてがらすで覆われている": {
     "female": "c5e103969ead9db26e27fa9680027725-female.wav",
     "male": "c5e103969ead9db26e27fa9680027725-male.wav"
   },
@@ -10415,7 +10403,7 @@
     "female": "3d2c408a3702e6ba7c7db8e749ecfd19-female.wav",
     "male": "3d2c408a3702e6ba7c7db8e749ecfd19-male.wav"
   },
-  "このホテルは上質な客室サービスで高く評価されている": {
+  "このほてるは上質な客室さーびすで高く評価されている": {
     "female": "990b83f22e663fbe75e9480a5947ea27-female.wav",
     "male": "990b83f22e663fbe75e9480a5947ea27-male.wav"
   },
@@ -10431,11 +10419,11 @@
     "female": "70357c453a8006b38d6bbafb3b3c5728-female.wav",
     "male": "70357c453a8006b38d6bbafb3b3c5728-male.wav"
   },
-  "ハート形です": {
+  "はーと形です": {
     "female": "132600bef84258db0aca40089d9c0513-female.wav",
     "male": "132600bef84258db0aca40089d9c0513-male.wav"
   },
-  "このケーキはハート形にデザインされていて特別な日にぴったりだ": {
+  "このけーきははーと形にでざいんされていて特別な日にぴったりだ": {
     "female": "74226b1121305ff3975ec276d9fc0c3d-female.wav",
     "male": "74226b1121305ff3975ec276d9fc0c3d-male.wav"
   },
@@ -10591,15 +10579,15 @@
     "female": "9e4c8a09ddd39ee55028a28c3c6160dd-female.wav",
     "male": "9e4c8a09ddd39ee55028a28c3c6160dd-male.wav"
   },
-  "キロ": {
+  "きろ": {
     "female": "30329f02a14ebb70e4c47171d9fc7b49-female.wav",
     "male": "30329f02a14ebb70e4c47171d9fc7b49-male.wav"
   },
-  "五キロです": {
+  "五きろです": {
     "female": "84d7c0b76428cb93bef00bfa2e25a4d1-female.wav",
     "male": "84d7c0b76428cb93bef00bfa2e25a4d1-male.wav"
   },
-  "彼は毎日十キロ以上のジョギングを続けている": {
+  "彼は毎日十きろ以上のじょぎんぐを続けている": {
     "female": "ada13c84a676d2bc67fe0b196a3f9857-female.wav",
     "male": "ada13c84a676d2bc67fe0b196a3f9857-male.wav"
   },
@@ -10667,7 +10655,7 @@
     "female": "2d8b6b4650de963d6b6a2ec1a6ba7839-female.wav",
     "male": "2d8b6b4650de963d6b6a2ec1a6ba7839-male.wav"
   },
-  "彼らのチームは決勝戦で見事な勝負を制した": {
+  "彼らのちーむは決勝戦で見事な勝負を制した": {
     "female": "552e3fe8f1741f33682b78571764fa3f-female.wav",
     "male": "552e3fe8f1741f33682b78571764fa3f-male.wav"
   },
@@ -10715,7 +10703,7 @@
     "female": "ecba8333e2d5de95ed4bf965bb86433c-female.wav",
     "male": "ecba8333e2d5de95ed4bf965bb86433c-male.wav"
   },
-  "このソーセージには辛子との相性が抜群だと言われている": {
+  "このそーせーじには辛子との相性が抜群だと言われている": {
     "female": "bab942422637c2a0f75cb5f35b9317d5-female.wav",
     "male": "bab942422637c2a0f75cb5f35b9317d5-male.wav"
   },
@@ -10803,11 +10791,11 @@
     "female": "7d7e4c1887e0f1013c3e3303286d54a8-female.wav",
     "male": "7d7e4c1887e0f1013c3e3303286d54a8-male.wav"
   },
-  "一ヶ月かかります": {
+  "一ゖ月かかります": {
     "female": "c9b589c0601e0e8e9cd129231f094b99-female.wav",
     "male": "c9b589c0601e0e8e9cd129231f094b99-male.wav"
   },
-  "このプロジェクトは一ヶ月以内に完成させる必要がある": {
+  "このぷろじぇくとは一ゖ月以内に完成させる必要がある": {
     "female": "28dc308b23aa72fec7f43b553ed701a2-female.wav",
     "male": "28dc308b23aa72fec7f43b553ed701a2-male.wav"
   },
@@ -10863,7 +10851,7 @@
     "female": "64da5eec7a43e0c833b6f90bcf6f1b64-female.wav",
     "male": "64da5eec7a43e0c833b6f90bcf6f1b64-male.wav"
   },
-  "このプロジェクトは予定よりも早く進行している": {
+  "このぷろじぇくとは予定よりも早く進行している": {
     "female": "e7342c1fabb720f559ebe6ae1dc51523-female.wav",
     "male": "e7342c1fabb720f559ebe6ae1dc51523-male.wav"
   },
@@ -10911,7 +10899,7 @@
     "female": "212c722daa7b479717d04a57fb0a81d2-female.wav",
     "male": "212c722daa7b479717d04a57fb0a81d2-male.wav"
   },
-  "彼のメールに対する返事はいつも驚くほど早い": {
+  "彼のめーるに対する返事はいつも驚くほど早い": {
     "female": "e04c63e983da836058b104bb7e8055d4-female.wav",
     "male": "e04c63e983da836058b104bb7e8055d4-male.wav"
   },
@@ -10979,7 +10967,7 @@
     "female": "8a9c31b32d97e962c11a012aad866941-female.wav",
     "male": "8a9c31b32d97e962c11a012aad866941-male.wav"
   },
-  "このカレーは辛口ながらも深いコクが感じられる": {
+  "このかれーは辛口ながらも深いこくが感じられる": {
     "female": "1ff1415a64fdd754e265614fec0045ab-female.wav",
     "male": "1ff1415a64fdd754e265614fec0045ab-male.wav"
   },
@@ -11015,7 +11003,7 @@
     "female": "91455afafa8039def723776ba9add14c-female.wav",
     "male": "91455afafa8039def723776ba9add14c-male.wav"
   },
-  "彼女は街の小さなパン屋で長年働いている": {
+  "彼女は街の小さなぱん屋で長年働いている": {
     "female": "4ed28170026e93faf8a4310f84419839-female.wav",
     "male": "4ed28170026e93faf8a4310f84419839-male.wav"
   },
@@ -11051,7 +11039,7 @@
     "female": "ec5584355626fda3c97ee502802103f7-female.wav",
     "male": "ec5584355626fda3c97ee502802103f7-male.wav"
   },
-  "彼は毎朝近くのプールで泳ぎを日課にしている": {
+  "彼は毎朝近くのぷーるで泳ぎを日課にしている": {
     "female": "65144b8db03c5deb766da452c14294e6-female.wav",
     "male": "65144b8db03c5deb766da452c14294e6-male.wav"
   },
@@ -11211,7 +11199,7 @@
     "female": "06cef7218c402fbad2bfd33cc1f256f6-female.wav",
     "male": "06cef7218c402fbad2bfd33cc1f256f6-male.wav"
   },
-  "今度のプロジェクトは今までで最も難しい挑戦だった": {
+  "今度のぷろじぇくとは今までで最も難しい挑戦だった": {
     "female": "d885de77505f83547e4219217f1bd7ab-female.wav",
     "male": "d885de77505f83547e4219217f1bd7ab-male.wav"
   },
@@ -11267,7 +11255,7 @@
     "female": "11c492ab9e5b78e5f4f15ac98f9c656b-female.wav",
     "male": "11c492ab9e5b78e5f4f15ac98f9c656b-male.wav"
   },
-  "彼女はその古いレコード店で貴重な一枚を見付けて買った": {
+  "彼女はその古いれこーど店で貴重な一枚を見付けて買った": {
     "female": "833c9f84c2464c9d4c22aab2157bb9ac-female.wav",
     "male": "833c9f84c2464c9d4c22aab2157bb9ac-male.wav"
   },
@@ -11279,7 +11267,7 @@
     "female": "2d59e61785740e74f29bf4b94c215484-female.wav",
     "male": "2d59e61785740e74f29bf4b94c215484-male.wav"
   },
-  "彼のスピーチにはいくつか欠けている部分があるように感じた": {
+  "彼のすぴーちにはいくつか欠けている部分があるように感じた": {
     "female": "7b23652ee5315c4a8f4693250f24ee90-female.wav",
     "male": "7b23652ee5315c4a8f4693250f24ee90-male.wav"
   },
@@ -11287,7 +11275,7 @@
     "female": "9197e4fd8383109546e8132b94b216b7-female.wav",
     "male": "9197e4fd8383109546e8132b94b216b7-male.wav"
   },
-  "カバンを持ちます": {
+  "かばんを持ちます": {
     "female": "a6442d03f460a774c1903d3fc83cd87a-female.wav",
     "male": "a6442d03f460a774c1903d3fc83cd87a-male.wav"
   },
@@ -11387,7 +11375,7 @@
     "female": "2eed18e4bd474890c16a0758c78cd9f2-female.wav",
     "male": "2eed18e4bd474890c16a0758c78cd9f2-male.wav"
   },
-  "彼のメールに対する返事はいつも驚くほど早く返された": {
+  "彼のめーるに対する返事はいつも驚くほど早く返された": {
     "female": "3fbb6c12772b82d2f2ee89ceee1f3f19-female.wav",
     "male": "3fbb6c12772b82d2f2ee89ceee1f3f19-male.wav"
   },
@@ -11423,7 +11411,7 @@
     "female": "4d1473664e98560ff84b96c2f7906c71-female.wav",
     "male": "4d1473664e98560ff84b96c2f7906c71-male.wav"
   },
-  "彼は毎朝近くのプールで泳ぐことを日課にしている": {
+  "彼は毎朝近くのぷーるで泳ぐことを日課にしている": {
     "female": "2ab5c46580a612a0e8939f1315fab1da-female.wav",
     "male": "2ab5c46580a612a0e8939f1315fab1da-male.wav"
   },
@@ -11447,7 +11435,7 @@
     "female": "7755319ef957fa0c0ae67ea365bca935-female.wav",
     "male": "7755319ef957fa0c0ae67ea365bca935-male.wav"
   },
-  "彼らのチームは決勝戦で見事な勝利を収めた": {
+  "彼らのちーむは決勝戦で見事な勝利を収めた": {
     "female": "ca02c92a10b7526f880ef1eaaafb7b2f-female.wav",
     "male": "ca02c92a10b7526f880ef1eaaafb7b2f-male.wav"
   },
@@ -11515,7 +11503,7 @@
     "female": "673c52e076125c575e014bf996127877-female.wav",
     "male": "673c52e076125c575e014bf996127877-male.wav"
   },
-  "彼らのチームは決勝戦で見事な勝者となった": {
+  "彼らのちーむは決勝戦で見事な勝者となった": {
     "female": "e564df565421f0c25de7973c5557e288-female.wav",
     "male": "e564df565421f0c25de7973c5557e288-male.wav"
   },
@@ -11627,7 +11615,7 @@
     "female": "03620514db51e8e7bde3c7594a2c41a6-female.wav",
     "male": "03620514db51e8e7bde3c7594a2c41a6-male.wav"
   },
-  "彼はそのアンケートに丁寧に回答した": {
+  "彼はそのあんけーとに丁寧に回答した": {
     "female": "a1f0a498f620df31bd4fa2beafee4c90-female.wav",
     "male": "a1f0a498f620df31bd4fa2beafee4c90-male.wav"
   },
@@ -11699,19 +11687,19 @@
     "female": "10b24c070a1281d005482a01bec0f99a-female.wav",
     "male": "10b24c070a1281d005482a01bec0f99a-male.wav"
   },
-  "パンを食べます": {
+  "ぱんを食べます": {
     "female": "b148f15c0ce52ae776c5aec8e20a8ae3-female.wav",
     "male": "b148f15c0ce52ae776c5aec8e20a8ae3-male.wav"
   },
-  "このベーカリーでは毎朝焼き立てのパンが並べられる": {
+  "このべーかりーでは毎朝焼き立てのぱんが並べられる": {
     "female": "7f0892ff342932071cd90364d75d493b-female.wav",
     "male": "7f0892ff342932071cd90364d75d493b-male.wav"
   },
-  "ビル": {
+  "びる": {
     "female": "7cda6e251ecf2d84ea8a425b69c2f232-female.wav",
     "male": "7cda6e251ecf2d84ea8a425b69c2f232-male.wav"
   },
-  "高いビルです": {
+  "高いびるです": {
     "female": "b140eebc1358d950fe9afdfa160a9ecc-female.wav",
     "male": "b140eebc1358d950fe9afdfa160a9ecc-male.wav"
   },
@@ -11759,7 +11747,7 @@
     "female": "d3c165d1e4bc014c9ea730545c66419b-female.wav",
     "male": "d3c165d1e4bc014c9ea730545c66419b-male.wav"
   },
-  "そのニュースを聞いて多くの人々が広場に集中した": {
+  "そのにゅーすを聞いて多くの人々が広場に集中した": {
     "female": "b1a902ce4fddcc2d220cd8acc777b193-female.wav",
     "male": "b1a902ce4fddcc2d220cd8acc777b193-male.wav"
   },
@@ -11831,7 +11819,7 @@
     "female": "b73175f8cf83ebe30fe43aece9634557-female.wav",
     "male": "b73175f8cf83ebe30fe43aece9634557-male.wav"
   },
-  "研究チームはその分野で画期的な技術を開発した": {
+  "研究ちーむはその分野で画期的な技術を開発した": {
     "female": "73fb3fec6534231c65ddbffdb37ee236-female.wav",
     "male": "73fb3fec6534231c65ddbffdb37ee236-male.wav"
   },
@@ -11855,7 +11843,7 @@
     "female": "5c95f20fd2d58f5fc6847ee5bfd5993a-female.wav",
     "male": "5c95f20fd2d58f5fc6847ee5bfd5993a-male.wav"
   },
-  "この電鉄会社は地域の交通インフラを長年支えてきた": {
+  "この電鉄会社は地域の交通いんふらを長年支えてきた": {
     "female": "e9eba1fa545d8ceb3382acbd7918b919-female.wav",
     "male": "e9eba1fa545d8ceb3382acbd7918b919-male.wav"
   },
@@ -11879,7 +11867,7 @@
     "female": "369aa08b3c1441df447d7491946434d2-female.wav",
     "male": "369aa08b3c1441df447d7491946434d2-male.wav"
   },
-  "そのイベントは盛大な雰囲気の中無事に終了した": {
+  "そのいべんとは盛大な雰囲気の中無事に終了した": {
     "female": "fc8a8c496ac93715048c67ac0f37cabd-female.wav",
     "male": "fc8a8c496ac93715048c67ac0f37cabd-male.wav"
   },
@@ -11943,11 +11931,11 @@
     "female": "a1d54dd2cdd7833ac3c72334209994af-female.wav",
     "male": "a1d54dd2cdd7833ac3c72334209994af-male.wav"
   },
-  "フランス語を勉強します": {
+  "ふらんす語を勉強します": {
     "female": "a8fb3d959b78c722abcbb253991b5ead-female.wav",
     "male": "a8fb3d959b78c722abcbb253991b5ead-male.wav"
   },
-  "彼女は大学でフランス語を専攻しその後翻訳家になった": {
+  "彼女は大学でふらんす語を専攻しその後翻訳家になった": {
     "female": "d88cbd57d58a8287968284791898a922-female.wav",
     "male": "d88cbd57d58a8287968284791898a922-male.wav"
   },
@@ -12055,7 +12043,7 @@
     "female": "ed5d00dfd52c6322a226a9558ea2ffd7-female.wav",
     "male": "ed5d00dfd52c6322a226a9558ea2ffd7-male.wav"
   },
-  "彼女の読み方には独特のリズムがあると評判だ": {
+  "彼女の読み方には独特のりずむがあると評判だ": {
     "female": "f7d9e7b92d16aa35c1848c1086b0a0f6-female.wav",
     "male": "f7d9e7b92d16aa35c1848c1086b0a0f6-male.wav"
   },
@@ -12159,7 +12147,7 @@
     "female": "7bf4ebb6b308d4b3a203eaa71393329d-female.wav",
     "male": "7bf4ebb6b308d4b3a203eaa71393329d-male.wav"
   },
-  "彼らのチームは最終決勝戦で見事な勝利を収めた": {
+  "彼らのちーむは最終決勝戦で見事な勝利を収めた": {
     "female": "7c30ec09102de22efad480d42209b6aa-female.wav",
     "male": "7c30ec09102de22efad480d42209b6aa-male.wav"
   },
@@ -12307,7 +12295,7 @@
     "female": "62e1ae57016e7b4154d56a6453b3a6cd-female.wav",
     "male": "62e1ae57016e7b4154d56a6453b3a6cd-male.wav"
   },
-  "彼は新しいアイデアを次々と生み出している": {
+  "彼は新しいあいであを次々と生み出している": {
     "female": "f530ee20da685dd5c8707d0578d17e40-female.wav",
     "male": "f530ee20da685dd5c8707d0578d17e40-male.wav"
   },
@@ -12315,11 +12303,11 @@
     "female": "8d7ffdb657303c4099760ff923ce23f2-female.wav",
     "male": "8d7ffdb657303c4099760ff923ce23f2-male.wav"
   },
-  "一ヶ所だけです": {
+  "一ゖ所だけです": {
     "female": "2b27e40c5b16460004b0c3603fcb436a-female.wav",
     "male": "2b27e40c5b16460004b0c3603fcb436a-male.wav"
   },
-  "この書類には一ヶ所だけ修正が必要な箇所がある": {
+  "この書類には一ゖ所だけ修正が必要な箇所がある": {
     "female": "614fc7e123e005e9a12f2b23ac475794-female.wav",
     "male": "614fc7e123e005e9a12f2b23ac475794-male.wav"
   },
@@ -12347,11 +12335,11 @@
     "female": "af24bb6937fd5a1b36fd31624b58438f-female.wav",
     "male": "af24bb6937fd5a1b36fd31624b58438f-male.wav"
   },
-  "ページ": {
+  "ぺーじ": {
     "female": "d86c8503ced0c56eb767de9d9f67f68a-female.wav",
     "male": "d86c8503ced0c56eb767de9d9f67f68a-male.wav"
   },
-  "このページを見てください": {
+  "このぺーじを見てください": {
     "female": "fdcb788c20ced66d283d044e4af59c0c-female.wav",
     "male": "fdcb788c20ced66d283d044e4af59c0c-male.wav"
   },
@@ -12419,7 +12407,7 @@
     "female": "de46309d21e3e2ab7adfa7fcb2fe0cb3-female.wav",
     "male": "de46309d21e3e2ab7adfa7fcb2fe0cb3-male.wav"
   },
-  "この私鉄会社は地域の交通インフラを長年支えてきた": {
+  "この私鉄会社は地域の交通いんふらを長年支えてきた": {
     "female": "1738cc393d44ab0e650ed5d5929ded65-female.wav",
     "male": "1738cc393d44ab0e650ed5d5929ded65-male.wav"
   },
@@ -12471,7 +12459,7 @@
     "female": "7adee4c624a574b8aeddf7b53b5700f8-female.wav",
     "male": "7adee4c624a574b8aeddf7b53b5700f8-male.wav"
   },
-  "彼はキャリアの大きな回転を迎えようとしている": {
+  "彼はきゃりあの大きな回転を迎えようとしている": {
     "female": "4fc47eaba7df70c73b044244bf12672d-female.wav",
     "male": "4fc47eaba7df70c73b044244bf12672d-male.wav"
   },
@@ -12483,11 +12471,11 @@
     "female": "566411e132b67c60ebf1ec652cf67fe2-female.wav",
     "male": "566411e132b67c60ebf1ec652cf67fe2-male.wav"
   },
-  "サービス": {
+  "さーびす": {
     "female": "6e498a32b6d0d680c83b8edfec6dacee-female.wav",
     "male": "6e498a32b6d0d680c83b8edfec6dacee-male.wav"
   },
-  "いいサービスです": {
+  "いいさーびすです": {
     "female": "9de812412b6fc62003f7097ca257521f-female.wav",
     "male": "9de812412b6fc62003f7097ca257521f-male.wav"
   },
@@ -12543,7 +12531,7 @@
     "female": "2a204551bcef66ec9aa00180f63aa996-female.wav",
     "male": "2a204551bcef66ec9aa00180f63aa996-male.wav"
   },
-  "あの歌手は感情豊かな歌声で多くのファンを魅了している": {
+  "あの歌手は感情豊かな歌声で多くのふぁんを魅了している": {
     "female": "d9b3db94b21610d26e8b3c4b3884a9e1-female.wav",
     "male": "d9b3db94b21610d26e8b3c4b3884a9e1-male.wav"
   },
@@ -12583,11 +12571,11 @@
     "female": "d044c84f12761da486a59108d5a3a2b7-female.wav",
     "male": "d044c84f12761da486a59108d5a3a2b7-male.wav"
   },
-  "スペイン語を勉強します": {
+  "すぺいん語を勉強します": {
     "female": "87ce3992ca446b7054620c7cd4d3ded5-female.wav",
     "male": "87ce3992ca446b7054620c7cd4d3ded5-male.wav"
   },
-  "彼女は大学でスペイン語を専攻しその後翻訳家になった": {
+  "彼女は大学ですぺいん語を専攻しその後翻訳家になった": {
     "female": "2e74e0fbd6218a8c1e3d64a4087e1866-female.wav",
     "male": "2e74e0fbd6218a8c1e3d64a4087e1866-male.wav"
   },
@@ -12611,7 +12599,7 @@
     "female": "d1aba67f57856ef168a09695610e812e-female.wav",
     "male": "d1aba67f57856ef168a09695610e812e-male.wav"
   },
-  "この立ち飲み屋は仕事帰りのサラリーマンで賑わっている": {
+  "この立ち飲み屋は仕事帰りのさらりーまんで賑わっている": {
     "female": "30cef29b2bf07eb1eda1b7007a2d00a1-female.wav",
     "male": "30cef29b2bf07eb1eda1b7007a2d00a1-male.wav"
   },
@@ -12735,7 +12723,7 @@
     "female": "94597c544afa1faae65a34e41770ba85-female.wav",
     "male": "94597c544afa1faae65a34e41770ba85-male.wav"
   },
-  "今朝のニュースは多くの人々に衝撃を与えた": {
+  "今朝のにゅーすは多くの人々に衝撃を与えた": {
     "female": "712c77ea7da806e12ffc8233fd5575be-female.wav",
     "male": "712c77ea7da806e12ffc8233fd5575be-male.wav"
   },
@@ -12747,21 +12735,17 @@
     "female": "2d83b7465dba73197591349f4b610569-female.wav",
     "male": "2d83b7465dba73197591349f4b610569-male.wav"
   },
-  "このプロジェクトは予定よりも早く進んでいる": {
+  "このぷろじぇくとは予定よりも早く進んでいる": {
     "female": "4b02e8155023bf1fe6c19f724403b64d-female.wav",
     "male": "4b02e8155023bf1fe6c19f724403b64d-male.wav"
   },
-  "タバコ": {
+  "たばこ": {
     "female": "03f6e7f939c6f03931222ab4be98c66b-female.wav",
     "male": "03f6e7f939c6f03931222ab4be98c66b-male.wav"
   },
-  "タバコを吸います": {
+  "たばこを吸います": {
     "female": "ab5626f3248694f2bd4b1f19717ce86b-female.wav",
     "male": "ab5626f3248694f2bd4b1f19717ce86b-male.wav"
-  },
-  "医者は彼にタバコを止めるよう強く勧めた": {
-    "female": "59fac3c6df7b65d0ff690b574a58ac78-female.wav",
-    "male": "59fac3c6df7b65d0ff690b574a58ac78-male.wav"
   },
   "はじめる": {
     "female": "af915dc0dffe1d9eaf2a53e4209dad42-female.wav",
@@ -12883,7 +12867,7 @@
     "female": "b69945cbf081fb2cd53fee3b529534e2-female.wav",
     "male": "b69945cbf081fb2cd53fee3b529534e2-male.wav"
   },
-  "そのイベントは盛大な雰囲気の中無事に終わった": {
+  "そのいべんとは盛大な雰囲気の中無事に終わった": {
     "female": "3ee570dd19b88dc583292cf418fb225f-female.wav",
     "male": "3ee570dd19b88dc583292cf418fb225f-male.wav"
   },
@@ -12959,7 +12943,7 @@
     "female": "815c9429c10a8af59c64f9a90c13a1d9-female.wav",
     "male": "815c9429c10a8af59c64f9a90c13a1d9-male.wav"
   },
-  "彼女は幼い頃からピアノを習い続けている": {
+  "彼女は幼い頃からぴあのを習い続けている": {
     "female": "9f9fa36451c39f4f1d6b59fc84f51774-female.wav",
     "male": "9f9fa36451c39f4f1d6b59fc84f51774-male.wav"
   },
@@ -13023,7 +13007,7 @@
     "female": "31b1f4dba3542d39479ce3211ac6df4b-female.wav",
     "male": "31b1f4dba3542d39479ce3211ac6df4b-male.wav"
   },
-  "ドアを開けます": {
+  "どあを開けます": {
     "female": "fc040a12347ec5976b6503450e1dbd99-female.wav",
     "male": "fc040a12347ec5976b6503450e1dbd99-male.wav"
   },
@@ -13063,7 +13047,7 @@
     "female": "476172845a397870b4c6638ac8c9f05b-female.wav",
     "male": "476172845a397870b4c6638ac8c9f05b-male.wav"
   },
-  "ボールが転がります": {
+  "ぼーるが転がります": {
     "female": "a263353fbe83fec24dd624c5cd26b52a-female.wav",
     "male": "a263353fbe83fec24dd624c5cd26b52a-male.wav"
   },
@@ -13135,7 +13119,7 @@
     "female": "cbab1a0bcf580d43fb6299d17e4898d7-female.wav",
     "male": "cbab1a0bcf580d43fb6299d17e4898d7-male.wav"
   },
-  "彼はそのメールをすぐに関係者に転送した": {
+  "彼はそのめーるをすぐに関係者に転送した": {
     "female": "d7cd01a13377b508f3e40cff2f86ce75-female.wav",
     "male": "d7cd01a13377b508f3e40cff2f86ce75-male.wav"
   },
@@ -13287,7 +13271,7 @@
     "female": "a490a8fc0a5b4e6a9ccd402f3b74624c-female.wav",
     "male": "a490a8fc0a5b4e6a9ccd402f3b74624c-male.wav"
   },
-  "このプロジェクトが完成するまで十年かかりました": {
+  "このぷろじぇくとが完成するまで十年かかりました": {
     "female": "cec2414b57e605372dfd21f34cd47585-female.wav",
     "male": "cec2414b57e605372dfd21f34cd47585-male.wav"
   },
@@ -13311,7 +13295,7 @@
     "female": "ba30252651c8e040386a98f29d2b8152-female.wav",
     "male": "ba30252651c8e040386a98f29d2b8152-male.wav"
   },
-  "彼にビー玉をあげました": {
+  "彼にびー玉をあげました": {
     "female": "8f53d87efc0dcf4ab942cd29d42f64f3-female.wav",
     "male": "8f53d87efc0dcf4ab942cd29d42f64f3-male.wav"
   },
@@ -13375,7 +13359,7 @@
     "female": "c077e7fc2e3f6970996a0f434135427f-female.wav",
     "male": "c077e7fc2e3f6970996a0f434135427f-male.wav"
   },
-  "キャンプ場では火の取り扱いに十分注意してください": {
+  "きゃんぷ場では火の取り扱いに十分注意してください": {
     "female": "d232f8053b25c9a47ec903af9c23e337-female.wav",
     "male": "d232f8053b25c9a47ec903af9c23e337-male.wav"
   },
@@ -13383,7 +13367,7 @@
     "female": "e1fcd84f61502480621ea8292e69677a-female.wav",
     "male": "e1fcd84f61502480621ea8292e69677a-male.wav"
   },
-  "このチームは五年連続で優勝している": {
+  "このちーむは五年連続で優勝している": {
     "female": "068e0913e58b2e2ba4d7839a6a1e2654-female.wav",
     "male": "068e0913e58b2e2ba4d7839a6a1e2654-male.wav"
   },
@@ -13451,7 +13435,7 @@
     "female": "3afbaeca7d18695eceea90f883464426-female.wav",
     "male": "3afbaeca7d18695eceea90f883464426-male.wav"
   },
-  "このパズルには六つのピースが足りない": {
+  "このぱずるには六つのぴーすが足りない": {
     "female": "451cecc543b3db7dc87debb123f45f69-female.wav",
     "male": "451cecc543b3db7dc87debb123f45f69-male.wav"
   },
@@ -13495,7 +13479,7 @@
     "female": "2b633bfa4d3291d293f8c923b0f9dda3-female.wav",
     "male": "2b633bfa4d3291d293f8c923b0f9dda3-male.wav"
   },
-  "このイベントには千人以上の人が集まった": {
+  "このいべんとには千人以上の人が集まった": {
     "female": "88486d9eff0bad97fbd12338cd90aa44-female.wav",
     "male": "88486d9eff0bad97fbd12338cd90aa44-male.wav"
   },
@@ -13583,7 +13567,7 @@
     "female": "2e2829e47c4a889e981d315b350fee57-female.wav",
     "male": "2e2829e47c4a889e981d315b350fee57-male.wav"
   },
-  "このセーターは上質な羊毛で編まれている": {
+  "このせーたーは上質な羊毛で編まれている": {
     "female": "1cf835de8dbb1e189fd53e65f25188e2-female.wav",
     "male": "1cf835de8dbb1e189fd53e65f25188e2-male.wav"
   },
@@ -13603,7 +13587,7 @@
     "female": "9eba72b250d7e32f674c501e5c41148c-female.wav",
     "male": "9eba72b250d7e32f674c501e5c41148c-male.wav"
   },
-  "舞台の上で彼女は堂々とスピーチをした": {
+  "舞台の上で彼女は堂々とすぴーちをした": {
     "female": "36b40fbbe7de2accfe4427109cec9676-female.wav",
     "male": "36b40fbbe7de2accfe4427109cec9676-male.wav"
   },
@@ -13631,7 +13615,7 @@
     "female": "0ff583b9bf616792678c180039894c62-female.wav",
     "male": "0ff583b9bf616792678c180039894c62-male.wav"
   },
-  "ドアを引いてください": {
+  "どあを引いてください": {
     "female": "004c5500b4cacb9042041b643a845ad1-female.wav",
     "male": "004c5500b4cacb9042041b643a845ad1-male.wav"
   },
@@ -13651,7 +13635,7 @@
     "female": "01d127d8ff1bbff1ea63c6bf53c3955d-female.wav",
     "male": "01d127d8ff1bbff1ea63c6bf53c3955d-male.wav"
   },
-  "そのニュースはあっという間に広がった": {
+  "そのにゅーすはあっという間に広がった": {
     "female": "15a9e099923d6d7c11fbc19cb5dd743d-female.wav",
     "male": "15a9e099923d6d7c11fbc19cb5dd743d-male.wav"
   },
@@ -13703,7 +13687,7 @@
     "female": "a6954999d4024c7da8ed9687843c6b6e-female.wav",
     "male": "a6954999d4024c7da8ed9687843c6b6e-male.wav"
   },
-  "このプロジェクトの主な目的はコストを削減することだ": {
+  "このぷろじぇくとの主な目的はこすとを削減することだ": {
     "female": "04faf85e84d519f97da89030b779f764-female.wav",
     "male": "04faf85e84d519f97da89030b779f764-male.wav"
   },
@@ -14051,7 +14035,7 @@
     "female": "66cb79a0064b68cc4ff41900d99df059-female.wav",
     "male": "66cb79a0064b68cc4ff41900d99df059-male.wav"
   },
-  "彼らの予想に反してそのプロジェクトは大成功を収めた": {
+  "彼らの予想に反してそのぷろじぇくとは大成功を収めた": {
     "female": "4f4476f971f22c72780268aecacd1197-female.wav",
     "male": "4f4476f971f22c72780268aecacd1197-male.wav"
   },
@@ -14107,7 +14091,7 @@
     "female": "d142ba7c40d309dae231d42c42c6799b-female.wav",
     "male": "d142ba7c40d309dae231d42c42c6799b-male.wav"
   },
-  "彼は大きな責任を負ってそのプロジェクトを最後までやり遂げた": {
+  "彼は大きな責任を負ってそのぷろじぇくとを最後までやり遂げた": {
     "female": "f7c0bf44da8803e72b538f3e6f54bf92-female.wav",
     "male": "f7c0bf44da8803e72b538f3e6f54bf92-male.wav"
   },
@@ -14267,7 +14251,7 @@
     "female": "37575866c1a0cfc045762fbbf0ce3b28-female.wav",
     "male": "37575866c1a0cfc045762fbbf0ce3b28-male.wav"
   },
-  "彼女は幼い頃からピアノの練習を欠かさず続けている": {
+  "彼女は幼い頃からぴあのの練習を欠かさず続けている": {
     "female": "be1d038a65ef68758e91a0fb9ac9698f-female.wav",
     "male": "be1d038a65ef68758e91a0fb9ac9698f-male.wav"
   },
@@ -14291,7 +14275,7 @@
     "female": "1dbef61b93f76144eb7299d7a9d0ebe2-female.wav",
     "male": "1dbef61b93f76144eb7299d7a9d0ebe2-male.wav"
   },
-  "彼はキャリアの大きな転機を迎えようとしている": {
+  "彼はきゃりあの大きな転機を迎えようとしている": {
     "female": "44dd047c223751a24ad1c8320c979e5e-female.wav",
     "male": "44dd047c223751a24ad1c8320c979e5e-male.wav"
   },
@@ -14383,7 +14367,7 @@
     "female": "600af0342db4a87b305a09f687170df8-female.wav",
     "male": "600af0342db4a87b305a09f687170df8-male.wav"
   },
-  "レストランで食べます": {
+  "れすとらんで食べます": {
     "female": "1215c1ee2aa54c9abc5fafd68e717c7e-female.wav",
     "male": "1215c1ee2aa54c9abc5fafd68e717c7e-male.wav"
   },
@@ -14423,7 +14407,7 @@
     "female": "ca864090bb2ac75d7973044160782f6d-female.wav",
     "male": "ca864090bb2ac75d7973044160782f6d-male.wav"
   },
-  "りんごやバナナを食べます": {
+  "りんごやばななを食べます": {
     "female": "4abc0dbaed618548b040e2935f09c476-female.wav",
     "male": "4abc0dbaed618548b040e2935f09c476-male.wav"
   },
@@ -14515,7 +14499,7 @@
     "female": "e477db0e24af5960e77644b6d32d1b72-female.wav",
     "male": "e477db0e24af5960e77644b6d32d1b72-male.wav"
   },
-  "友人が古いホテルにいます": {
+  "友人が古いほてるにいます": {
     "female": "80d76ad267120b159b5028baa6aa2ed0-female.wav",
     "male": "80d76ad267120b159b5028baa6aa2ed0-male.wav"
   },
@@ -14646,5 +14630,925 @@
   "明日始めます": {
     "female": "5784a1d0d68ec4ecc029c996fe58ec80-female.wav",
     "male": "5784a1d0d68ec4ecc029c996fe58ec80-male.wav"
+  },
+  "ばいせんど": {
+    "female": "8deb2359662b45b14464c71b1c2aac90-female.wav",
+    "male": "8deb2359662b45b14464c71b1c2aac90-male.wav"
+  },
+  "あさいり": {
+    "female": "dd425a627f84c00ecbd28a557d66c530-female.wav",
+    "male": "dd425a627f84c00ecbd28a557d66c530-male.wav"
+  },
+  "ちゅういり": {
+    "female": "a6c8d234b910dd81d63017d00d20824c-female.wav",
+    "male": "a6c8d234b910dd81d63017d00d20824c-male.wav"
+  },
+  "ちゅうふかいり": {
+    "female": "a723f6f7caade8b03620948f25c7e713-female.wav",
+    "male": "a723f6f7caade8b03620948f25c7e713-male.wav"
+  },
+  "ふかいり": {
+    "female": "a0e975a2ce8f08a64358b1b8d6e3afb8-female.wav",
+    "male": "a0e975a2ce8f08a64358b1b8d6e3afb8-male.wav"
+  },
+  "ばいせん": {
+    "female": "8e94ecca5f5b013c1aee342d739b0bfa-female.wav",
+    "male": "8e94ecca5f5b013c1aee342d739b0bfa-male.wav"
+  },
+  "なままめ": {
+    "female": "6cf15b3dd278064ff9885b14eca67d40-female.wav",
+    "male": "6cf15b3dd278064ff9885b14eca67d40-male.wav"
+  },
+  "さんち": {
+    "female": "85ac483e3bff1dabd13e85c8d8f36ab1-female.wav",
+    "male": "85ac483e3bff1dabd13e85c8d8f36ab1-male.wav"
+  },
+  "のうえん": {
+    "female": "78d4c0001cfd4379f262f5e18d3d643e-female.wav",
+    "male": "78d4c0001cfd4379f262f5e18d3d643e-male.wav"
+  },
+  "ひんしゅ": {
+    "female": "85faa31b17a55e82c0c27a31dd4b339a-female.wav",
+    "male": "85faa31b17a55e82c0c27a31dd4b339a-male.wav"
+  },
+  "せいせい": {
+    "female": "168e9433a5595be72f2968f008d29ee7-female.wav",
+    "male": "168e9433a5595be72f2968f008d29ee7-male.wav"
+  },
+  "みずあらいしき": {
+    "female": "118b2165652d1956e53fdaae7daedf75-female.wav",
+    "male": "118b2165652d1956e53fdaae7daedf75-male.wav"
+  },
+  "かんしき": {
+    "female": "3ab5b953b23664f531c60267753077df-female.wav",
+    "male": "3ab5b953b23664f531c60267753077df-male.wav"
+  },
+  "まめ": {
+    "female": "c6d2096058485609df5917bb1214c9d6-female.wav",
+    "male": "c6d2096058485609df5917bb1214c9d6-male.wav"
+  },
+  "こーひーまめ": {
+    "female": "c9b7c0063209560f0b3365b849baf3a8-female.wav",
+    "male": "c9b7c0063209560f0b3365b849baf3a8-male.wav"
+  },
+  "まいくろろっと": {
+    "female": "3f3a3f217a29bdefce7db1cf89012bc4-female.wav",
+    "male": "3f3a3f217a29bdefce7db1cf89012bc4-male.wav"
+  },
+  "はんどどりっぷ": {
+    "female": "e095f59007e2762635688d4743ed472f-female.wav",
+    "male": "e095f59007e2762635688d4743ed472f-male.wav"
+  },
+  "ぷあおーばー": {
+    "female": "77d77be1f1d5fafbcf4d92bd6107436d-female.wav",
+    "male": "77d77be1f1d5fafbcf4d92bd6107436d-male.wav"
+  },
+  "どりっぷこーひー": {
+    "female": "61dea384cfc274ae9caeab412173ebf6-female.wav",
+    "male": "61dea384cfc274ae9caeab412173ebf6-male.wav"
+  },
+  "ねるどりっぷ": {
+    "female": "fddabf9a1c528b4ca48684dcfdb4a81f-female.wav",
+    "male": "fddabf9a1c528b4ca48684dcfdb4a81f-male.wav"
+  },
+  "どりっぱー": {
+    "female": "78e9185334e551a164235a8f48c9218d-female.wav",
+    "male": "78e9185334e551a164235a8f48c9218d-male.wav"
+  },
+  "ふれんちぷれす": {
+    "female": "2296b958c2f0a5c8435d3e44740dcc4f-female.wav",
+    "male": "2296b958c2f0a5c8435d3e44740dcc4f-male.wav"
+  },
+  "えすぷれっそ": {
+    "female": "8dd83428fb82f4e9ea8529f192e0bd8c-female.wav",
+    "male": "8dd83428fb82f4e9ea8529f192e0bd8c-male.wav"
+  },
+  "さいふぉん": {
+    "female": "50da4ce3ee11c12225202872993d4134-female.wav",
+    "male": "50da4ce3ee11c12225202872993d4134-male.wav"
+  },
+  "えあろぷれす": {
+    "female": "0e62993df65636b9c6e613aece994513-female.wav",
+    "male": "0e62993df65636b9c6e613aece994513-male.wav"
+  },
+  "みずだしこーひー": {
+    "female": "29ae8cf518df4b8cf59623f4e59fc425-female.wav",
+    "male": "29ae8cf518df4b8cf59623f4e59fc425-male.wav"
+  },
+  "むらし": {
+    "female": "c6cc87763ea997fdbca75f84e307412c-female.wav",
+    "male": "c6cc87763ea997fdbca75f84e307412c-male.wav"
+  },
+  "ぶらっく": {
+    "female": "7f6c0d3798a7db63c273aec0a46f4932-female.wav",
+    "male": "7f6c0d3798a7db63c273aec0a46f4932-male.wav"
+  },
+  "さとうなし": {
+    "female": "47632b880307c54ecacb7a9925160cda-female.wav",
+    "male": "47632b880307c54ecacb7a9925160cda-male.wav"
+  },
+  "さとうぬき": {
+    "female": "a9f135be9b7129d628cd2c3cc1d418bc-female.wav",
+    "male": "a9f135be9b7129d628cd2c3cc1d418bc-male.wav"
+  },
+  "みるくなし": {
+    "female": "ea477beacb11dce22db56567a6c03b8e-female.wav",
+    "male": "ea477beacb11dce22db56567a6c03b8e-male.wav"
+  },
+  "ほっと": {
+    "female": "38fa4bc9608f477a9f62056ca7a9459e-female.wav",
+    "male": "38fa4bc9608f477a9f62056ca7a9459e-male.wav"
+  },
+  "あたたかい": {
+    "female": "dc76580428a760801ab29c187b51ed0a-female.wav",
+    "male": "dc76580428a760801ab29c187b51ed0a-male.wav"
+  },
+  "あいす": {
+    "female": "c9e353084888e50a28ea0c95dc1a3f16-female.wav",
+    "male": "c9e353084888e50a28ea0c95dc1a3f16-male.wav"
+  },
+  "つめたい": {
+    "female": "b71274964e79c2b201da4fba4bf98487-female.wav",
+    "male": "b71274964e79c2b201da4fba4bf98487-male.wav"
+  },
+  "おもちかえり": {
+    "female": "8e2b71cad806fb29986648c2bf296596-female.wav",
+    "male": "8e2b71cad806fb29986648c2bf296596-male.wav"
+  },
+  "てんない": {
+    "female": "406a870d272ab5d479f98024d28d3d59-female.wav",
+    "male": "406a870d272ab5d479f98024d28d3d59-male.wav"
+  },
+  "いっぱい": {
+    "female": "7c17984710a6c2aa9fd37300876100f2-female.wav",
+    "male": "7c17984710a6c2aa9fd37300876100f2-male.wav"
+  },
+  "でかふぇ/かふぇいんれす": {
+    "female": "66d7b2eff4d4d8d53734f8d3e1e26f81-female.wav",
+    "male": "66d7b2eff4d4d8d53734f8d3e1e26f81-male.wav"
+  },
+  "さんみ": {
+    "female": "e05be01497a7b824043d8459943371e9-female.wav",
+    "male": "e05be01497a7b824043d8459943371e9-male.wav"
+  },
+  "にがみ": {
+    "female": "08bef9c5a13529d918a63e441673eff5-female.wav",
+    "male": "08bef9c5a13529d918a63e441673eff5-male.wav"
+  },
+  "あまみ": {
+    "female": "d8089aa189ec12d6249f00d168cf7485-female.wav",
+    "male": "d8089aa189ec12d6249f00d168cf7485-male.wav"
+  },
+  "かおり": {
+    "female": "591b392c86543b84938f9d6c8535ade1-female.wav",
+    "male": "591b392c86543b84938f9d6c8535ade1-male.wav"
+  },
+  "ふるーてぃー": {
+    "female": "1d929a8952f21c6b35ed3057258e807c-female.wav",
+    "male": "1d929a8952f21c6b35ed3057258e807c-male.wav"
+  },
+  "ふうみ": {
+    "female": "7dd6a7e3bd43bb459fefe262d72407ad-female.wav",
+    "male": "7dd6a7e3bd43bb459fefe262d72407ad-male.wav"
+  },
+  "あとあじ": {
+    "female": "007b431d8fe38cda2ab5d412576ac22c-female.wav",
+    "male": "007b431d8fe38cda2ab5d412576ac22c-male.wav"
+  },
+  "よいん": {
+    "female": "ed640e0d74d5bf674f0abaacf5b09932-female.wav",
+    "male": "ed640e0d74d5bf674f0abaacf5b09932-male.wav"
+  },
+  "はなやか": {
+    "female": "0427225c928499d44a0bbbaf0e3a1977-female.wav",
+    "male": "0427225c928499d44a0bbbaf0e3a1977-male.wav"
+  },
+  "かふぇ": {
+    "female": "2ecc49f662049479ddeafcfe007a7f8b-female.wav",
+    "male": "2ecc49f662049479ddeafcfe007a7f8b-male.wav"
+  },
+  "きっさてん": {
+    "female": "b0675a7c610dc1b84845830a0de507d1-female.wav",
+    "male": "b0675a7c610dc1b84845830a0de507d1-male.wav"
+  },
+  "ばりすた": {
+    "female": "224d28d23f554a028cfa307cbc837690-female.wav",
+    "male": "224d28d23f554a028cfa307cbc837690-male.wav"
+  },
+  "ばいせんじょ": {
+    "female": "462b0a4d96fd32c1aea6c059ef8e2e93-female.wav",
+    "male": "462b0a4d96fd32c1aea6c059ef8e2e93-male.wav"
+  },
+  "のみくらべせっと": {
+    "female": "8932ae2bcf6fd309195cec13e08a2665-female.wav",
+    "male": "8932ae2bcf6fd309195cec13e08a2665-male.wav"
+  },
+  "こーひーおまかせ": {
+    "female": "05d043eca6f53e68ff3596ea90db75f4-female.wav",
+    "male": "05d043eca6f53e68ff3596ea90db75f4-male.wav"
+  },
+  "おすすめ": {
+    "female": "a0415844ff4a544a507e9b561b914bbe-female.wav",
+    "male": "a0415844ff4a544a507e9b561b914bbe-male.wav"
+  },
+  "わいん": {
+    "female": "ee897597a19d77c7f0a05ef617d06970-female.wav",
+    "male": "ee897597a19d77c7f0a05ef617d06970-male.wav"
+  },
+  "あかわいん": {
+    "female": "8b58b5cbd51d991467de5b3f90145f9a-female.wav",
+    "male": "8b58b5cbd51d991467de5b3f90145f9a-male.wav"
+  },
+  "しろわいん": {
+    "female": "a743bb67e5a9f6ce685bee51bb50d0d6-female.wav",
+    "male": "a743bb67e5a9f6ce685bee51bb50d0d6-male.wav"
+  },
+  "ろぜ": {
+    "female": "964c6e50c9449c841738817e16605094-female.wav",
+    "male": "964c6e50c9449c841738817e16605094-male.wav"
+  },
+  "すぱーくりんぐわいん": {
+    "female": "fb2996cdebda2c0f878abae3d283ac04-female.wav",
+    "male": "fb2996cdebda2c0f878abae3d283ac04-male.wav"
+  },
+  "しゃんぱん": {
+    "female": "5f0aaec4e3bcc877de4a49579dabd547-female.wav",
+    "male": "5f0aaec4e3bcc877de4a49579dabd547-male.wav"
+  },
+  "あまくち": {
+    "female": "1351624b5414872ee4d771c71248ff42-female.wav",
+    "male": "1351624b5414872ee4d771c71248ff42-male.wav"
+  },
+  "ぐらすわいん": {
+    "female": "ed18fdc059283a7ae3cfd75cbc0b5b68-female.wav",
+    "male": "ed18fdc059283a7ae3cfd75cbc0b5b68-male.wav"
+  },
+  "しいん": {
+    "female": "d70f3c3b18485b7fa81ce961f16eb4f4-female.wav",
+    "male": "d70f3c3b18485b7fa81ce961f16eb4f4-male.wav"
+  },
+  "ういすきー": {
+    "female": "8dfd9fa958d96b65b3d0ff221633cd76-female.wav",
+    "male": "8dfd9fa958d96b65b3d0ff221633cd76-male.wav"
+  },
+  "はいぼーる": {
+    "female": "58a0d85bf28930f9fb350858f48b5e2a-female.wav",
+    "male": "58a0d85bf28930f9fb350858f48b5e2a-male.wav"
+  },
+  "みずわり": {
+    "female": "1c1fa32d7987e95b1e13809c5e14f270-female.wav",
+    "male": "1c1fa32d7987e95b1e13809c5e14f270-male.wav"
+  },
+  "おゆわり": {
+    "female": "8d6569e30e1d35e184412b5cadcfcbb1-female.wav",
+    "male": "8d6569e30e1d35e184412b5cadcfcbb1-male.wav"
+  },
+  "すとれーと": {
+    "female": "851feef41cf3a1f8133b86d16119cfbd-female.wav",
+    "male": "851feef41cf3a1f8133b86d16119cfbd-male.wav"
+  },
+  "ちぇいさー": {
+    "female": "e292427e50b01fb202d3fe78d45425c8-female.wav",
+    "male": "e292427e50b01fb202d3fe78d45425c8-male.wav"
+  },
+  "しんぐるもると": {
+    "female": "52314c7f1aea0d313a1c3c66b432d3d2-female.wav",
+    "male": "52314c7f1aea0d313a1c3c66b432d3d2-male.wav"
+  },
+  "ぶれんでっど": {
+    "female": "71cebb0577d3e095c542e27535433c52-female.wav",
+    "male": "71cebb0577d3e095c542e27535433c52-male.wav"
+  },
+  "びーる": {
+    "female": "ac6974c0b145c1c99055e531f078dba2-female.wav",
+    "male": "ac6974c0b145c1c99055e531f078dba2-male.wav"
+  },
+  "びんびーる": {
+    "female": "e0088ef2b14c8284faa4278aeae6731e-female.wav",
+    "male": "e0088ef2b14c8284faa4278aeae6731e-male.wav"
+  },
+  "ちゅうじょっき": {
+    "female": "0daa1ce5477ed1f9366bdd150d77d860-female.wav",
+    "male": "0daa1ce5477ed1f9366bdd150d77d860-male.wav"
+  },
+  "なまちゅう": {
+    "female": "2a7337796c27c4390125f2f0937e2d05-female.wav",
+    "male": "2a7337796c27c4390125f2f0937e2d05-male.wav"
+  },
+  "くらふとびーる": {
+    "female": "11386efa1ca5f4080bfba290808a4bac-female.wav",
+    "male": "11386efa1ca5f4080bfba290808a4bac-male.wav"
+  },
+  "とりあえずなま": {
+    "female": "cd8914e631334dd9bc2ec169335d0edb-female.wav",
+    "male": "cd8914e631334dd9bc2ec169335d0edb-male.wav"
+  },
+  "かんぱい": {
+    "female": "bb911be8db1cadf38f5997580463fa64-female.wav",
+    "male": "bb911be8db1cadf38f5997580463fa64-male.wav"
+  },
+  "おとおし": {
+    "female": "afa4c41b6fda833edb3a5a6b69a6c20f-female.wav",
+    "male": "afa4c41b6fda833edb3a5a6b69a6c20f-male.wav"
+  },
+  "にぎりずし": {
+    "female": "2740e065b1840acf2b10fcefb63ca432-female.wav",
+    "male": "2740e065b1840acf2b10fcefb63ca432-male.wav"
+  },
+  "まきずし": {
+    "female": "22e0c43fff2a2ce98cbf141a3c294cdc-female.wav",
+    "male": "22e0c43fff2a2ce98cbf141a3c294cdc-male.wav"
+  },
+  "さしみ": {
+    "female": "7f516e0510a5d2ba007d251771a6d346-female.wav",
+    "male": "7f516e0510a5d2ba007d251771a6d346-male.wav"
+  },
+  "ねた": {
+    "female": "8c23fa1a7ab4ecd58d33344293469d7c-female.wav",
+    "male": "8c23fa1a7ab4ecd58d33344293469d7c-male.wav"
+  },
+  "しゃり": {
+    "female": "7f6c22ca8943ebc8e34cfb29f4d5f1a2-female.wav",
+    "male": "7f6c22ca8943ebc8e34cfb29f4d5f1a2-male.wav"
+  },
+  "がり": {
+    "female": "efbf5006c1542b885ef1f0f835257cbd-female.wav",
+    "male": "efbf5006c1542b885ef1f0f835257cbd-male.wav"
+  },
+  "むらさき": {
+    "female": "92650a6ab2767abd7f489e3716f54780-female.wav",
+    "male": "92650a6ab2767abd7f489e3716f54780-male.wav"
+  },
+  "あがり": {
+    "female": "d9fc992dc1e2c51b7913dcc4e5157aa4-female.wav",
+    "male": "d9fc992dc1e2c51b7913dcc4e5157aa4-male.wav"
+  },
+  "おあいそ": {
+    "female": "0337006b50a4893ae9ffe117a63b91bc-female.wav",
+    "male": "0337006b50a4893ae9ffe117a63b91bc-male.wav"
+  },
+  "おまかせ": {
+    "female": "dce6b9f599fec44b89db269a46a5ed36-female.wav",
+    "male": "dce6b9f599fec44b89db269a46a5ed36-male.wav"
+  },
+  "おこのみ": {
+    "female": "a5f1ee9aa745d5d383f693e53cffcd93-female.wav",
+    "male": "a5f1ee9aa745d5d383f693e53cffcd93-male.wav"
+  },
+  "まぐろ": {
+    "female": "03cb74ff5d388328dc72f473a77cac68-female.wav",
+    "male": "03cb74ff5d388328dc72f473a77cac68-male.wav"
+  },
+  "ちゅうとろ": {
+    "female": "101a8b6273fffddd764760e7b27b7534-female.wav",
+    "male": "101a8b6273fffddd764760e7b27b7534-male.wav"
+  },
+  "おおとろ": {
+    "female": "b5d4fe775210321ccdcde7715943cd45-female.wav",
+    "male": "b5d4fe775210321ccdcde7715943cd45-male.wav"
+  },
+  "あかみ": {
+    "female": "74ce09d0b05973b2a3a90fc8cc10a408-female.wav",
+    "male": "74ce09d0b05973b2a3a90fc8cc10a408-male.wav"
+  },
+  "しろみ": {
+    "female": "76ee7df7d7bf5c6a52762eda87677ea1-female.wav",
+    "male": "76ee7df7d7bf5c6a52762eda87677ea1-male.wav"
+  },
+  "ひかりもの": {
+    "female": "0d4714b5e2e0122ee22285b9086d2925-female.wav",
+    "male": "0d4714b5e2e0122ee22285b9086d2925-male.wav"
+  },
+  "ぶり": {
+    "female": "6ae8a2d86acc2bde78018360e78df6b7-female.wav",
+    "male": "6ae8a2d86acc2bde78018360e78df6b7-male.wav"
+  },
+  "ひらめ": {
+    "female": "a5067577e25304cc71d18f8eac07a57e-female.wav",
+    "male": "a5067577e25304cc71d18f8eac07a57e-male.wav"
+  },
+  "えんがわ": {
+    "female": "9ae366aae958eec5e787d847d18a87df-female.wav",
+    "male": "9ae366aae958eec5e787d847d18a87df-male.wav"
+  },
+  "すずき": {
+    "female": "d4b3e8e8326b37de87d6fbdc1f199794-female.wav",
+    "male": "d4b3e8e8326b37de87d6fbdc1f199794-male.wav"
+  },
+  "あまえび": {
+    "female": "fff7c17c8aeb46045a2efcda9f5e93e5-female.wav",
+    "male": "fff7c17c8aeb46045a2efcda9f5e93e5-male.wav"
+  },
+  "くるまえび": {
+    "female": "6e0cc62c5b81800975fa17de876dd0e5-female.wav",
+    "male": "6e0cc62c5b81800975fa17de876dd0e5-male.wav"
+  },
+  "かずのこ": {
+    "female": "e3fe510cd60f6986dd1d265be099fa38-female.wav",
+    "male": "e3fe510cd60f6986dd1d265be099fa38-male.wav"
+  },
+  "とびこ": {
+    "female": "dc5f33626fa18fd2e462b687952e236a-female.wav",
+    "male": "dc5f33626fa18fd2e462b687952e236a-male.wav"
+  },
+  "かにかま": {
+    "female": "8db3571501f3d01c748486305a6f603c-female.wav",
+    "male": "8db3571501f3d01c748486305a6f603c-male.wav"
+  },
+  "ぎょうざ": {
+    "female": "981b8d5bcb9bd7b37a1b6420b6c5a9ab-female.wav",
+    "male": "981b8d5bcb9bd7b37a1b6420b6c5a9ab-male.wav"
+  },
+  "やきぎょうざ": {
+    "female": "a3d5b55febf444e2481fda5cd2b87f82-female.wav",
+    "male": "a3d5b55febf444e2481fda5cd2b87f82-male.wav"
+  },
+  "すいぎょうざ": {
+    "female": "af095ce154dd3ae271e410e652ea1775-female.wav",
+    "male": "af095ce154dd3ae271e410e652ea1775-male.wav"
+  },
+  "あげぎょうざ": {
+    "female": "701b9f511885514415249b487f8c874c-female.wav",
+    "male": "701b9f511885514415249b487f8c874c-male.wav"
+  },
+  "はねつきぎょうざ": {
+    "female": "77ef25cb37258ecc76ad7d4038b7c920-female.wav",
+    "male": "77ef25cb37258ecc76ad7d4038b7c920-male.wav"
+  },
+  "たれ": {
+    "female": "63ebe17ed5a41b5809b594ed3b22478f-female.wav",
+    "male": "63ebe17ed5a41b5809b594ed3b22478f-male.wav"
+  },
+  "ぽんず": {
+    "female": "13db1d7039f209a70c191d8980a00648-female.wav",
+    "male": "13db1d7039f209a70c191d8980a00648-male.wav"
+  },
+  "らーゆ": {
+    "female": "867d658570ec6cf7d14900dfc98c3aaf-female.wav",
+    "male": "867d658570ec6cf7d14900dfc98c3aaf-male.wav"
+  },
+  "す": {
+    "female": "052cd511c8cd42254944a6ace1813f84-female.wav",
+    "male": "052cd511c8cd42254944a6ace1813f84-male.wav"
+  },
+  "しょうゆ": {
+    "female": "01dc3789ac17c0d9301d6bef2ae3c98c-female.wav",
+    "male": "01dc3789ac17c0d9301d6bef2ae3c98c-male.wav"
+  },
+  "とんこつ": {
+    "female": "658e646adb03d57339f36fe34ccfd7e5-female.wav",
+    "male": "658e646adb03d57339f36fe34ccfd7e5-male.wav"
+  },
+  "みそ": {
+    "female": "0a6d6ad489d10603c7335ad18ffa4319-female.wav",
+    "male": "0a6d6ad489d10603c7335ad18ffa4319-male.wav"
+  },
+  "しお": {
+    "female": "24e49afa20b8b2cc19e72acb1ee35d6d-female.wav",
+    "male": "24e49afa20b8b2cc19e72acb1ee35d6d-male.wav"
+  },
+  "いえけい": {
+    "female": "ce083244822a72b1eb739cece560668c-female.wav",
+    "male": "ce083244822a72b1eb739cece560668c-male.wav"
+  },
+  "つけめん": {
+    "female": "04e4503a74052c5a2dc85363c2d4c1a6-female.wav",
+    "male": "04e4503a74052c5a2dc85363c2d4c1a6-male.wav"
+  },
+  "めんのかたさ": {
+    "female": "3ab032a4a8621af1a31d3581b5e41abd-female.wav",
+    "male": "3ab032a4a8621af1a31d3581b5e41abd-male.wav"
+  },
+  "こってり": {
+    "female": "0f5c40f427d303bc522e5873a3793799-female.wav",
+    "male": "0f5c40f427d303bc522e5873a3793799-male.wav"
+  },
+  "あっさり": {
+    "female": "d13c442d9918004041d3454b4689a091-female.wav",
+    "male": "d13c442d9918004041d3454b4689a091-male.wav"
+  },
+  "かえだま": {
+    "female": "543cfb9aa6daea9497c66dd722a2fc2a-female.wav",
+    "male": "543cfb9aa6daea9497c66dd722a2fc2a-male.wav"
+  },
+  "おおもり": {
+    "female": "996b555b1e9172dd321826b93865f9f9-female.wav",
+    "male": "996b555b1e9172dd321826b93865f9f9-male.wav"
+  },
+  "にんにく": {
+    "female": "d97255a9ff6923693d0e49490de6540c-female.wav",
+    "male": "d97255a9ff6923693d0e49490de6540c-male.wav"
+  },
+  "ちゃーしゅー": {
+    "female": "82fe25f46d0040218850b731939eb936-female.wav",
+    "male": "82fe25f46d0040218850b731939eb936-male.wav"
+  },
+  "あじたま": {
+    "female": "367b9cb5a660e51563dd977de98adf8b-female.wav",
+    "male": "367b9cb5a660e51563dd977de98adf8b-male.wav"
+  },
+  "めんま": {
+    "female": "8a71cb8a522652dd4565b86b45b7010f-female.wav",
+    "male": "8a71cb8a522652dd4565b86b45b7010f-male.wav"
+  },
+  "のり": {
+    "female": "9b5ce4755dfd037ea179340b57c3b9a7-female.wav",
+    "male": "9b5ce4755dfd037ea179340b57c3b9a7-male.wav"
+  },
+  "ねぎ": {
+    "female": "0fc04e4a324dccaad619ed42223edf87-female.wav",
+    "male": "0fc04e4a324dccaad619ed42223edf87-male.wav"
+  },
+  "しょっけんき/けんばいき": {
+    "female": "1320d3300b960bf6ba1406c38ce0ace5-female.wav",
+    "male": "1320d3300b960bf6ba1406c38ce0ace5-male.wav"
+  },
+  "かれーらいす": {
+    "female": "e85929ddf06c3462f01235d42a9cab0d-female.wav",
+    "male": "e85929ddf06c3462f01235d42a9cab0d-male.wav"
+  },
+  "るー": {
+    "female": "806623b8c55348dcb22c9754c79171c1-female.wav",
+    "male": "806623b8c55348dcb22c9754c79171c1-male.wav"
+  },
+  "すーぷかれー": {
+    "female": "334c297cd2dc5f73eaaf2abb44e8e28c-female.wav",
+    "male": "334c297cd2dc5f73eaaf2abb44e8e28c-male.wav"
+  },
+  "とっぴんぐ": {
+    "female": "ef5ab724184ee670f8a533984543b047-female.wav",
+    "male": "ef5ab724184ee670f8a533984543b047-male.wav"
+  },
+  "かつかれー": {
+    "female": "2b3e56915ebeb2aea75bb99d8dbae5fd-female.wav",
+    "male": "2b3e56915ebeb2aea75bb99d8dbae5fd-male.wav"
+  },
+  "てんぷら": {
+    "female": "66031e28443d0e39c6ffec42186662e0-female.wav",
+    "male": "66031e28443d0e39c6ffec42186662e0-male.wav"
+  },
+  "やきとり": {
+    "female": "7c4e41f2c5ac5a553fb7c7a60e7e656c-female.wav",
+    "male": "7c4e41f2c5ac5a553fb7c7a60e7e656c-male.wav"
+  },
+  "もも": {
+    "female": "c8820f3ec4a016be95d287ad576d50dd-female.wav",
+    "male": "c8820f3ec4a016be95d287ad576d50dd-male.wav"
+  },
+  "つくね": {
+    "female": "d80ca91947a0a209647b3c9292e15655-female.wav",
+    "male": "d80ca91947a0a209647b3c9292e15655-male.wav"
+  },
+  "ねぎま": {
+    "female": "20686ee44f3182080dfe9dc9d51a6778-female.wav",
+    "male": "20686ee44f3182080dfe9dc9d51a6778-male.wav"
+  },
+  "ればー": {
+    "female": "38b64b7e2fa58d8187b7ef82d8617212-female.wav",
+    "male": "38b64b7e2fa58d8187b7ef82d8617212-male.wav"
+  },
+  "ぎゅうどん": {
+    "female": "acf28e80a81bd46609e5725a2bd4ff83-female.wav",
+    "male": "acf28e80a81bd46609e5725a2bd4ff83-male.wav"
+  },
+  "かつどん": {
+    "female": "18bb17a61091fb90e86f66e6a8ac4838-female.wav",
+    "male": "18bb17a61091fb90e86f66e6a8ac4838-male.wav"
+  },
+  "おやこどん": {
+    "female": "d76d2be59466fb276a1332434f397e29-female.wav",
+    "male": "d76d2be59466fb276a1332434f397e29-male.wav"
+  },
+  "てんどん": {
+    "female": "564f1901d9db4d38f162b90f268f0297-female.wav",
+    "male": "564f1901d9db4d38f162b90f268f0297-male.wav"
+  },
+  "うどん": {
+    "female": "6aa7c7970282f8cc61aa0882336d6aed-female.wav",
+    "male": "6aa7c7970282f8cc61aa0882336d6aed-male.wav"
+  },
+  "そば": {
+    "female": "ea88ab205a9dd531591327f42a2e280f-female.wav",
+    "male": "ea88ab205a9dd531591327f42a2e280f-male.wav"
+  },
+  "おこのみやき": {
+    "female": "b402e8b89a36add16321b38dac20daaf-female.wav",
+    "male": "b402e8b89a36add16321b38dac20daaf-male.wav"
+  },
+  "たこやき": {
+    "female": "92a0ede3c55f8a6e90def6ab07a470b2-female.wav",
+    "male": "92a0ede3c55f8a6e90def6ab07a470b2-male.wav"
+  },
+  "おでん": {
+    "female": "67ebf9f18e3939921d486fa4dd38cf36-female.wav",
+    "male": "67ebf9f18e3939921d486fa4dd38cf36-male.wav"
+  },
+  "やきにく": {
+    "female": "44ca3ce1f702e3162b780d79bb934e7f-female.wav",
+    "male": "44ca3ce1f702e3162b780d79bb934e7f-male.wav"
+  },
+  "しゃぶしゃぶ": {
+    "female": "e70c0af90742164ef4b97cb7938421cc-female.wav",
+    "male": "e70c0af90742164ef4b97cb7938421cc-male.wav"
+  },
+  "すきやき": {
+    "female": "ed9c97519f97f5d15ac28fdae1cee387-female.wav",
+    "male": "ed9c97519f97f5d15ac28fdae1cee387-male.wav"
+  },
+  "みそしる": {
+    "female": "1e2db2b1ce8fe5f9cc79310cdf1476e9-female.wav",
+    "male": "1e2db2b1ce8fe5f9cc79310cdf1476e9-male.wav"
+  },
+  "おにぎり": {
+    "female": "aa39a4e8a517982f57416d4cc39045be-female.wav",
+    "male": "aa39a4e8a517982f57416d4cc39045be-male.wav"
+  },
+  "とうふ": {
+    "female": "e8fcab5150732dad20037de96498bfec-female.wav",
+    "male": "e8fcab5150732dad20037de96498bfec-male.wav"
+  },
+  "つけもの": {
+    "female": "37d1ebf1503cfd33eb21b53c194ab051-female.wav",
+    "male": "37d1ebf1503cfd33eb21b53c194ab051-male.wav"
+  },
+  "じどうはんばいき/じはんき": {
+    "female": "3b8b6d5de705b1df660756049698283d-female.wav",
+    "male": "3b8b6d5de705b1df660756049698283d-male.wav"
+  },
+  "うりきれ": {
+    "female": "86b9b8aed1d3e07209f916865c0f727f-female.wav",
+    "male": "86b9b8aed1d3e07209f916865c0f727f-male.wav"
+  },
+  "じゅんびちゅう": {
+    "female": "091d035aa29c3f8522834419916e958d-female.wav",
+    "male": "091d035aa29c3f8522834419916e958d-male.wav"
+  },
+  "おつり": {
+    "female": "0698408dc34182a9ea1ce85ce2d27cff-female.wav",
+    "male": "0698408dc34182a9ea1ce85ce2d27cff-male.wav"
+  },
+  "こうか": {
+    "female": "35e094801fba0e6ce26077b0695b46dc-female.wav",
+    "male": "35e094801fba0e6ce26077b0695b46dc-male.wav"
+  },
+  "ぺっとぼとる": {
+    "female": "285c3317b605852125f3c31450e3f732-female.wav",
+    "male": "285c3317b605852125f3c31450e3f732-male.wav"
+  },
+  "かんこーひー": {
+    "female": "4b6e1833d2171a56a936bc0cd6c463c3-female.wav",
+    "male": "4b6e1833d2171a56a936bc0cd6c463c3-male.wav"
+  },
+  "りょくちゃ": {
+    "female": "c326c9cefbdc86966de7bdd25ae8b059-female.wav",
+    "male": "c326c9cefbdc86966de7bdd25ae8b059-male.wav"
+  },
+  "むぎちゃ": {
+    "female": "85ea1945012cf2d23964fc82f6e703e7-female.wav",
+    "male": "85ea1945012cf2d23964fc82f6e703e7-male.wav"
+  },
+  "みねらるうぉーたー": {
+    "female": "0104cfae9f2cd2d310d3727d3fa42ea5-female.wav",
+    "male": "0104cfae9f2cd2d310d3727d3fa42ea5-male.wav"
+  },
+  "こーひー（びとう/むとう）": {
+    "female": "5ddbc130fb4513a2bb25e876277d7181-female.wav",
+    "male": "5ddbc130fb4513a2bb25e876277d7181-male.wav"
+  },
+  "やさいじゅーす": {
+    "female": "477973674e9ebbc03da6f74cec7b5aef-female.wav",
+    "male": "477973674e9ebbc03da6f74cec7b5aef-male.wav"
+  },
+  "たんさん": {
+    "female": "fc9626456368bec67aac1d0bfe9d9abd-female.wav",
+    "male": "fc9626456368bec67aac1d0bfe9d9abd-male.wav"
+  },
+  "すぽーつどりんく": {
+    "female": "8503694752f5601718e31cce93300cf7-female.wav",
+    "male": "8503694752f5601718e31cce93300cf7-male.wav"
+  },
+  "えなじーどりんく": {
+    "female": "cd0e2dc2fd82d891fa47105d277ec0b5-female.wav",
+    "male": "cd0e2dc2fd82d891fa47105d277ec0b5-male.wav"
+  },
+  "とうにゅう": {
+    "female": "7f2d05247b0e118ac1ad981235e00043-female.wav",
+    "male": "7f2d05247b0e118ac1ad981235e00043-male.wav"
+  },
+  "こーんぽたーじゅ": {
+    "female": "b83d79bab419ef02f1610061cf404ce6-female.wav",
+    "male": "b83d79bab419ef02f1610061cf404ce6-male.wav"
+  },
+  "ここあ": {
+    "female": "34716d0403744204e5d1a2d01a2e28f7-female.wav",
+    "male": "34716d0403744204e5d1a2d01a2e28f7-male.wav"
+  },
+  "これをおねがいします": {
+    "female": "ad6d49aebca5c26dbb5a50a8e96c6c59-female.wav",
+    "male": "ad6d49aebca5c26dbb5a50a8e96c6c59-male.wav"
+  },
+  "おかいけいおねがいします": {
+    "female": "4f0a32256df9c2fd1db6bd19995ae8f1-female.wav",
+    "male": "4f0a32256df9c2fd1db6bd19995ae8f1-male.wav"
+  },
+  "べつべつで": {
+    "female": "c9d661cc383ac293147c3d52b471a7aa-female.wav",
+    "male": "c9d661cc383ac293147c3d52b471a7aa-male.wav"
+  },
+  "いっしょで": {
+    "female": "22e3841f5784e853c5ca484c94a1822f-female.wav",
+    "male": "22e3841f5784e853c5ca484c94a1822f-male.wav"
+  },
+  "かーどではらえますか": {
+    "female": "2cc728e2bee2bcce9f9074e537273c56-female.wav",
+    "male": "2cc728e2bee2bcce9f9074e537273c56-male.wav"
+  },
+  "げんきん": {
+    "female": "f1c8de417e46c037800cdd552537189c-female.wav",
+    "male": "f1c8de417e46c037800cdd552537189c-male.wav"
+  },
+  "もちかえりできますか": {
+    "female": "274ad34f163c4ee1a72ff5ab1d9e8d32-female.wav",
+    "male": "274ad34f163c4ee1a72ff5ab1d9e8d32-male.wav"
+  },
+  "ていしょく": {
+    "female": "b5ddcfebad6823c60c862c97b9c4feae-female.wav",
+    "male": "b5ddcfebad6823c60c862c97b9c4feae-male.wav"
+  },
+  "たんぴん": {
+    "female": "713026df765ea7bd4ca224f61bacd43e-female.wav",
+    "male": "713026df765ea7bd4ca224f61bacd43e-male.wav"
+  },
+  "せっと": {
+    "female": "db21a705feb4204bb6c55ffb163e170f-female.wav",
+    "male": "db21a705feb4204bb6c55ffb163e170f-male.wav"
+  },
+  "ひがわり": {
+    "female": "84093e5d3751657d93d97cc53f67dbea-female.wav",
+    "male": "84093e5d3751657d93d97cc53f67dbea-male.wav"
+  },
+  "ほんじつ": {
+    "female": "ad3981005bc4ac96a1024c8d3c7716f7-female.wav",
+    "male": "ad3981005bc4ac96a1024c8d3c7716f7-male.wav"
+  },
+  "きせつ": {
+    "female": "cc772da3375f8001911dde529f3d1aba-female.wav",
+    "male": "cc772da3375f8001911dde529f3d1aba-male.wav"
+  },
+  "おかわりじゆう": {
+    "female": "70bf338fee0ea3900a67a7aa2332413e-female.wav",
+    "male": "70bf338fee0ea3900a67a7aa2332413e-male.wav"
+  },
+  "からい/あまい/しょっぱい/すっぱい/にがい": {
+    "female": "88aeec80752dd8592b0e6f09c14b3e6c-female.wav",
+    "male": "88aeec80752dd8592b0e6f09c14b3e6c-male.wav"
+  },
+  "つめたい/あたたかい/あつい": {
+    "female": "b80821c723cea6511e6da1e26a41f6aa-female.wav",
+    "male": "b80821c723cea6511e6da1e26a41f6aa-male.wav"
+  },
+  "やき/に/あげ/なま": {
+    "female": "a34d17f373d9da97b53e035940fb7c13-female.wav",
+    "male": "a34d17f373d9da97b53e035940fb7c13-male.wav"
+  },
+  "もちかえり": {
+    "female": "ffa3495b9a0f0eee57df6c3385e5736a-female.wav",
+    "male": "ffa3495b9a0f0eee57df6c3385e5736a-male.wav"
+  },
+  "にく/とりにく/ぶたにく/ぎゅうにく/さかな/やさい/たまご": {
+    "female": "205acdabc23e789be08427804788c81e-female.wav",
+    "male": "205acdabc23e789be08427804788c81e-male.wav"
+  },
+  "あれるぎー": {
+    "female": "02f3892c8dd1e38170ad124d487d249e-female.wav",
+    "male": "02f3892c8dd1e38170ad124d487d249e-male.wav"
+  },
+  "〇〇ははいっていますか": {
+    "female": "43f68ef0e847317e0e653b98894f5a1a-female.wav",
+    "male": "43f68ef0e847317e0e653b98894f5a1a-male.wav"
+  },
+  "〇〇あれるぎーがあります": {
+    "female": "4ee4b0f0a20b3df11ad026d3d7fc563f-female.wav",
+    "male": "4ee4b0f0a20b3df11ad026d3d7fc563f-male.wav"
+  },
+  "〇〇はたべられません": {
+    "female": "7b02b0d5f5c0b5e73e9848203886b778-female.wav",
+    "male": "7b02b0d5f5c0b5e73e9848203886b778-male.wav"
+  },
+  "ひがしぐち/にしぐち/みなみぐち/きたぐち": {
+    "female": "9d1b3e01ff8cad9572af4a02082a88c8-female.wav",
+    "male": "9d1b3e01ff8cad9572af4a02082a88c8-male.wav"
+  },
+  "かいさつ": {
+    "female": "291fa2f1b555017013c7adf846e8b26a-female.wav",
+    "male": "291fa2f1b555017013c7adf846e8b26a-male.wav"
+  },
+  "のりかえ": {
+    "female": "0810ca4b05eae163ef44e13ab0c51301-female.wav",
+    "male": "0810ca4b05eae163ef44e13ab0c51301-male.wav"
+  },
+  "ほーむ": {
+    "female": "af1c27672e01447bb476fcb09bb328be-female.wav",
+    "male": "af1c27672e01447bb476fcb09bb328be-male.wav"
+  },
+  "のりば": {
+    "female": "f753ae436953741236c51cd1ceca48df-female.wav",
+    "male": "f753ae436953741236c51cd1ceca48df-male.wav"
+  },
+  "うんちん": {
+    "female": "f4500ffba4f76143c72d0c5ac7872775-female.wav",
+    "male": "f4500ffba4f76143c72d0c5ac7872775-male.wav"
+  },
+  "じゆうせき": {
+    "female": "0e2f6519403c49331e0bf3612d7e6a2b-female.wav",
+    "male": "0e2f6519403c49331e0bf3612d7e6a2b-male.wav"
+  },
+  "していせき": {
+    "female": "08f7f6c365f1e2c0639c3dd561837373-female.wav",
+    "male": "08f7f6c365f1e2c0639c3dd561837373-male.wav"
+  },
+  "かくえきていしゃ/ふつう": {
+    "female": "cd001e1b038903a47e9e2cc8ae5967c3-female.wav",
+    "male": "cd001e1b038903a47e9e2cc8ae5967c3-male.wav"
+  },
+  "かいそく": {
+    "female": "06ff72f6bacfc60a2f2929c3b89747d3-female.wav",
+    "male": "06ff72f6bacfc60a2f2929c3b89747d3-male.wav"
+  },
+  "とっきゅう": {
+    "female": "0ce13607072011ece5e30f6111796128-female.wav",
+    "male": "0ce13607072011ece5e30f6111796128-male.wav"
+  },
+  "あいしーかーど": {
+    "female": "caefe903dd1aabf5366b6177b3aa666a-female.wav",
+    "male": "caefe903dd1aabf5366b6177b3aa666a-male.wav"
+  },
+  "こいんろっかー": {
+    "female": "4e574f14d5c1ee967be159eb53f09784-female.wav",
+    "male": "4e574f14d5c1ee967be159eb53f09784-male.wav"
+  },
+  "きけん": {
+    "female": "ce5b64053e48bc1f193f9fa10540491b-female.wav",
+    "male": "ce5b64053e48bc1f193f9fa10540491b-male.wav"
+  },
+  "ひじょうぐち": {
+    "female": "805145fc6bfb0cf320f9396b2ffb2ced-female.wav",
+    "male": "805145fc6bfb0cf320f9396b2ffb2ced-male.wav"
+  },
+  "とまれ": {
+    "female": "15ed041eea68bd7625b4b82180f3cbf1-female.wav",
+    "male": "15ed041eea68bd7625b4b82180f3cbf1-male.wav"
+  },
+  "きんえん": {
+    "female": "1353112fe3502a21a8234fbe706adc6c-female.wav",
+    "male": "1353112fe3502a21a8234fbe706adc6c-male.wav"
+  },
+  "あんない": {
+    "female": "c6aafdb2c7539dd45c7233f000f40d5c-female.wav",
+    "male": "c6aafdb2c7539dd45c7233f000f40d5c-male.wav"
+  },
+  "おてあらい/といれおとこ/おんな": {
+    "female": "6f4ffaa253d2956e4efa0120d9325db9-female.wav",
+    "male": "6f4ffaa253d2956e4efa0120d9325db9-male.wav"
+  },
+  "みぎ/ひだり/うえ/した": {
+    "female": "5b73ddb2df4b693ad3fa0b2563ca7c68-female.wav",
+    "male": "5b73ddb2df4b693ad3fa0b2563ca7c68-male.wav"
+  },
+  "あたためますか→おねがいします/だいじょうぶです": {
+    "female": "6707678bac405d8c890141172ca70513-female.wav",
+    "male": "6707678bac405d8c890141172ca70513-male.wav"
+  },
+  "ふくろはごりようですか→いりません/だいじょうぶです": {
+    "female": "9bbf6284d01dcacad465e381ad038e82-female.wav",
+    "male": "9bbf6284d01dcacad465e381ad038e82-male.wav"
+  },
+  "おはし/すぷーん/ふぉーく/すとろー": {
+    "female": "9bf40f22561b89b3ce5a127dc55d3002-female.wav",
+    "male": "9bf40f22561b89b3ce5a127dc55d3002-male.wav"
+  },
+  "ぽいんとかーど": {
+    "female": "5017825253ee79f350bcbf5c1ae98ba8-female.wav",
+    "male": "5017825253ee79f350bcbf5c1ae98ba8-male.wav"
+  },
+  "れしーと": {
+    "female": "380e7568a984c9b0d5050f7ecd157150-female.wav",
+    "male": "380e7568a984c9b0d5050f7ecd157150-male.wav"
+  },
+  "ちぇっくいん/ちぇっくあうと": {
+    "female": "1a21af76ee7ba50c2a87de5941c39d22-female.wav",
+    "male": "1a21af76ee7ba50c2a87de5941c39d22-male.wav"
+  },
+  "よやく": {
+    "female": "6c3512df97d513cf582005525d4c374c-female.wav",
+    "male": "6c3512df97d513cf582005525d4c374c-male.wav"
+  },
+  "ふろんと": {
+    "female": "8009607e9f55a763579329a258994ad3-female.wav",
+    "male": "8009607e9f55a763579329a258994ad3-male.wav"
+  },
+  "かぎ": {
+    "female": "9d2db8e42cc1296c3d54d06dc76b4ca0-female.wav",
+    "male": "9d2db8e42cc1296c3d54d06dc76b4ca0-male.wav"
   }
 }

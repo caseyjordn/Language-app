@@ -384,7 +384,15 @@
     body:has(.wkq) .lesson-review{order:2;flex:none;max-height:45%;overflow:auto;margin:0;border-radius:16px 16px 0 0}
     body:has(.wkq) .quiz-hero-top{position:relative;margin-bottom:10px;width:100%;max-width:none}
     body:has(.wkq) .feedback-msg:empty{display:none}
-    body:has(.wkq) .feedback-row{display:block}
+    body:has(.wkq) .quiz-hero.state-correct{background:var(--accent)}
+    body:has(.wkq) .wkq-screen:has(.state-incorrect){background:var(--color-incorrect)}
+    body:has(.wkq) .quiz-hero.state-incorrect{flex:0 0 auto;max-height:38%}
+    body:has(.wkq) .quiz-hero.state-incorrect .quiz-char{margin:8px 0 0}
+    body:has(.wkq) .quiz-hero.state-incorrect .quiz-char.fit1{font-size:min(44px, calc((100vw - 40px) / var(--n, 4)))}
+    body:has(.wkq) .lesson-review.visible{flex:1 1 auto;min-height:0;max-height:none;margin:10px 12px;border-radius:16px}
+    body:has(.wkq) .feedback-row{display:none}
+    body:has(.wkq) input.answer.correct{color:#fff}
+    body:has(.wkq) input.answer.incorrect{color:#fff}
     body:has(.wkq) .quiz-card{margin-bottom:0}
     body:has(.wkq) .quiz-hero-top .count{display:none}
     body:has(.wkq) .wkq-stats{display:flex;gap:14px;font-size:14px;font-weight:700}
@@ -400,8 +408,6 @@
     body:has(.wkq) .answer-row{background:#111;padding:10px 14px}
     body:has(.wkq) input.answer{border:none;color:#fff;text-align:center !important;font-size:20px;padding:10px 4px;-webkit-appearance:none;appearance:none}
     body:has(.wkq) input.answer::placeholder{color:rgba(255,255,255,.45)}
-    body:has(.wkq) input.answer.correct{color:#7CFFB2}
-    body:has(.wkq) input.answer.incorrect{color:#FF8FA3}
     body:has(.wkq) .answer-row .btn.check{background:#fff;color:#111}
     body:has(.wkq) .quiz-card .hint{display:none}
     body:has(.wkq) .feedback-row{margin:0;min-height:0}
@@ -5759,6 +5765,17 @@ function attachQuizHandlers() {
   // Check/Next button doesn't steal focus, so the box stays active between
   // pressing Check and moving on.
   checkBtn.addEventListener('mousedown', e => e.preventDefault());
+  // Tapping an audio button used to steal focus from the answer box and drop
+  // the keyboard. Stop the tap from taking focus, and re-focus right after
+  // the click (inside the gesture, so iOS allows it) as a backstop.
+  const screenEl = typeof document.querySelector === 'function' ? document.querySelector('.wkq-screen') : null;
+  if (screenEl) {
+    const isAudio = e => e.target && e.target.closest && e.target.closest('.audio-btn');
+    screenEl.addEventListener('mousedown', e => { if (isAudio(e)) e.preventDefault(); });
+    screenEl.addEventListener('click', e => {
+      if (isAudio(e) && document.activeElement !== input) input.focus({ preventScroll: true });
+    });
+  }
   const quitMenu = document.getElementById('quitMenu');
   const quitBtn = document.getElementById('quitBtn');
   if (quitBtn && quitMenu) {

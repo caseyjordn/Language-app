@@ -43,8 +43,13 @@ function pickSpeakerId(gender, text) {
   return pool[h % pool.length].id;
 }
 
+// MUST match normalizeAnswer in index.html, including the katakana -> hiragana
+// fold: the app looks audio up by this key, so a manifest entry written under
+// an unfolded katakana key (e.g. "ホテル") is never found and falls back to
+// robotic browser TTS.
 function normalizeAnswer(s) {
-  return String(s || '').trim().toLowerCase().replace(/[.,、。\s!！]/g, '');
+  return String(s || '').trim().toLowerCase().replace(/[.,、。\s!！]/g, '')
+    .replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
 }
 
 function hashFor(text) {
@@ -120,11 +125,29 @@ async function main() {
     (v.examples || []).forEach(e => { if (e.jp) texts.add(e.jp); });
   });
   KANJI.forEach(k => {
-    if (k.onyomi) texts.add(k.onyomi);
+    if (k.onyomi || k.kunyomi) texts.add(k.onyomi || k.kunyomi);
     (k.examples || []).forEach(e => { if (e.jp) texts.add(e.jp); });
   });
   (GRAMMAR || []).forEach(g => { if (g.example && g.example.jp) texts.add(g.example.jp); });
   SENTENCES.forEach(s => { if (s.jp) texts.add(s.jp); });
+
+  // Custom vocab (Duo / tourist / your own) lives in your account, not in
+  // index.html, so it has no audio unless we read it from exports here.
+  // Sources: files/casey-tier-and-category-update.json, tourist-vocab-output.json,
+  // plus any extra JSON paths passed on the command line (a full app export
+  // with a customVocab key, or a plain array of {reading}).
+  const customSources = [
+    path.join(__dirname, 'files', 'casey-tier-and-category-update.json'),
+    path.join(__dirname, 'tourist-vocab-output.json'),
+    ...process.argv.slice(2)
+  ];
+  customSources.forEach(f => {
+    try {
+      const j = JSON.parse(fs.readFileSync(f, 'utf8').replace(/^\uFEFF/, ''));
+      const list = Array.isArray(j) ? j : ((j.customVocab && j.customVocab.vocab) || []);
+      list.forEach(v => { if (v && v.reading) texts.add(v.reading); });
+    } catch (e) { /* source not present, skip */ }
+  });
 
   let manifest = {};
   if (fs.existsSync(MANIFEST_PATH)) {
