@@ -5822,6 +5822,23 @@ function availableSentences() {
   );
 }
 
+// BUG FIX: sentence practice never had a real kana form to check typed
+// romaji against — acceptedReadings only ever held the ROMAJI string
+// itself (e.g. "yama wa ookii desu"), so typing romaji and having it
+// live-convert to kana (like every other reading question in the app)
+// always mismatched, and the "Translate" screen's promise that "kana,
+// kanji, or romaji all work" was never actually true for romaji input.
+// This derives a kana reading from that same romaji string, using the
+// exact converter the live-typing listener uses below — so a sentence's
+// accepted answers now include a kana form that a converted answer can
+// actually match, self-consistently, even for sentences whose romaji uses
+// simplified particle spelling (wa/o) rather than literal は/を.
+function sentenceKanaReading(s) {
+  if (!s || !s.romaji) return '';
+  const cleaned = s.romaji.replace(/[.,?!]/g, '');
+  return finalizeTrailingN(romajiToKana(cleaned, false), false);
+}
+
 function viewSentencesRoute(subparts) {
   const sub = subparts[0];
   if (sub === 'read-type') return viewReadType();
@@ -5896,9 +5913,9 @@ function renderSentencePractice() {
     </div>
     <div class="quiz-hero-spacer" id="heroSpacer"></div>
     <div class="quiz-card">
-      <div class="question-label">${isTranslate ? 'Type it in Japanese' : 'Type the reading (romaji)'}</div>
-      <input class="answer" id="answerInput" type="text" placeholder="${isTranslate ? 'kana/kanji or romaji' : 'romaji'}" autocomplete="off">
-      <div class="hint">${isTranslate ? 'Kana/kanji or romaji both work.' : 'Read the sentence above, then type its reading.'}</div>
+      <div class="question-label">${isTranslate ? 'Type it in Japanese' : 'Type the reading (kana or romaji)'}</div>
+      <input class="answer" id="answerInput" type="text" placeholder="${isTranslate ? 'kana/kanji or romaji' : 'reading (kana or romaji)'}" autocomplete="off">
+      <div class="hint">${isTranslate ? 'Kanji, kana, or romaji (converts to kana as you type) all work.' : 'Type using romaji — it converts to kana as you type.'}</div>
       <div class="feedback-row">
         <div class="feedback-msg" id="feedbackMsg"></div>
         <button class="btn check" id="checkBtn">Check</button>
@@ -5933,8 +5950,14 @@ function attachSentencePracticeHandlers() {
     if (!val) return;
     const { mode, pool, index } = sentencePractice;
     const s = pool[index];
-    const accepted = mode === 'translate' ? s.acceptedTranslations : s.acceptedReadings;
-    const correct = isCloseEnough(val, accepted, mode === 'translate' ? 'meaning' : 'reading');
+    // Both modes now accept the sentence's real kanji/kana text, a kana
+    // reading derived from its romaji, AND the raw romaji itself (in case
+    // the live conversion below missed something) — see sentenceKanaReading.
+    const kanaReading = sentenceKanaReading(s);
+    const accepted = mode === 'translate'
+      ? [...(s.acceptedTranslations || []), kanaReading, ...(s.acceptedReadings || [])]
+      : [...(s.acceptedReadings || []), kanaReading];
+    const correct = isCloseEnough(val, accepted, 'reading');
 
     if (correct) {
       locked = true;
@@ -5966,6 +5989,19 @@ function attachSentencePracticeHandlers() {
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter') check();
     if (!locked) input.classList.remove('correct', 'incorrect');
+  });
+
+  // Live romaji -> kana conversion, same as the reading questions in
+  // reviews (see attachQuizHandlers). Skipped while an IME composition is
+  // in progress (e.g. typing kanji directly on a Japanese keyboard for
+  // Translate) so this doesn't fight with in-progress kanji conversion.
+  let composing = false;
+  input.addEventListener('compositionstart', () => { composing = true; });
+  input.addEventListener('compositionend', () => { composing = false; });
+  input.addEventListener('input', () => {
+    if (composing) return;
+    const converted = romajiToKana(input.value, false);
+    if (converted !== input.value) input.value = converted;
   });
   input.addEventListener('focus', () => { if (IS_TOUCH_DEVICE) setHeroCompact(true); setTimeout(() => window.scrollTo(0, 0), 60); });
   input.addEventListener('blur', () => setHeroCompact(false));
