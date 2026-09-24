@@ -405,7 +405,9 @@
     body:has(.wkq) .quiz-card{max-width:none;margin:0;background:transparent;border-radius:0;box-shadow:none;padding:0}
     body:has(.wkq) .question-label{display:block;margin:0;border-radius:0;background:rgba(0,0,0,.72);color:#fff;font-size:15px;text-transform:none;letter-spacing:0;text-align:center;padding:10px 16px}
     body:has(.wkq) .question-label b{color:#fff}
-    body:has(.wkq) .answer-row{background:#111;padding:10px 14px}
+    body:has(.wkq) .answer-row{background:#111;padding:10px 14px;position:relative;display:block}
+    body:has(.wkq) .answer-row input.answer{width:100%}
+    body:has(.wkq) .answer-row .btn.check{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
     body:has(.wkq) input.answer{border:none;color:#fff;text-align:center !important;font-size:20px;padding:10px 4px;-webkit-appearance:none;appearance:none}
     body:has(.wkq) input.answer::placeholder{color:rgba(255,255,255,.45)}
     body:has(.wkq) .answer-row .btn.check{background:#fff;color:#111}
@@ -3795,7 +3797,19 @@ function finalizeTrailingN(s, katakana) {
 
 function burstConfetti() {
   const colors = [getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#AA00FF', '#FF00AA', '#00AAFF', '#FFC700'];
-  const originX = window.innerWidth / 2, originY = window.innerHeight * 0.75;
+  // BUG FIX: this used to always burst from 75% of window.innerHeight —
+  // but on iOS Safari, window.innerHeight stays the FULL un-shrunk page
+  // height even while the keyboard is up (the keyboard instead shrinks
+  // visualViewport). Any time the keyboard was open — which on the mobile
+  // review screen is most of the time, by design (see keepKeyboardOpen) —
+  // that "75% down" point landed underneath the keyboard, off the actual
+  // visible area, so the burst was firing but invisible. Using
+  // visualViewport's height/offset when available anchors it to what's
+  // actually on screen instead.
+  const vv = typeof window !== 'undefined' && window.visualViewport;
+  const viewportH = vv ? vv.height : window.innerHeight;
+  const viewportTop = vv ? vv.offsetTop : 0;
+  const originX = window.innerWidth / 2, originY = viewportTop + viewportH * 0.6;
   for (let i = 0; i < 46; i++) {
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
