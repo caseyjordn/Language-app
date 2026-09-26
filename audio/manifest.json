@@ -15550,5 +15550,53 @@
   "かぎ": {
     "female": "9d2db8e42cc1296c3d54d06dc76b4ca0-female.wav",
     "male": "9d2db8e42cc1296c3d54d06dc76b4ca0-male.wav"
+  },
+  "なんめいさまですか": {
+    "female": "6eb5c3e03992dff6a76ff367c0913f1c-female.wav",
+    "male": "6eb5c3e03992dff6a76ff367c0913f1c-male.wav"
+  },
+  "だいじょうぶです": {
+    "female": "cd14a085c12c542a49dd0039a3e0c316-female.wav",
+    "male": "cd14a085c12c542a49dd0039a3e0c316-male.wav"
+  },
+  "てんないで": {
+    "female": "c004ce1b442fe5c06933f7d1bc077051-female.wav",
+    "male": "c004ce1b442fe5c06933f7d1bc077051-male.wav"
+  },
+  "ふくろはごりようですか": {
+    "female": "29cf617b27bb5ab0343df5d54373304c-female.wav",
+    "male": "29cf617b27bb5ab0343df5d54373304c-male.wav"
+  },
+  "きつえん": {
+    "female": "afbe2470b37bf8a6838bef4dbade3606-female.wav",
+    "male": "afbe2470b37bf8a6838bef4dbade3606-male.wav"
+  },
+  "どうも": {
+    "female": "8fd75f3be268ce4756b1370e0d5fb3bb-female.wav",
+    "male": "8fd75f3be268ce4756b1370e0d5fb3bb-male.wav"
+  },
+  "おねがいします": {
+    "female": "56945bbb09dfa2e2a121ec89f12d7c66-female.wav",
+    "male": "56945bbb09dfa2e2a121ec89f12d7c66-male.wav"
+  },
+  "といれ": {
+    "female": "be35519cabac5db6c462090c34a0087e-female.wav",
+    "male": "be35519cabac5db6c462090c34a0087e-male.wav"
+  },
+  "えいごはなせますか": {
+    "female": "5626c37057acdafed6bd637afa8315f5-female.wav",
+    "male": "5626c37057acdafed6bd637afa8315f5-male.wav"
+  },
+  "えいごわかりますか": {
+    "female": "8c64c2bb8a4a2d3123c372c299b94bcf-female.wav",
+    "male": "8c64c2bb8a4a2d3123c372c299b94bcf-male.wav"
+  },
+  "わかります": {
+    "female": "401f0ef145710bf81fdae3b2d3456b22-female.wav",
+    "male": "401f0ef145710bf81fdae3b2d3456b22-male.wav"
+  },
+  "はなせます": {
+    "female": "89fe1d04a23876b5064841babe514a40-female.wav",
+    "male": "89fe1d04a23876b5064841babe514a40-male.wav"
   }
 }

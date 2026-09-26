@@ -138,6 +138,7 @@ async function main() {
   // with a customVocab key, or a plain array of {reading}).
   const customSources = [
     path.join(__dirname, 'files', 'casey-tier-and-category-update.json'),
+    path.join(__dirname, 'files', 'tourist-video-vocab-new.json'),
     path.join(__dirname, 'tourist-vocab-output.json'),
     ...process.argv.slice(2)
   ];
