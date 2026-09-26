@@ -4535,6 +4535,7 @@ function customVocabCategorySectionsHTML(type, list) {
           ${isDuo ? `<p class="wk-text">You already know these from Duolingo — one shot to answer each, no lesson intro. Get it right and it starts at Guru I; miss it and it starts at Apprentice II instead of Apprentice I.</p>` : ''}
           ${notLearned.length && roomForNewLessons() <= 0 ? `<p class="wk-text" style="color:var(--color-incorrect)">Apprentice limit reached (${currentApprenticeCount()}/${STATE.apprenticeLimit}) — clear some reviews first.</p>` : ''}
           ${notLearned.length ? `
+            ${notLearned.length > 5 ? `<input type="text" class="cv-picker-search cv-search-box" style="margin-bottom:10px" data-target="${checkClass}" placeholder="Search these to find one quickly..." autocomplete="off">` : ''}
             <div class="lesson-picker-actions">
               <button type="button" class="wk-button" id="${selectAllId}">Select All</button>
               <button type="button" class="wk-button" id="${clearId}">Clear</button>
@@ -4717,6 +4718,13 @@ function attachCustomVocabHubHandlers() {
     const isDuo = category === 'duo';
     const startLabel = isDuo ? 'Start One-Time Review' : 'Start Lesson';
     const checks = () => [...document.querySelectorAll('.' + checkClass)];
+    // Only the rows the current search hasn't hidden — "Select All" while
+    // you've typed a search means "select what I'm looking at," not
+    // secretly grab everything in the whole (possibly huge) list too.
+    const visibleChecks = () => checks().filter(c => {
+      const row = c.closest('.cv-picker-row');
+      return !row || row.style.display !== 'none';
+    });
     const startBtn = document.getElementById(startId);
     // Same Apprentice-limit room as the WK lesson picker — custom-vocab
     // lessons and Duo one-time checks land new items in Apprentice too,
@@ -4733,7 +4741,7 @@ function attachCustomVocabHubHandlers() {
     checks().forEach(c => c.addEventListener('change', updateCount));
     const selectAll = document.getElementById(selectAllId);
     const clearBtn = document.getElementById(clearId);
-    if (selectAll) selectAll.addEventListener('click', () => { const room = roomForNewLessons(); checks().forEach((c, i) => { c.checked = i < room; }); updateCount(); });
+    if (selectAll) selectAll.addEventListener('click', () => { const room = roomForNewLessons(); visibleChecks().forEach((c, i) => { c.checked = i < room; }); updateCount(); });
     if (clearBtn) clearBtn.addEventListener('click', () => { checks().forEach(c => { c.checked = false; c.disabled = false; }); updateCount(); });
     if (startBtn) startBtn.addEventListener('click', () => {
       const ids = checks().filter(c => c.checked).map(c => c.value).slice(0, roomForNewLessons());
@@ -4742,6 +4750,23 @@ function attachCustomVocabHubHandlers() {
     });
     updateCount(); // reflect the current room immediately, even before any change event
   }
+  // Live filter over a not-yet-learned list — hides non-matching rows
+  // (word/reading/meaning, kana-fold-aware) without touching any existing
+  // checkbox selections, so you can search, tick a few, keep searching,
+  // and tick more before hitting Start Lesson.
+  document.querySelectorAll('.cv-picker-search').forEach(box => {
+    box.addEventListener('input', () => {
+      const qKana = normalizeAnswer(box.value);
+      const qEn = box.value.trim().toLowerCase();
+      document.querySelectorAll('.' + box.dataset.target).forEach(cb => {
+        const row = cb.closest('.cv-picker-row');
+        if (!row) return;
+        const text = row.textContent || '';
+        const visible = !qKana && !qEn ? true : (normalizeAnswer(text).includes(qKana) || text.toLowerCase().includes(qEn));
+        row.style.display = visible ? '' : 'none';
+      });
+    });
+  });
   ['vocab', 'kanji'].forEach(type => {
     CUSTOM_VOCAB_CATEGORY_ORDER.forEach(category => {
       wirePicker(`cvl-check-${type}-${category}`, `cvlSelectAll-${type}-${category}`, `cvlClear-${type}-${category}`, `cvlStart-${type}-${category}`, type, category);
