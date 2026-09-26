@@ -310,9 +310,6 @@
   .translation-reveal{margin-top:6px}
   .translation-reveal .sentence-translation{filter:blur(7px);user-select:none;transition:filter .15s;margin:0 0 8px;cursor:default}
   .translation-reveal.revealed .sentence-translation{filter:blur(0);user-select:text}
-
-  .kana-reveal .kana-hint{font-family:"Noto Sans JP",sans-serif;font-size:16px;opacity:.9;filter:blur(6px);user-select:none;transition:filter .15s;margin:0 0 6px;cursor:default}
-  .kana-reveal.revealed .kana-hint{filter:blur(0);user-select:text}
   .reveal-btn{border:1px solid var(--color-widget-border);background:#fff;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--accent-dark);cursor:pointer}
   .reveal-btn:hover{background:var(--accent-light)}
   /* padding-bottom includes the safe-area inset so these buttons clear the
@@ -3332,9 +3329,17 @@ function bagOfWordsMatch(rawVal, acceptedList) {
 // what's on screen. Kanji items are always a single kanji character (never
 // pure-kana), so this only ever changes vocab.
 function isPureKana(word) { return !/[一-鿿]/.test(String(word || '')); }
+// Tourist vocab is for speaking/understanding on a trip, not kanji
+// literacy (that's covered separately by the real WK curriculum) — so it
+// only ever tests Meaning, same as a pure-kana word, even when its "word"
+// does contain kanji. The kana reading is shown as the quiz prompt itself
+// (see renderQuizQuestion) rather than something to recall/type.
+function isKanjiReadingSkipped(item) {
+  return isPureKana(item.word) || (item && item.source === 'custom' && item.category === 'tourist');
+}
 function fieldsFor(type, item) {
   if (type === 'grammar') return ['blank'];
-  if (type === 'vocab' && item && isPureKana(item.word)) return ['meaning'];
+  if (type === 'vocab' && item && isKanjiReadingSkipped(item)) return ['meaning'];
   return ['meaning', 'reading'];
 }
 
@@ -3674,13 +3679,10 @@ function exampleSentenceHTML(example, labelHTML = '') {
 document.addEventListener('click', e => {
   const btn = e.target.closest('[data-reveal-toggle]');
   if (!btn) return;
-  const wrap = btn.closest('.translation-reveal, .kana-reveal');
+  const wrap = btn.closest('.translation-reveal');
   if (!wrap) return;
   wrap.classList.toggle('revealed');
-  const revealed = wrap.classList.contains('revealed');
-  btn.textContent = revealed
-    ? (btn.dataset.hideLabel || 'Hide translation')
-    : (btn.dataset.showLabel || 'Show translation');
+  btn.textContent = wrap.classList.contains('revealed') ? 'Hide translation' : 'Show translation';
 });
 
 /* ======================================================================
@@ -5749,25 +5751,19 @@ function renderQuizQuestion() {
   const segs = Array.from({ length: segCount }, (_, i) => `<span class="${i < Math.round((answeredCount / totalQuestions) * segCount) ? 'done' : ''}"></span>`).join('');
 
   const label = type === 'grammar' ? 'Fill in the blank' : (q.field === 'meaning' ? 'Meaning' : 'Reading');
-  const promptChar = type === 'grammar' ? blankSentence(item) : displayWord(type, item);
+  // Tourist vocab is only ever quizzed on Meaning (see fieldsFor) since
+  // reading kanji isn't the point of that set — so instead of showing the
+  // kanji spelling as the prompt (which you'd have nothing to go on for),
+  // show its kana reading directly. Nothing hidden, nothing to reveal —
+  // just what you'd actually see/hear on the trip.
+  const promptChar = type === 'grammar' ? blankSentence(item)
+    : (type === 'vocab' && item.source === 'custom' && item.category === 'tourist' && !isPureKana(item.word)) ? displayReading(type, item)
+    : displayWord(type, item);
   const placeholder = type === 'grammar' ? 'type the missing part' : (q.field === 'meaning' ? 'English meaning' : 'reading (kana or romaji)');
   // audio only offered on Meaning questions — playing the reading on a
   // Reading question would just hand you the answer
   const ttsButton = (type !== 'grammar' && q.field === 'meaning' && displayReading(type, item))
     ? `<div class="hero-audio-wrap" style="margin-top:8px">${audioButtonsHTML(displayReading(type, item), 'background:rgba(255,255,255,.18);border-color:transparent;color:#fff')}</div>`
-    : '';
-  // Tourist vocab often has readings you haven't memorized the way you
-  // have for WK's own curriculum, and a kanji-mixed word gives you nothing
-  // to go on while answering a Meaning question. A hidden-by-default
-  // reading you can optionally reveal helps without turning every card
-  // into a freebie — never shown on Reading questions, since that would
-  // just hand you the answer, and skipped for already-pure-kana words
-  // (the word IS its own reading there, nothing to reveal).
-  const kanaHint = (type === 'vocab' && item.category === 'tourist' && q.field === 'meaning' && !isPureKana(item.word) && displayReading(type, item))
-    ? `<div class="kana-reveal" style="margin-top:8px">
-        <div class="kana-hint">${displayReading(type, item)}</div>
-        <button type="button" class="reveal-btn" data-reveal-toggle data-show-label="Show reading" data-hide-label="Hide reading" style="background:rgba(255,255,255,.18);color:#fff;border-color:transparent">Show reading</button>
-      </div>`
     : '';
   const modeBadge = mode === 'lesson'
     ? `<div class="hero-mode-badge" style="font-size:11px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;display:inline-block;margin-top:6px">Lesson Quiz</div>`
@@ -5788,8 +5784,7 @@ function renderQuizQuestion() {
         <div class="wkq-stats"><span>${totalAttempts ? Math.round((correctAttempts / totalAttempts) * 100) : 100}%</span><span>${answeredCount} done</span><span>${totalQuestions - answeredCount} left</span></div>
       </div>
       <div class="session-bar" id="sessionBar">${segs}</div>
-      <div class="quiz-char${type === 'grammar' ? ' is-grammar' : ' fit1'}" style="${type === 'grammar' ? 'font-size:26px' : `--n:${Math.max(2, [...String(displayWord(type, item)).replace(/<[^>]*>/g, '')].length)}`}">${promptChar}</div>
-      ${kanaHint}
+      <div class="quiz-char${type === 'grammar' ? ' is-grammar' : ' fit1'}" style="${type === 'grammar' ? 'font-size:26px' : `--n:${Math.max(2, [...String(promptChar).replace(/<[^>]*>/g, '')].length)}`}">${promptChar}</div>
       ${ttsButton}
       ${modeBadge}
     </div>
