@@ -162,12 +162,25 @@ async function main() {
     process.exit(1);
   }
 
+  // BUG FIX: FEMALE_SPEAKERS/MALE_SPEAKERS grew from 2 voices each to 5
+  // each (see git history, commit 84842df) but this loop's skip-if-exists
+  // check only ever looks at whether a FILE already exists for a given
+  // text — it has no idea the pool it was picked from later got bigger,
+  // so it never revisits already-generated words. Nearly everything
+  // generated before that point (i.e. almost the whole built-in catalog)
+  // has been frozen on the original 2-voice roster ever since, which is
+  // exactly why it sounded like "no variety, same voices every time" —
+  // there just weren't 5 voices in play for that content, only 2. --force
+  // ignores the skip check so every text gets re-synthesized against
+  // whatever CURRENT roster is configured above; normal runs (no flag)
+  // keep the fast incremental behavior for adding new content later.
+  const FORCE = process.argv.includes('--force');
   let generated = 0, skipped = 0, failed = 0;
   for (const text of texts) {
     const key = normalizeAnswer(text);
     if (!manifest[key]) manifest[key] = {};
     for (const gender of ['female', 'male']) {
-      if (manifest[key][gender] && fs.existsSync(path.join(AUDIO_DIR, manifest[key][gender]))) {
+      if (!FORCE && manifest[key][gender] && fs.existsSync(path.join(AUDIO_DIR, manifest[key][gender]))) {
         skipped++;
         continue;
       }
@@ -179,6 +192,11 @@ async function main() {
         manifest[key][gender] = filename;
         generated++;
         process.stdout.write('.');
+        // Checkpoint periodically (this --force run touches thousands of
+        // entries and can take a long time) so an interruption partway
+        // through doesn't lose everything already regenerated — re-running
+        // afterward just picks up wherever it left off, same as normal.
+        if (generated % 100 === 0) fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
       } catch (err) {
         failed++;
         console.error(`\nFailed on "${text}" (${gender}): ${err.message}`);
