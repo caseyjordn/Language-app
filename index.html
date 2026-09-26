@@ -219,9 +219,6 @@
 
   .backup-section{background:#fff;border:1px solid var(--color-widget-border);border-radius:16px;padding:20px 24px;margin-bottom:16px}
   .backup-section h2{font-size:18px;margin:0 0 6px}
-  .cv-category-block{margin-top:18px;padding-top:14px;border-top:1px solid var(--color-widget-border)}
-  .cv-category-block:first-of-type{margin-top:10px;padding-top:0;border-top:none}
-  .cv-category-block h3{font-size:14px;font-weight:700;margin:0 0 8px;color:var(--color-widget-secondary-text)}
   /* font-size 16px minimum — same iOS auto-zoom reason as .level-select */
   .backup-textarea{width:100%;min-height:140px;font-family:monospace;font-size:16px;border:1px solid var(--color-widget-border);border-radius:8px;padding:10px;margin:10px 0;resize:vertical}
   .backup-status{margin-left:10px;font-size:12px;color:var(--color-widget-secondary-text)}
@@ -524,6 +521,19 @@
   .custom-vocab-row .cv-reading{color:var(--color-widget-secondary-text);min-width:80px}
   .custom-vocab-row .cv-meaning{flex:1;color:var(--color-widget-secondary-text)}
   .custom-vocab-row .cv-remove{border:none;background:none;color:#C00;font-size:12.5px;cursor:pointer;padding:4px 8px}
+
+  .cv-details{background:#fff;border:1px solid var(--color-widget-border);border-radius:16px;padding:0;margin-bottom:16px;overflow:hidden}
+  .cv-details > summary{list-style:none;cursor:pointer;padding:20px 24px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+  .cv-details > summary::-webkit-details-marker{display:none}
+  .cv-details > summary::after{content:'▾';font-size:13px;color:var(--color-widget-secondary-text);transition:transform .15s ease}
+  .cv-details:not([open]) > summary::after{transform:rotate(-90deg)}
+  .cv-details-body{padding:0 24px 20px}
+  .cv-details .cv-details{border:none;border-top:1px solid var(--color-widget-border);border-radius:0;margin:0}
+  .cv-details .cv-details > summary{padding:14px 0;font-size:14px;font-weight:700;color:var(--color-widget-secondary-text)}
+  .cv-details .cv-details .cv-details-body{padding:0 0 14px}
+  .cv-picker-row{display:flex;align-items:center;gap:8px}
+  .cv-picker-row .lesson-picker-row{flex:1}
+  .cv-picker-row .cv-remove{flex:none;border:none;background:none;color:#C00;font-size:15px;cursor:pointer;padding:4px 10px}
 </style>
 </head>
 <body>
@@ -4299,6 +4309,22 @@ function lessonPickerRowHTML(type, item, checkboxClass) {
     </label>`;
 }
 
+// Same row as above, plus a remove button — only used for CUSTOM vocab
+// not-yet-learned lists, where "I don't want to learn this one after all"
+// is a real thing you'd want (there's no equivalent for real WK content,
+// which is why the shared lessonPickerRowHTML above doesn't have one).
+// Reuses the exact same .cv-remove class/handler that already removes a
+// learned custom item (see attachCustomVocabHubHandlers) — deleting a
+// not-yet-learned one is the same operation, it just has no progress
+// record to also clear.
+function customVocabPickerRowHTML(type, item, checkboxClass) {
+  return `
+    <div class="cv-picker-row">
+      ${lessonPickerRowHTML(type, item, checkboxClass)}
+      <button type="button" class="cv-remove" data-type="${type}" data-id="${item.id}" title="Remove — you don't want to learn this one">✕</button>
+    </div>`;
+}
+
 function viewLessonPicker(type) {
   const pool = lessonQueueFor(type);
   const room = roomForNewLessons();
@@ -4366,6 +4392,20 @@ function slugifyCustomId(prefix, text) {
   return 'custom:' + prefix + ':' + text + ':' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
 
+// Tracks which <details> sections on the Custom Vocab page are open —
+// deliberately a plain module-level variable, not part of STATE: this is
+// just "how you left the page open" scroll-convenience, not progress data,
+// so it doesn't need to sync or persist across reloads. It DOES need to
+// survive the page's own re-renders though (every add/remove click calls
+// render(), which rebuilds the whole page from scratch) — without this,
+// every click would snap every section back to its default open/closed
+// state instead of staying where you left it.
+let customVocabOpenState = {};
+function cvDetails(key, defaultOpen, summaryHTML, bodyHTML) {
+  const isOpen = customVocabOpenState[key] !== undefined ? customVocabOpenState[key] : defaultOpen;
+  return `<details class="cv-details" data-cv-key="${key}" ${isOpen ? 'open' : ''}><summary>${summaryHTML}</summary><div class="cv-details-body">${bodyHTML}</div></details>`;
+}
+
 function viewCustomVocabHub() {
   const myVocab = (STATE.customVocab && STATE.customVocab.vocab) || [];
   const myKanji = (STATE.customVocab && STATE.customVocab.kanji) || [];
@@ -4376,8 +4416,7 @@ function viewCustomVocabHub() {
       <div class="section-title">Custom Vocab</div>
     </div>
     <main>
-      <div class="backup-section">
-        <h2>Add a word</h2>
+      ${cvDetails('tools:addWord', false, 'Add a word', `
         <p class="wk-text">Adds to your custom deck below — it won't show up in reviews until you pick it and run it through a lesson.</p>
         <div class="auth-field"><label>Word</label><input type="text" id="cvWord" placeholder="食べる"></div>
         <div class="auth-field"><label>Reading</label><input type="text" id="cvReading" placeholder="たべる"></div>
@@ -4387,10 +4426,9 @@ function viewCustomVocabHub() {
         </div>
         <button class="wk-button primary" id="cvAddWord">Add word</button>
         <span id="cvWordStatus" class="backup-status"></span>
-      </div>
+      `)}
 
-      <div class="backup-section">
-        <h2>Add a kanji</h2>
+      ${cvDetails('tools:addKanji', false, 'Add a kanji', `
         <p class="wk-text">Same deal — sits in your custom kanji deck until you lesson it.</p>
         <div class="auth-field"><label>Character</label><input type="text" id="cvChar" placeholder="食"></div>
         <div class="auth-field"><label>On'yomi (optional)</label><input type="text" id="cvOnyomi" placeholder="ショク"></div>
@@ -4401,15 +4439,14 @@ function viewCustomVocabHub() {
         </div>
         <button class="wk-button primary" id="cvAddKanji">Add kanji</button>
         <span id="cvKanjiStatus" class="backup-status"></span>
-      </div>
+      `)}
 
-      <div class="backup-section">
-        <h2>Bulk add words</h2>
+      ${cvDetails('tools:bulkAdd', false, 'Bulk add words', `
         <p class="wk-text">Paste a JSON array of words (each needs <code>word</code>, <code>reading</code>, <code>meaning</code> — <code>category</code>/<code>readingType</code>/<code>meaningMnemonic</code> optional). Unlike the Backup/Restore import, this only ADDS to your custom vocab — it never touches your review progress. Anything already in your deck or in the built-in WaniKani list (matched by word or reading) is skipped automatically.</p>
         <textarea class="backup-textarea" id="cvBulkBox" placeholder='[{"word":"喫煙","reading":"きつえん","meaning":"Smoking","category":"tourist"}]'></textarea>
         <button class="wk-button primary" id="cvBulkAdd">Add words</button>
         <span id="cvBulkStatus" class="backup-status"></span>
-      </div>
+      `)}
 
       ${customVocabCategorySectionsHTML('vocab', myVocab)}
       ${customVocabCategorySectionsHTML('kanji', myKanji)}
@@ -4478,11 +4515,7 @@ function customVocabCategorySectionsHTML(type, list) {
     const sectionTitle = isDuo ? 'One-Time Review' : 'Lessons';
     const startLabel = isDuo ? 'Start One-Time Review' : 'Start Lesson';
     const emptyNote = isDuo ? 'Nothing left to check in this set.' : 'Nothing waiting to be learned in this set.';
-    return `
-      <div class="backup-section">
-        <h2>${CUSTOM_VOCAB_CATEGORY_LABEL[category]} — ${label} (${items.length})</h2>
-        <div class="cv-category-block">
-          <h3>${sectionTitle} (${notLearned.length})</h3>
+    const newBlock = cvDetails(`cat:${type}:${category}:new`, true, `${sectionTitle} (${notLearned.length})`, `
           ${isDuo ? `<p class="wk-text">You already know these from Duolingo — one shot to answer each, no lesson intro. Get it right and it starts at Guru I; miss it and it starts at Apprentice II instead of Apprentice I.</p>` : ''}
           ${notLearned.length && roomForNewLessons() <= 0 ? `<p class="wk-text" style="color:var(--color-incorrect)">Apprentice limit reached (${currentApprenticeCount()}/${STATE.apprenticeLimit}) — clear some reviews first.</p>` : ''}
           ${notLearned.length ? `
@@ -4490,15 +4523,14 @@ function customVocabCategorySectionsHTML(type, list) {
               <button type="button" class="wk-button" id="${selectAllId}">Select All</button>
               <button type="button" class="wk-button" id="${clearId}">Clear</button>
             </div>
-            <div class="lesson-picker-list">${notLearned.map(it => lessonPickerRowHTML(type, it, checkClass)).join('')}</div>
+            <div class="lesson-picker-list">${notLearned.map(it => customVocabPickerRowHTML(type, it, checkClass)).join('')}</div>
             <button type="button" class="wk-button primary" id="${startId}" disabled style="margin-top:10px">${startLabel} (0 selected)</button>
           ` : `<p class="empty-state">${emptyNote}</p>`}
-        </div>
-        <div class="cv-category-block">
-          <h3>Already Learned (${learnedItems.length})</h3>
-          ${customVocabLearnedByTierHTML(type, learnedItems)}
-        </div>
-      </div>`;
+    `);
+    const learnedBlock = cvDetails(`cat:${type}:${category}:learned`, false, `Already Learned (${learnedItems.length})`,
+      customVocabLearnedByTierHTML(type, learnedItems));
+    return cvDetails(`cat:${type}:${category}`, true, `${CUSTOM_VOCAB_CATEGORY_LABEL[category]} — ${label} (${items.length})`,
+      newBlock + learnedBlock);
   }).join('') || `<div class="backup-section"><h2>${label} (0)</h2><p class="empty-state">Nothing added yet.</p></div>`;
 }
 
@@ -4525,6 +4557,10 @@ function startDuoCheck(type, ids) {
 }
 
 function attachCustomVocabHubHandlers() {
+  document.querySelectorAll('.cv-details').forEach(d => {
+    d.addEventListener('toggle', () => { customVocabOpenState[d.dataset.cvKey] = d.open; });
+  });
+
   document.getElementById('cvAddWord').addEventListener('click', () => {
     const word = document.getElementById('cvWord').value.trim();
     const reading = document.getElementById('cvReading').value.trim();
