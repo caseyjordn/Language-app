@@ -534,6 +534,16 @@
   .cv-picker-row{display:flex;align-items:center;gap:8px}
   .cv-picker-row .lesson-picker-row{flex:1}
   .cv-picker-row .cv-remove{flex:none;border:none;background:none;color:#C00;font-size:15px;cursor:pointer;padding:4px 10px}
+
+  .cv-search-box{width:100%;border:1px solid var(--color-widget-border);border-radius:var(--border-radius-normal);padding:10px 14px;font-size:15px;margin-top:4px;font-family:"Noto Sans JP",sans-serif}
+  .cv-search-box:focus{outline:none;border-color:var(--accent)}
+  .cv-search-results{margin-top:10px;max-height:340px;overflow-y:auto}
+  .cv-search-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--color-widget-border);font-size:14px}
+  .cv-search-row .cv-search-tag{flex:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:var(--color-locked-bg);color:var(--color-widget-secondary-text);border-radius:4px;padding:3px 7px;white-space:nowrap}
+  .cv-search-row .lp-word{font-weight:700;min-width:70px;font-family:"Noto Sans JP",sans-serif}
+  .cv-search-row .lp-reading{color:var(--color-widget-secondary-text);min-width:70px;font-family:"Noto Sans JP",sans-serif}
+  .cv-search-row .lp-meaning{flex:1;color:var(--color-widget-secondary-text)}
+  .cv-search-more{font-size:12px;color:var(--color-widget-secondary-text);padding:8px 0 0}
 </style>
 </head>
 <body>
@@ -4416,6 +4426,12 @@ function viewCustomVocabHub() {
       <div class="section-title">Custom Vocab</div>
     </div>
     <main>
+      ${cvDetails('tools:search', true, 'Search vocab', `
+        <p class="wk-text">Search everything you can already answer in reviews — built-in WaniKani vocab AND your own custom words — by word, reading, or English meaning. Handy for checking whether a word's already in before you add it again.</p>
+        <input type="text" id="cvSearchBox" class="cv-search-box" placeholder="Search word, reading, or meaning..." autocomplete="off">
+        <div id="cvSearchResults" class="cv-search-results"></div>
+      `)}
+
       ${cvDetails('tools:addWord', false, 'Add a word', `
         <p class="wk-text">Adds to your custom deck below — it won't show up in reviews until you pick it and run it through a lesson.</p>
         <div class="auth-field"><label>Word</label><input type="text" id="cvWord" placeholder="食べる"></div>
@@ -4560,6 +4576,50 @@ function attachCustomVocabHubHandlers() {
   document.querySelectorAll('.cv-details').forEach(d => {
     d.addEventListener('toggle', () => { customVocabOpenState[d.dataset.cvKey] = d.open; });
   });
+
+  const cvSearchBox = document.getElementById('cvSearchBox');
+  const cvSearchResults = document.getElementById('cvSearchResults');
+  if (cvSearchBox) {
+    cvSearchBox.addEventListener('input', () => {
+      const raw = cvSearchBox.value.trim();
+      if (!raw) { cvSearchResults.innerHTML = ''; return; }
+      // normalizeAnswer folds katakana->hiragana and lowercases, so a
+      // search matches regardless of script/case; meaning is matched
+      // separately since it's English, not kana.
+      const qKana = normalizeAnswer(raw);
+      const qEn = raw.toLowerCase();
+      const all = contentFor('vocab');
+      const matches = all.filter(it => {
+        const w = normalizeAnswer(it.word || '');
+        const r = normalizeAnswer(it.reading || '');
+        const m = (it.meaning || '').toLowerCase();
+        return (qKana && (w.includes(qKana) || r.includes(qKana))) || m.includes(qEn);
+      });
+      if (!matches.length) {
+        cvSearchResults.innerHTML = `<p class="empty-state">No matches — looks new. <button type="button" class="wk-button" id="cvSearchAddNew">Add "${escapeHTML(raw)}" as a new word</button></p>`;
+        document.getElementById('cvSearchAddNew').addEventListener('click', () => {
+          customVocabOpenState['tools:addWord'] = true;
+          const isJapanese = /[぀-ヿ一-鿿]/.test(raw);
+          render();
+          if (isJapanese) document.getElementById('cvWord').value = raw;
+          else document.getElementById('cvMeaning').value = raw;
+          document.getElementById(isJapanese ? 'cvWord' : 'cvMeaning').focus();
+        });
+        return;
+      }
+      const shown = matches.slice(0, 50);
+      cvSearchResults.innerHTML = shown.map(it => {
+        const tag = it.source === 'custom' ? (CUSTOM_VOCAB_CATEGORY_LABEL[it.category || 'custom']) : 'WaniKani';
+        return `
+        <div class="cv-search-row">
+          <span class="cv-search-tag">${tag}</span>
+          <span class="lp-word">${displayWord('vocab', it)}</span>
+          <span class="lp-reading">${displayReading('vocab', it) || ''}</span>
+          <span class="lp-meaning">${displayMeaning('vocab', it) || ''}</span>
+        </div>`;
+      }).join('') + (matches.length > shown.length ? `<p class="cv-search-more">+ ${matches.length - shown.length} more match${matches.length - shown.length === 1 ? '' : 'es'} — narrow your search to see them.</p>` : '');
+    });
+  }
 
   document.getElementById('cvAddWord').addEventListener('click', () => {
     const word = document.getElementById('cvWord').value.trim();
