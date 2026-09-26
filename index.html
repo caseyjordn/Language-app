@@ -2933,6 +2933,7 @@ function setItemStage(type, id, stage) {
 // any future per-login setup, even though there's nothing to auto-run here
 // anymore.
 function postLoadInit() {
+  applyTouristVocabOnetimeFix();
   saveState();
 }
 
@@ -4416,6 +4417,45 @@ function cvDetails(key, defaultOpen, summaryHTML, bodyHTML) {
   return `<details class="cv-details" data-cv-key="${key}" ${isOpen ? 'open' : ''}><summary>${summaryHTML}</summary><div class="cv-details-body">${bodyHTML}</div></details>`;
 }
 
+// One-off cleanup for the tourist vocab batch that shipped with several
+// entries bundling multiple distinct words into one card (e.g.
+// "右/左/上/下" as a single "word") — see the conversation this was found
+// in. `remove` are the bad bundled entries; `add` are their properly
+// split, deduped replacements. Applied automatically and silently on boot
+// (see applyTouristVocabOnetimeFix/postLoadInit) rather than through any
+// UI — no button to click, no JSON to paste, nothing to notice at all;
+// it just quietly cleans up on your next load and then never touches
+// anything again once nothing matches `remove` anymore.
+const TOURIST_VOCAB_ONETIME_FIX ={"remove":["ウォッシュド / 水洗式","ナチュラル / 乾式","テイクアウト / お持ち帰り","デカフェ / カフェインレス","苦味 / 苦み","甘味 / 甘み","焙煎所 / ロースタリー","食券機 / 券売機","自動販売機 / 自販機","コーヒー（微糖/無糖）","辛い/甘い/しょっぱい/酸っぱい/苦い","冷たい/温かい/熱い","焼き/煮/揚げ/生","肉/鶏肉/豚肉/牛肉/魚/野菜/卵","東口/西口/南口/北口","各駅停車/普通","お手洗い/トイレ, 男/女","右/左/上/下","温めますか？ → お願いします/大丈夫です","袋はご利用ですか？ → いりません/大丈夫です","お箸/スプーン/フォーク/ストロー","チェックイン/チェックアウト"],"add":[{"id":"水洗式","word":"水洗式","reading":"すいせんしき","meaning":"Washed Process","readingType":"noun","meaningMnemonic":"水 (water) + 洗い (washing) + 式 (method). Also called ウォッシュド (loanword).","source":"custom","category":"tourist"},{"id":"乾式","word":"乾式","reading":"かんしき","meaning":"Natural (Dry) Process","readingType":"noun","meaningMnemonic":"乾 (dry) + 式 (method). Also called ナチュラル (loanword).","source":"custom","category":"tourist"},{"id":"お持ち帰り","word":"お持ち帰り","reading":"おもちかえり","meaning":"To-Go","readingType":"noun","meaningMnemonic":"お + 持ち (carrying) + 帰り (returning home). Also called テイクアウト (loanword).","source":"custom","category":"tourist"},{"id":"デカフェ","word":"デカフェ","reading":"でかふぇ","meaning":"Decaf","readingType":"noun","meaningMnemonic":"Loanword from English \"decaf.\"","source":"custom","category":"tourist"},{"id":"カフェインレス","word":"カフェインレス","reading":"かふぇいんれす","meaning":"Caffeine-Free","readingType":"noun","meaningMnemonic":"Loanword from English \"caffeine-less.\"","source":"custom","category":"tourist"},{"id":"苦味","word":"苦味","reading":"にがみ","meaning":"Bitterness","readingType":"noun","meaningMnemonic":"苦い (bitter) + 味/み (taste/-ness).","source":"custom","category":"tourist"},{"id":"甘味","word":"甘味","reading":"あまみ","meaning":"Sweetness","readingType":"noun","meaningMnemonic":"甘い (sweet) + 味/み (taste/-ness).","source":"custom","category":"tourist"},{"id":"焙煎所","word":"焙煎所","reading":"ばいせんじょ","meaning":"Roastery","readingType":"noun","meaningMnemonic":"焙煎 (roasting) + 所 (place). Also called ロースタリー (loanword).","source":"custom","category":"tourist"},{"id":"食券機","word":"食券機","reading":"しょっけんき","meaning":"Meal Ticket Machine","readingType":"noun","meaningMnemonic":"食券 (meal ticket) + 機 (machine).","source":"custom","category":"tourist"},{"id":"券売機","word":"券売機","reading":"けんばいき","meaning":"Ticket Vending Machine","readingType":"noun","meaningMnemonic":"券売 (ticket-selling) + 機 (machine).","source":"custom","category":"tourist"},{"id":"自動販売機","word":"自動販売機","reading":"じどうはんばいき","meaning":"Vending Machine","readingType":"noun","meaningMnemonic":"自動 (automatic) + 販売 (selling) + 機 (machine). Often shortened to 自販機.","source":"custom","category":"tourist"},{"id":"自販機","word":"自販機","reading":"じはんき","meaning":"Vending Machine (Short Form)","readingType":"noun","meaningMnemonic":"Abbreviation of 自動販売機.","source":"custom","category":"tourist"},{"id":"微糖","word":"微糖","reading":"びとう","meaning":"Lightly Sweetened","readingType":"noun","meaningMnemonic":"微 (slight) + 糖 (sugar) — a canned/bottled coffee sweetness level.","source":"custom","category":"tourist"},{"id":"無糖","word":"無糖","reading":"むとう","meaning":"Unsweetened","readingType":"noun","meaningMnemonic":"無 (without) + 糖 (sugar).","source":"custom","category":"tourist"},{"id":"しょっぱい","word":"しょっぱい","reading":"しょっぱい","meaning":"Salty","readingType":"i-adjective","meaningMnemonic":"Typically written in kana.","source":"custom","category":"tourist"},{"id":"酸っぱい","word":"酸っぱい","reading":"すっぱい","meaning":"Sour","readingType":"i-adjective","meaningMnemonic":"酸 (acid) + っぱい.","source":"custom","category":"tourist"},{"id":"焼き","word":"焼き","reading":"やき","meaning":"Grilled","readingType":"noun","meaningMnemonic":"From 焼く, \"to grill/bake.\"","source":"custom","category":"tourist"},{"id":"揚げ","word":"揚げ","reading":"あげ","meaning":"Deep-Fried","readingType":"noun","meaningMnemonic":"From 揚げる, \"to deep-fry.\"","source":"custom","category":"tourist"},{"id":"鶏肉","word":"鶏肉","reading":"とりにく","meaning":"Chicken (Meat)","readingType":"noun","meaningMnemonic":"鶏 (chicken) + 肉 (meat).","source":"custom","category":"tourist"},{"id":"各駅停車","word":"各駅停車","reading":"かくえきていしゃ","meaning":"Local (Train, Stops Every Station)","readingType":"noun","meaningMnemonic":"各 (each) + 駅 (station) + 停車 (stopping).","source":"custom","category":"tourist"},{"id":"普通","word":"普通","reading":"ふつう","meaning":"Normal / Local (Train)","readingType":"noun","meaningMnemonic":"普 (general) + 通 (passing) — also just means \"normal\" generally.","source":"custom","category":"tourist"},{"id":"お手洗い","word":"お手洗い","reading":"おてあらい","meaning":"Restroom (Polite)","readingType":"noun","meaningMnemonic":"お + 手 (hand) + 洗い (washing).","source":"custom","category":"tourist"},{"id":"温めますか","word":"温めますか","reading":"あたためますか","meaning":"Would You Like This Heated?","readingType":"expression","meaningMnemonic":"温めます (will warm, from 温める) + か (question) — asked at a konbini register.","source":"custom","category":"tourist"},{"id":"いりません","word":"いりません","reading":"いりません","meaning":"No, Thanks (Don't Need It)","readingType":"expression","meaningMnemonic":"Negative of 要る, \"to need/require.\"","source":"custom","category":"tourist"},{"id":"スプーン","word":"スプーン","reading":"すぷーん","meaning":"Spoon","readingType":"noun","meaningMnemonic":"Loanword from English \"spoon.\"","source":"custom","category":"tourist"},{"id":"フォーク","word":"フォーク","reading":"ふぉーく","meaning":"Fork","readingType":"noun","meaningMnemonic":"Loanword from English \"fork.\"","source":"custom","category":"tourist"},{"id":"ストロー","word":"ストロー","reading":"すとろー","meaning":"Straw","readingType":"noun","meaningMnemonic":"Loanword from English \"straw.\"","source":"custom","category":"tourist"},{"id":"チェックイン","word":"チェックイン","reading":"ちぇっくいん","meaning":"Check-In","readingType":"noun","meaningMnemonic":"Loanword from English \"check-in.\"","source":"custom","category":"tourist"},{"id":"チェックアウト","word":"チェックアウト","reading":"ちぇっくあうと","meaning":"Check-Out","readingType":"noun","meaningMnemonic":"Loanword from English \"check-out.\"","source":"custom","category":"tourist"},{"id":"甘い","word":"甘い","reading":"あまい","meaning":"Sweet","readingType":"i-adjective","meaningMnemonic":"A common taste adjective.","source":"custom","category":"tourist"},{"id":"熱い","word":"熱い","reading":"あつい","meaning":"Hot (To Touch)","readingType":"i-adjective","meaningMnemonic":"From 熱する, \"to heat.\" Different kanji from 暑い (hot weather).","source":"custom","category":"tourist"},{"id":"野菜","word":"野菜","reading":"やさい","meaning":"Vegetables","readingType":"noun","meaningMnemonic":"野 (field) + 菜 (greens).","source":"custom","category":"tourist"},{"id":"卵","word":"卵","reading":"たまご","meaning":"Egg","readingType":"noun","meaningMnemonic":"A single kanji meaning \"egg.\"","source":"custom","category":"tourist"},{"id":"お箸","word":"お箸","reading":"おはし","meaning":"Chopsticks","readingType":"noun","meaningMnemonic":"お (honorific prefix) + 箸 (chopsticks).","source":"custom","category":"tourist"},{"id":"レジ袋いりますか","word":"レジ袋いりますか","reading":"れじぶくろいりますか","meaning":"Do You Need a Plastic Bag?","readingType":"expression","meaningMnemonic":"レジ (loanword \"register/cashier,\" short for レジスター) + 袋 (ぶくろ, \"bag\") + いります (いります, \"need,\" from 要る) + か (question particle). Together: \"do you need a plastic/checkout bag?\" A more casual/common phrasing than 袋はご利用ですか.","source":"custom","category":"tourist"}]};
+
+// Runs the fix above once, silently, if it's still needed — no UI, no
+// confirmation, nothing to click. Safe to call on every boot: once
+// nothing in customVocab.vocab matches TOURIST_VOCAB_ONETIME_FIX.remove
+// anymore, this is a same-tick no-op forever after.
+function applyTouristVocabOnetimeFix() {
+  STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
+  const removeSet = new Set(TOURIST_VOCAB_ONETIME_FIX.remove);
+  const hasPending = STATE.customVocab.vocab.some(it => removeSet.has(it.word));
+  if (!hasPending) return;
+  STATE.customVocab.vocab = STATE.customVocab.vocab.filter(it => {
+    if (!removeSet.has(it.word)) return true;
+    delete STATE.items[itemKey('vocab', it.id)];
+    return false;
+  });
+  const known = new Set();
+  contentFor('vocab').forEach(v => {
+    if (v.word) known.add('w:' + v.word);
+    if (v.reading) known.add('r:' + v.reading);
+  });
+  TOURIST_VOCAB_ONETIME_FIX.add.forEach(entry => {
+    const wKey = 'w:' + entry.word, rKey = 'r:' + entry.reading;
+    if (known.has(wKey) || known.has(rKey)) return;
+    known.add(wKey); known.add(rKey);
+    STATE.customVocab.vocab.push({ ...entry, id: slugifyCustomId('vocab', entry.word) });
+  });
+}
+
+
 function viewCustomVocabHub() {
   const myVocab = (STATE.customVocab && STATE.customVocab.vocab) || [];
   const myKanji = (STATE.customVocab && STATE.customVocab.kanji) || [];
@@ -4462,6 +4502,13 @@ function viewCustomVocabHub() {
         <textarea class="backup-textarea" id="cvBulkBox" placeholder='[{"word":"喫煙","reading":"きつえん","meaning":"Smoking","category":"tourist"}]'></textarea>
         <button class="wk-button primary" id="cvBulkAdd">Add words</button>
         <span id="cvBulkStatus" class="backup-status"></span>
+      `)}
+
+      ${cvDetails('tools:bulkRemove', false, 'Bulk remove words', `
+        <p class="wk-text">Paste a JSON array of words to delete — plain strings (<code>["word1","word2"]</code>) or objects with a <code>word</code> field both work. Removes them from your custom deck and clears any review progress for them. Use this to clean up bad entries (like a bundled multi-word card) before re-adding the fixed version below.</p>
+        <textarea class="backup-textarea" id="cvBulkRemoveBox" placeholder='["旧しい単語", "別の単語"]'></textarea>
+        <button class="wk-button" id="cvBulkRemove" style="background:var(--color-incorrect);color:#fff;border-color:var(--color-incorrect)">Remove words</button>
+        <span id="cvBulkRemoveStatus" class="backup-status"></span>
       `)}
 
       ${customVocabCategorySectionsHTML('vocab', myVocab)}
@@ -4577,6 +4624,7 @@ function attachCustomVocabHubHandlers() {
   document.querySelectorAll('.cv-details').forEach(d => {
     d.addEventListener('toggle', () => { customVocabOpenState[d.dataset.cvKey] = d.open; });
   });
+
 
   const cvSearchBox = document.getElementById('cvSearchBox');
   const cvSearchResults = document.getElementById('cvSearchResults');
@@ -4699,6 +4747,38 @@ function attachCustomVocabHubHandlers() {
     saveState();
     status.style.color = 'var(--color-correct)';
     status.textContent = `Added ${added}, skipped ${skipped} already-known${invalid ? `, ${invalid} entries missing word/reading/meaning` : ''}.`;
+    box.value = '';
+    render();
+  });
+
+  document.getElementById('cvBulkRemove').addEventListener('click', () => {
+    const box = document.getElementById('cvBulkRemoveBox');
+    const status = document.getElementById('cvBulkRemoveStatus');
+    let list;
+    try {
+      list = JSON.parse(box.value);
+    } catch (err) {
+      status.textContent = "That doesn't look like valid JSON.";
+      status.style.color = 'var(--color-incorrect)';
+      return;
+    }
+    if (!Array.isArray(list)) {
+      status.textContent = 'Expected a JSON array of words (strings or {word} objects).';
+      status.style.color = 'var(--color-incorrect)';
+      return;
+    }
+    const targetWords = new Set(list.map(e => (typeof e === 'string' ? e : e && e.word) || '').map(w => w.trim()).filter(Boolean));
+    STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
+    let removed = 0;
+    STATE.customVocab.vocab = STATE.customVocab.vocab.filter(it => {
+      if (!targetWords.has(it.word)) return true;
+      delete STATE.items[itemKey('vocab', it.id)];
+      removed++;
+      return false;
+    });
+    saveState();
+    status.style.color = 'var(--color-correct)';
+    status.textContent = `Removed ${removed} of ${targetWords.size} requested (any not found were already gone).`;
     box.value = '';
     render();
   });
