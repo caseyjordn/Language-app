@@ -139,6 +139,7 @@ async function main() {
   const customSources = [
     path.join(__dirname, 'files', 'casey-tier-and-category-update.json'),
     path.join(__dirname, 'files', 'tourist-video-vocab-new.json'),
+    path.join(__dirname, 'files', 'shrimp-allergy-vocab-new.json'),
     path.join(__dirname, 'tourist-vocab-output.json'),
     ...process.argv.slice(2)
   ];

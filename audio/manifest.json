@@ -15598,5 +15598,29 @@
   "はなせます": {
     "female": "89fe1d04a23876b5064841babe514a40-female.wav",
     "male": "89fe1d04a23876b5064841babe514a40-male.wav"
+  },
+  "えび": {
+    "female": "8c434dc2781979c5344a54a7fd311dd5-female.wav",
+    "male": "8c434dc2781979c5344a54a7fd311dd5-male.wav"
+  },
+  "えびあれるぎー": {
+    "female": "30f295e5c72edfe3f7323e1c5cf21692-female.wav",
+    "male": "30f295e5c72edfe3f7323e1c5cf21692-male.wav"
+  },
+  "こうかくるい": {
+    "female": "e972232979b745d430b699064a67ce7d-female.wav",
+    "male": "e972232979b745d430b699064a67ce7d-male.wav"
+  },
+  "えびあれるぎーがあります": {
+    "female": "bd32cf3db2f67b1984c12528614a7f94-female.wav",
+    "male": "bd32cf3db2f67b1984c12528614a7f94-male.wav"
+  },
+  "えびはたべられません": {
+    "female": "486e2b3d5461ce79208c0e652304bf50-female.wav",
+    "male": "486e2b3d5461ce79208c0e652304bf50-male.wav"
+  },
+  "えびがはいっていますか": {
+    "female": "f51fe038733bc0bb45f4665884248c06-female.wav",
+    "male": "f51fe038733bc0bb45f4665884248c06-male.wav"
   }
 }
