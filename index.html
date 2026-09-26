@@ -4403,6 +4403,14 @@ function viewCustomVocabHub() {
         <span id="cvKanjiStatus" class="backup-status"></span>
       </div>
 
+      <div class="backup-section">
+        <h2>Bulk add words</h2>
+        <p class="wk-text">Paste a JSON array of words (each needs <code>word</code>, <code>reading</code>, <code>meaning</code> — <code>category</code>/<code>readingType</code>/<code>meaningMnemonic</code> optional). Unlike the Backup/Restore import, this only ADDS to your custom vocab — it never touches your review progress. Anything already in your deck or in the built-in WaniKani list (matched by word or reading) is skipped automatically.</p>
+        <textarea class="backup-textarea" id="cvBulkBox" placeholder='[{"word":"喫煙","reading":"きつえん","meaning":"Smoking","category":"tourist"}]'></textarea>
+        <button class="wk-button primary" id="cvBulkAdd">Add words</button>
+        <span id="cvBulkStatus" class="backup-status"></span>
+      </div>
+
       ${customVocabCategorySectionsHTML('vocab', myVocab)}
       ${customVocabCategorySectionsHTML('kanji', myKanji)}
     </main>`, after: attachCustomVocabHubHandlers };
@@ -4543,6 +4551,58 @@ function attachCustomVocabHubHandlers() {
     const item = { id: slugifyCustomId('kanji', char), char, onyomi, kunyomi, meaning, source: 'custom', category };
     STATE.customVocab.kanji.push(item);
     saveState();
+    render();
+  });
+
+  document.getElementById('cvBulkAdd').addEventListener('click', () => {
+    const box = document.getElementById('cvBulkBox');
+    const status = document.getElementById('cvBulkStatus');
+    let list;
+    try {
+      list = JSON.parse(box.value);
+    } catch (err) {
+      status.textContent = "That doesn't look like valid JSON.";
+      status.style.color = 'var(--color-incorrect)';
+      return;
+    }
+    if (!Array.isArray(list)) {
+      status.textContent = 'Expected a JSON array of word objects.';
+      status.style.color = 'var(--color-incorrect)';
+      return;
+    }
+    STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
+    // Dedupe against the built-in WK list AND everything already in your
+    // custom deck (by word OR reading — same two words with different
+    // glosses are still the same underlying vocab item), plus within the
+    // pasted batch itself, so pasting the same list twice is a no-op.
+    const known = new Set();
+    contentFor('vocab').forEach(v => {
+      if (v.word) known.add('w:' + v.word);
+      if (v.reading) known.add('r:' + v.reading);
+    });
+    let added = 0, skipped = 0, invalid = 0;
+    list.forEach(entry => {
+      const word = entry && entry.word && String(entry.word).trim();
+      const reading = entry && entry.reading && String(entry.reading).trim();
+      const meaning = entry && entry.meaning && String(entry.meaning).trim();
+      if (!word || !reading || !meaning) { invalid++; return; }
+      const wKey = 'w:' + word, rKey = 'r:' + reading;
+      if (known.has(wKey) || known.has(rKey)) { skipped++; return; }
+      known.add(wKey); known.add(rKey);
+      STATE.customVocab.vocab.push({
+        id: slugifyCustomId('vocab', word),
+        word, reading, meaning,
+        readingType: entry.readingType || '',
+        meaningMnemonic: entry.meaningMnemonic || '',
+        source: 'custom',
+        category: entry.category || 'custom'
+      });
+      added++;
+    });
+    saveState();
+    status.style.color = 'var(--color-correct)';
+    status.textContent = `Added ${added}, skipped ${skipped} already-known${invalid ? `, ${invalid} entries missing word/reading/meaning` : ''}.`;
+    box.value = '';
     render();
   });
 
