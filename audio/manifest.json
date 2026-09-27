@@ -15742,5 +15742,93 @@
   "れじぶくろいりますか": {
     "female": "82ed53a31a560220afd5afcb6ecf1a73-female.wav",
     "male": "82ed53a31a560220afd5afcb6ecf1a73-male.wav"
+  },
+  "あかわいん/しろわいん": {
+    "female": "cbc82ba8d831f4be2f764686eedf8116-female.wav",
+    "male": "cbc82ba8d831f4be2f764686eedf8116-male.wav"
+  },
+  "からくち/あまくち": {
+    "female": "b15991ae6d0cb8391709b8e86bab17c7-female.wav",
+    "male": "b15991ae6d0cb8391709b8e86bab17c7-male.wav"
+  },
+  "しんぐるもると/ぶれんでっど": {
+    "female": "e33f7cd68e0e56a03432c57544f0036e-female.wav",
+    "male": "e33f7cd68e0e56a03432c57544f0036e-male.wav"
+  },
+  "ちゅうじょっき/なまちゅう": {
+    "female": "3b1bc8624503d204fc9c755738609da4-female.wav",
+    "male": "3b1bc8624503d204fc9c755738609da4-male.wav"
+  },
+  "おまかせ/おこのみ": {
+    "female": "366b206343151b345c59ffc327b35421-female.wav",
+    "male": "366b206343151b345c59ffc327b35421-male.wav"
+  },
+  "ちゅうとろ/おおとろ": {
+    "female": "9c98a8fabb06e7a72afcd86ab67db6de-female.wav",
+    "male": "9c98a8fabb06e7a72afcd86ab67db6de-male.wav"
+  },
+  "こってり/あっさり": {
+    "female": "486b61b2ceec7ca7c44200bf24a36bc3-female.wav",
+    "male": "486b61b2ceec7ca7c44200bf24a36bc3-male.wav"
+  },
+  "かれー/かれーらいす": {
+    "female": "69f3ad50a11a5e6377382d5b0a689cdd-female.wav",
+    "male": "69f3ad50a11a5e6377382d5b0a689cdd-male.wav"
+  },
+  "べつべつで/いっしょで": {
+    "female": "c2300062e032ef07bad43f69971645d5-female.wav",
+    "male": "c2300062e032ef07bad43f69971645d5-male.wav"
+  },
+  "ていしょく/たんぴん/せっと": {
+    "female": "1e98de3c7fadded7dc9facab89e25090-female.wav",
+    "male": "1e98de3c7fadded7dc9facab89e25090-male.wav"
+  },
+  "ひがわり/ほんじつ/きせつ": {
+    "female": "fc48cbdb04bb45e67e756b6ebb490e9a-female.wav",
+    "male": "fc48cbdb04bb45e67e756b6ebb490e9a-male.wav"
+  },
+  "にんき/おすすめ": {
+    "female": "2392cd0dd6cde4f312e826cafb5f321d-female.wav",
+    "male": "2392cd0dd6cde4f312e826cafb5f321d-male.wav"
+  },
+  "おおもり/おかわりじゆう": {
+    "female": "fb139b6dd17a5cd2b99eacc1f2b6af83-female.wav",
+    "male": "fb139b6dd17a5cd2b99eacc1f2b6af83-male.wav"
+  },
+  "うりきれ/もちかえり": {
+    "female": "660b2d66022c377072df47b9094121c7-female.wav",
+    "male": "660b2d66022c377072df47b9094121c7-male.wav"
+  },
+  "えき/いりぐち/でぐち": {
+    "female": "65522b4780e3144f61c28ddde79cbea9-female.wav",
+    "male": "65522b4780e3144f61c28ddde79cbea9-male.wav"
+  },
+  "かいさつ/きっぷ": {
+    "female": "8e8f4244d6955c92491fa17dc16de55e-female.wav",
+    "male": "8e8f4244d6955c92491fa17dc16de55e-male.wav"
+  },
+  "のりかえ/ほーむ/のりば": {
+    "female": "1edfd494476c0949e1d33333fee67d0b-female.wav",
+    "male": "1edfd494476c0949e1d33333fee67d0b-male.wav"
+  },
+  "うんちん/じゆうせき/していせき": {
+    "female": "68e22110d06e870e16b622c006ecea32-female.wav",
+    "male": "68e22110d06e870e16b622c006ecea32-male.wav"
+  },
+  "かくえきていしゃ/ふつう/かいそく/とっきゅう": {
+    "female": "307f1fd0f5f810f56f33d6b7090dca9b-female.wav",
+    "male": "307f1fd0f5f810f56f33d6b7090dca9b-male.wav"
+  },
+  "あいしーかーど/こいんろっかー": {
+    "female": "a146876a862b7e60ff6b9a41f23b3ec3-female.wav",
+    "male": "a146876a862b7e60ff6b9a41f23b3ec3-male.wav"
+  },
+  "きけん/ひじょうぐち/とまれ/きんえん/あんない": {
+    "female": "dd600f89a7e6a73f184a60151cb83e96-female.wav",
+    "male": "dd600f89a7e6a73f184a60151cb83e96-male.wav"
+  },
+  "ぽいんとかーど/れしーと/べんとう": {
+    "female": "6822084d026bea11d5567946ea8c2aee-female.wav",
+    "male": "6822084d026bea11d5567946ea8c2aee-male.wav"
   }
 }

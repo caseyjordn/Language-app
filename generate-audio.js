@@ -141,12 +141,17 @@ async function main() {
     path.join(__dirname, 'files', 'tourist-video-vocab-new.json'),
     path.join(__dirname, 'files', 'shrimp-allergy-vocab-new.json'),
     path.join(__dirname, 'tourist-vocab-output.json'),
+    path.join(__dirname, 'files', 'tourist-vocab-splitfix.json'),
+    path.join(__dirname, 'files', 'tourist-vocab-wave2-fix.json'),
+    path.join(__dirname, 'files', 'current-progress-9-27-parsed.json'),
     ...process.argv.slice(2)
   ];
   customSources.forEach(f => {
     try {
       const j = JSON.parse(fs.readFileSync(f, 'utf8').replace(/^\uFEFF/, ''));
-      const list = Array.isArray(j) ? j : ((j.customVocab && j.customVocab.vocab) || []);
+      // Handles a plain array, a full state export ({customVocab:{vocab}}),
+      // or a {remove, add} one-time-fix file.
+      const list = Array.isArray(j) ? j : (j.add || (j.customVocab && j.customVocab.vocab) || []);
       list.forEach(v => { if (v && v.reading) texts.add(v.reading); });
     } catch (e) { /* source not present, skip */ }
   });

@@ -4441,18 +4441,28 @@ function cvDetails(key, defaultOpen, summaryHTML, bodyHTML) {
 // it just quietly cleans up on your next load and then never touches
 // anything again once nothing matches `remove` anymore.
 const TOURIST_VOCAB_ONETIME_FIX ={"remove":["ウォッシュド / 水洗式","ナチュラル / 乾式","テイクアウト / お持ち帰り","デカフェ / カフェインレス","苦味 / 苦み","甘味 / 甘み","焙煎所 / ロースタリー","食券機 / 券売機","自動販売機 / 自販機","コーヒー（微糖/無糖）","辛い/甘い/しょっぱい/酸っぱい/苦い","冷たい/温かい/熱い","焼き/煮/揚げ/生","肉/鶏肉/豚肉/牛肉/魚/野菜/卵","東口/西口/南口/北口","各駅停車/普通","お手洗い/トイレ, 男/女","右/左/上/下","温めますか？ → お願いします/大丈夫です","袋はご利用ですか？ → いりません/大丈夫です","お箸/スプーン/フォーク/ストロー","チェックイン/チェックアウト"],"add":[{"id":"水洗式","word":"水洗式","reading":"すいせんしき","meaning":"Washed Process","readingType":"noun","meaningMnemonic":"水 (water) + 洗い (washing) + 式 (method). Also called ウォッシュド (loanword).","source":"custom","category":"tourist"},{"id":"乾式","word":"乾式","reading":"かんしき","meaning":"Natural (Dry) Process","readingType":"noun","meaningMnemonic":"乾 (dry) + 式 (method). Also called ナチュラル (loanword).","source":"custom","category":"tourist"},{"id":"お持ち帰り","word":"お持ち帰り","reading":"おもちかえり","meaning":"To-Go","readingType":"noun","meaningMnemonic":"お + 持ち (carrying) + 帰り (returning home). Also called テイクアウト (loanword).","source":"custom","category":"tourist"},{"id":"デカフェ","word":"デカフェ","reading":"でかふぇ","meaning":"Decaf","readingType":"noun","meaningMnemonic":"Loanword from English \"decaf.\"","source":"custom","category":"tourist"},{"id":"カフェインレス","word":"カフェインレス","reading":"かふぇいんれす","meaning":"Caffeine-Free","readingType":"noun","meaningMnemonic":"Loanword from English \"caffeine-less.\"","source":"custom","category":"tourist"},{"id":"苦味","word":"苦味","reading":"にがみ","meaning":"Bitterness","readingType":"noun","meaningMnemonic":"苦い (bitter) + 味/み (taste/-ness).","source":"custom","category":"tourist"},{"id":"甘味","word":"甘味","reading":"あまみ","meaning":"Sweetness","readingType":"noun","meaningMnemonic":"甘い (sweet) + 味/み (taste/-ness).","source":"custom","category":"tourist"},{"id":"焙煎所","word":"焙煎所","reading":"ばいせんじょ","meaning":"Roastery","readingType":"noun","meaningMnemonic":"焙煎 (roasting) + 所 (place). Also called ロースタリー (loanword).","source":"custom","category":"tourist"},{"id":"食券機","word":"食券機","reading":"しょっけんき","meaning":"Meal Ticket Machine","readingType":"noun","meaningMnemonic":"食券 (meal ticket) + 機 (machine).","source":"custom","category":"tourist"},{"id":"券売機","word":"券売機","reading":"けんばいき","meaning":"Ticket Vending Machine","readingType":"noun","meaningMnemonic":"券売 (ticket-selling) + 機 (machine).","source":"custom","category":"tourist"},{"id":"自動販売機","word":"自動販売機","reading":"じどうはんばいき","meaning":"Vending Machine","readingType":"noun","meaningMnemonic":"自動 (automatic) + 販売 (selling) + 機 (machine). Often shortened to 自販機.","source":"custom","category":"tourist"},{"id":"自販機","word":"自販機","reading":"じはんき","meaning":"Vending Machine (Short Form)","readingType":"noun","meaningMnemonic":"Abbreviation of 自動販売機.","source":"custom","category":"tourist"},{"id":"微糖","word":"微糖","reading":"びとう","meaning":"Lightly Sweetened","readingType":"noun","meaningMnemonic":"微 (slight) + 糖 (sugar) — a canned/bottled coffee sweetness level.","source":"custom","category":"tourist"},{"id":"無糖","word":"無糖","reading":"むとう","meaning":"Unsweetened","readingType":"noun","meaningMnemonic":"無 (without) + 糖 (sugar).","source":"custom","category":"tourist"},{"id":"しょっぱい","word":"しょっぱい","reading":"しょっぱい","meaning":"Salty","readingType":"i-adjective","meaningMnemonic":"Typically written in kana.","source":"custom","category":"tourist"},{"id":"酸っぱい","word":"酸っぱい","reading":"すっぱい","meaning":"Sour","readingType":"i-adjective","meaningMnemonic":"酸 (acid) + っぱい.","source":"custom","category":"tourist"},{"id":"焼き","word":"焼き","reading":"やき","meaning":"Grilled","readingType":"noun","meaningMnemonic":"From 焼く, \"to grill/bake.\"","source":"custom","category":"tourist"},{"id":"揚げ","word":"揚げ","reading":"あげ","meaning":"Deep-Fried","readingType":"noun","meaningMnemonic":"From 揚げる, \"to deep-fry.\"","source":"custom","category":"tourist"},{"id":"鶏肉","word":"鶏肉","reading":"とりにく","meaning":"Chicken (Meat)","readingType":"noun","meaningMnemonic":"鶏 (chicken) + 肉 (meat).","source":"custom","category":"tourist"},{"id":"各駅停車","word":"各駅停車","reading":"かくえきていしゃ","meaning":"Local (Train, Stops Every Station)","readingType":"noun","meaningMnemonic":"各 (each) + 駅 (station) + 停車 (stopping).","source":"custom","category":"tourist"},{"id":"普通","word":"普通","reading":"ふつう","meaning":"Normal / Local (Train)","readingType":"noun","meaningMnemonic":"普 (general) + 通 (passing) — also just means \"normal\" generally.","source":"custom","category":"tourist"},{"id":"お手洗い","word":"お手洗い","reading":"おてあらい","meaning":"Restroom (Polite)","readingType":"noun","meaningMnemonic":"お + 手 (hand) + 洗い (washing).","source":"custom","category":"tourist"},{"id":"温めますか","word":"温めますか","reading":"あたためますか","meaning":"Would You Like This Heated?","readingType":"expression","meaningMnemonic":"温めます (will warm, from 温める) + か (question) — asked at a konbini register.","source":"custom","category":"tourist"},{"id":"いりません","word":"いりません","reading":"いりません","meaning":"No, Thanks (Don't Need It)","readingType":"expression","meaningMnemonic":"Negative of 要る, \"to need/require.\"","source":"custom","category":"tourist"},{"id":"スプーン","word":"スプーン","reading":"すぷーん","meaning":"Spoon","readingType":"noun","meaningMnemonic":"Loanword from English \"spoon.\"","source":"custom","category":"tourist"},{"id":"フォーク","word":"フォーク","reading":"ふぉーく","meaning":"Fork","readingType":"noun","meaningMnemonic":"Loanword from English \"fork.\"","source":"custom","category":"tourist"},{"id":"ストロー","word":"ストロー","reading":"すとろー","meaning":"Straw","readingType":"noun","meaningMnemonic":"Loanword from English \"straw.\"","source":"custom","category":"tourist"},{"id":"チェックイン","word":"チェックイン","reading":"ちぇっくいん","meaning":"Check-In","readingType":"noun","meaningMnemonic":"Loanword from English \"check-in.\"","source":"custom","category":"tourist"},{"id":"チェックアウト","word":"チェックアウト","reading":"ちぇっくあうと","meaning":"Check-Out","readingType":"noun","meaningMnemonic":"Loanword from English \"check-out.\"","source":"custom","category":"tourist"},{"id":"甘い","word":"甘い","reading":"あまい","meaning":"Sweet","readingType":"i-adjective","meaningMnemonic":"A common taste adjective.","source":"custom","category":"tourist"},{"id":"熱い","word":"熱い","reading":"あつい","meaning":"Hot (To Touch)","readingType":"i-adjective","meaningMnemonic":"From 熱する, \"to heat.\" Different kanji from 暑い (hot weather).","source":"custom","category":"tourist"},{"id":"野菜","word":"野菜","reading":"やさい","meaning":"Vegetables","readingType":"noun","meaningMnemonic":"野 (field) + 菜 (greens).","source":"custom","category":"tourist"},{"id":"卵","word":"卵","reading":"たまご","meaning":"Egg","readingType":"noun","meaningMnemonic":"A single kanji meaning \"egg.\"","source":"custom","category":"tourist"},{"id":"お箸","word":"お箸","reading":"おはし","meaning":"Chopsticks","readingType":"noun","meaningMnemonic":"お (honorific prefix) + 箸 (chopsticks).","source":"custom","category":"tourist"},{"id":"レジ袋いりますか","word":"レジ袋いりますか","reading":"れじぶくろいりますか","meaning":"Do You Need a Plastic Bag?","readingType":"expression","meaningMnemonic":"レジ (loanword \"register/cashier,\" short for レジスター) + 袋 (ぶくろ, \"bag\") + いります (いります, \"need,\" from 要る) + か (question particle). Together: \"do you need a plastic/checkout bag?\" A more casual/common phrasing than 袋はご利用ですか.","source":"custom","category":"tourist"}]};
+const TOURIST_VOCAB_ONETIME_FIX_WAVE2 = {"remove":["赤ワイン / 白ワイン","辛口 / 甘口","シングルモルト / ブレンデッド","中ジョッキ / 生中","おまかせ / お好み","中トロ / 大トロ","こってり / あっさり","カレー / カレーライス","別々で / 一緒で","定食 / 単品 / セット","日替わり / 本日 / 季節","人気 / おすすめ","大盛り / おかわり自由","売り切れ / 持ち帰り","駅 / 入口 / 出口","改札 / 切符","乗り換え / ホーム / 乗り場","運賃 / 自由席 / 指定席","各駅停車/普通 / 快速 / 特急","ICカード / コインロッカー","危険 / 非常口 / 止まれ / 禁煙 / 案内","ポイントカード / レシート / 弁当",{"word":"瓶ビール","reading":"びんビール"}],"add":[{"id":"赤ワイン","word":"赤ワイン","reading":"あかわいん","meaning":"Red","readingType":"","meaningMnemonic":"赤 (あか, \"red\") + ワイン (loanword \"wine\").","source":"custom","category":"tourist"},{"id":"白ワイン","word":"白ワイン","reading":"しろわいん","meaning":"White Wine","readingType":"","meaningMnemonic":"白 (しろ, \"white\") + ワイン (loanword \"wine\").","source":"custom","category":"tourist"},{"id":"甘口","word":"甘口","reading":"あまくち","meaning":"Sweet","readingType":"","meaningMnemonic":"甘い (あまい, \"sweet\") + 口 (くち, \"mouth/taste profile\") — a sweet sake/drink.","source":"custom","category":"tourist"},{"id":"シングルモルト","word":"シングルモルト","reading":"しんぐるもると","meaning":"Single Malt","readingType":"","meaningMnemonic":"Loanword from English \"single malt\" (whiskey).","source":"custom","category":"tourist"},{"id":"ブレンデッド","word":"ブレンデッド","reading":"ぶれんでっど","meaning":"Blended","readingType":"","meaningMnemonic":"Loanword from English \"blended\" (whiskey).","source":"custom","category":"tourist"},{"id":"中ジョッキ","word":"中ジョッキ","reading":"ちゅうジョッキ","meaning":"Medium Mug","readingType":"","meaningMnemonic":"中 (ちゅう, \"medium\") + ジョッキ (loanword \"jug/mug\").","source":"custom","category":"tourist"},{"id":"生中","word":"生中","reading":"なまちゅう","meaning":"A Medium Draft","readingType":"","meaningMnemonic":"生 (なま, \"fresh/draft\") + 中 (ちゅう, \"medium\") — casual term for a medium draft beer.","source":"custom","category":"tourist"},{"id":"おまかせ","word":"おまかせ","reading":"おまかせ","meaning":"Chef's Choice","readingType":"","meaningMnemonic":"お (honorific) + 任せ (まかせ, \"entrusting\") — chef's discretion.","source":"custom","category":"tourist"},{"id":"お好み","word":"お好み","reading":"おこのみ","meaning":"À La Carte","readingType":"","meaningMnemonic":"お (honorific) + 好み (このみ, \"preference,\" from 好く \"to like\") — ordering as you like.","source":"custom","category":"tourist"},{"id":"中トロ","word":"中トロ","reading":"ちゅうとろ","meaning":"Medium","readingType":"","meaningMnemonic":"中 (ちゅう, \"medium\") + トロ (slang for the fatty tuna belly cut).","source":"custom","category":"tourist"},{"id":"大トロ","word":"大トロ","reading":"おおとろ","meaning":"Fatty Tuna Belly","readingType":"","meaningMnemonic":"大 (おお, \"big\") + トロ (slang for the fatty tuna belly cut) — the fattiest cut.","source":"custom","category":"tourist"},{"id":"こってり","word":"こってり","reading":"こってり","meaning":"Rich/Heavy (Flavor)","readingType":"","meaningMnemonic":"Kana-only descriptive word for a rich/heavy broth, no kanji.","source":"custom","category":"tourist"},{"id":"あっさり","word":"あっさり","reading":"あっさり","meaning":"Light (Flavor)","readingType":"","meaningMnemonic":"Kana-only descriptive word for a light broth, no kanji.","source":"custom","category":"tourist"},{"id":"カレーライス","word":"カレーライス","reading":"かれーらいす","meaning":"Curry Rice","readingType":"","meaningMnemonic":"カレー (loanword \"curry\") + ライス (loanword \"rice\").","source":"custom","category":"tourist"},{"id":"別々で","word":"別々で","reading":"べつべつで","meaning":"Separate","readingType":"","meaningMnemonic":"別々 (べつべつ, \"separately,\" from 別 \"separate/different\") + で.","source":"custom","category":"tourist"},{"id":"一緒で","word":"一緒で","reading":"いっしょで","meaning":"Together","readingType":"","meaningMnemonic":"一緒 (いっしょ, \"together,\" 一 \"one\" + 緒 \"thread/together\") + で.","source":"custom","category":"tourist"},{"id":"定食","word":"定食","reading":"ていしょく","meaning":"Set Meal","readingType":"","meaningMnemonic":"定 (fixed) + 食 (meal) — a fixed set meal.","source":"custom","category":"tourist"},{"id":"単品","word":"単品","reading":"たんぴん","meaning":"À La Carte","readingType":"","meaningMnemonic":"単 (single) + 品 (item) — an à la carte single item.","source":"custom","category":"tourist"},{"id":"セット","word":"セット","reading":"せっと","meaning":"Combo","readingType":"","meaningMnemonic":"Loanword from English \"set\" (a combo meal).","source":"custom","category":"tourist"},{"id":"日替わり","word":"日替わり","reading":"ひがわり","meaning":"Daily Special","readingType":"","meaningMnemonic":"日 (day) + 替わり (changing) — changes daily.","source":"custom","category":"tourist"},{"id":"本日","word":"本日","reading":"ほんじつ","meaning":"Today's","readingType":"","meaningMnemonic":"本 (this/main) + 日 (day) — formal word for \"today.\"","source":"custom","category":"tourist"},{"id":"季節","word":"季節","reading":"きせつ","meaning":"Seasonal","readingType":"","meaningMnemonic":"季 (season) + 節 (occasion/period).","source":"custom","category":"tourist"},{"id":"おかわり自由","word":"おかわり自由","reading":"おかわりじゆう","meaning":"Free Refills","readingType":"","meaningMnemonic":"おかわり (\"another helping\") + 自由 (じゆう, \"freedom\") — free refills.","source":"custom","category":"tourist"},{"id":"持ち帰り","word":"持ち帰り","reading":"もちかえり","meaning":"Takeout","readingType":"","meaningMnemonic":"持ち (carrying) + 帰り (returning) — takeout.","source":"custom","category":"tourist"},{"id":"改札","word":"改札","reading":"かいさつ","meaning":"Ticket Gate","readingType":"","meaningMnemonic":"改 (check/revise) + 札 (tag/ticket) — the ticket gate.","source":"custom","category":"tourist"},{"id":"乗り換え","word":"乗り換え","reading":"のりかえ","meaning":"Transfer","readingType":"","meaningMnemonic":"乗り (riding, from 乗る) + 換え (exchanging, from 換える) — a transfer.","source":"custom","category":"tourist"},{"id":"ホーム","word":"ホーム","reading":"ほーむ","meaning":"Platform","readingType":"","meaningMnemonic":"Loanword from English \"platform\" (of a station).","source":"custom","category":"tourist"},{"id":"乗り場","word":"乗り場","reading":"のりば","meaning":"Boarding Point","readingType":"","meaningMnemonic":"乗り (riding) + 場 (place) — a boarding point.","source":"custom","category":"tourist"},{"id":"運賃","word":"運賃","reading":"うんちん","meaning":"Fare","readingType":"","meaningMnemonic":"運ぶ (to transport) + 賃 (fee) — a fare.","source":"custom","category":"tourist"},{"id":"自由席","word":"自由席","reading":"じゆうせき","meaning":"Non-Reserved","readingType":"","meaningMnemonic":"自由 (freedom) + 席 (seat) — non-reserved seating.","source":"custom","category":"tourist"},{"id":"指定席","word":"指定席","reading":"していせき","meaning":"Reserved Seat","readingType":"","meaningMnemonic":"指定 (designation, 指 \"point/finger\" + 定 \"fix\") + 席 (seat) — reserved seating.","source":"custom","category":"tourist"},{"id":"快速","word":"快速","reading":"かいそく","meaning":"Rapid (Train)","readingType":"","meaningMnemonic":"快 (pleasant/fast) + 速 (speed) — a rapid train.","source":"custom","category":"tourist"},{"id":"特急","word":"特急","reading":"とっきゅう","meaning":"Limited Express (Train)","readingType":"","meaningMnemonic":"特 (special) + 急 (urgent/rapid) — a limited express train.","source":"custom","category":"tourist"},{"id":"ICカード","word":"ICカード","reading":"あいしーかーど","meaning":"IC Card","readingType":"","meaningMnemonic":"Loanword \"IC card\" (a rechargeable transit card).","source":"custom","category":"tourist"},{"id":"コインロッカー","word":"コインロッカー","reading":"こいんろっかー","meaning":"Coin Locker","readingType":"","meaningMnemonic":"Loanword from English \"coin locker.\"","source":"custom","category":"tourist"},{"id":"危険","word":"危険","reading":"きけん","meaning":"Danger","readingType":"","meaningMnemonic":"危ない (dangerous) + 険しい (steep/risky).","source":"custom","category":"tourist"},{"id":"非常口","word":"非常口","reading":"ひじょうぐち","meaning":"Emergency Exit","readingType":"","meaningMnemonic":"非常 (emergency, 非 \"non-\" + 常 \"normal\") + 口 (opening).","source":"custom","category":"tourist"},{"id":"止まれ","word":"止まれ","reading":"とまれ","meaning":"Stop","readingType":"","meaningMnemonic":"Imperative form of 止まる, \"to stop.\"","source":"custom","category":"tourist"},{"id":"禁煙","word":"禁煙","reading":"きんえん","meaning":"No Smoking","readingType":"","meaningMnemonic":"","source":"custom","category":"tourist"},{"id":"案内","word":"案内","reading":"あんない","meaning":"Information","readingType":"","meaningMnemonic":"案 (plan/proposal) + 内 (inside) — information/guidance.","source":"custom","category":"tourist"},{"id":"ポイントカード","word":"ポイントカード","reading":"ぽいんとかーど","meaning":"Point Card","readingType":"","meaningMnemonic":"Loanword from English \"point card.\"","source":"custom","category":"tourist"},{"id":"レシート","word":"レシート","reading":"れしーと","meaning":"Receipt","readingType":"","meaningMnemonic":"Loanword from English \"receipt.\"","source":"custom","category":"tourist"},{"id":"瓶ビール","word":"瓶ビール","reading":"びんびーる","meaning":"Bottled Beer","readingType":"","meaningMnemonic":"瓶 (びん, \"bottle\") + ビール (loanword \"beer\").","source":"custom","category":"tourist"}]};
+
 
 // Runs the fix above once, silently, if it's still needed — no UI, no
 // confirmation, nothing to click. Safe to call on every boot: once
 // nothing in customVocab.vocab matches TOURIST_VOCAB_ONETIME_FIX.remove
 // anymore, this is a same-tick no-op forever after.
-function applyTouristVocabOnetimeFix() {
+function applyOneTimeVocabFix(fix) {
   STATE.customVocab = STATE.customVocab || { vocab: [], kanji: [], grammar: [] };
-  const removeSet = new Set(TOURIST_VOCAB_ONETIME_FIX.remove);
-  const hasPending = STATE.customVocab.vocab.some(it => removeSet.has(it.word));
+  // `remove` entries are plain word strings (a bundled entry with a word
+  // no future "add" will ever reuse), OR {word, reading} pairs — needed
+  // when a fix corrects an EXISTING word's reading in place (its word
+  // reappears in `add` with the fixed reading), so matching by word alone
+  // would treat the just-corrected entry as still-pending forever and
+  // remove+recreate it every single boot.
+  const removeWords = new Set(fix.remove.filter(r => typeof r === 'string'));
+  const removePairs = fix.remove.filter(r => typeof r === 'object');
+  const matches = it => removeWords.has(it.word) || removePairs.some(p => p.word === it.word && p.reading === it.reading);
+  const hasPending = STATE.customVocab.vocab.some(matches);
   if (!hasPending) return;
   STATE.customVocab.vocab = STATE.customVocab.vocab.filter(it => {
-    if (!removeSet.has(it.word)) return true;
+    if (!matches(it)) return true;
     delete STATE.items[itemKey('vocab', it.id)];
     return false;
   });
@@ -4461,12 +4471,21 @@ function applyTouristVocabOnetimeFix() {
     if (v.word) known.add('w:' + v.word);
     if (v.reading) known.add('r:' + v.reading);
   });
-  TOURIST_VOCAB_ONETIME_FIX.add.forEach(entry => {
+  fix.add.forEach(entry => {
     const wKey = 'w:' + entry.word, rKey = 'r:' + entry.reading;
     if (known.has(wKey) || known.has(rKey)) return;
     known.add(wKey); known.add(rKey);
     STATE.customVocab.vocab.push({ ...entry, id: slugifyCustomId('vocab', entry.word) });
   });
+}
+function applyTouristVocabOnetimeFix() {
+  applyOneTimeVocabFix(TOURIST_VOCAB_ONETIME_FIX);
+  // Wave 2 — a second batch of bundled multi-word tourist entries found
+  // later (右/左/上/下-style bundling wasn't fully caught the first time),
+  // plus a stray unfixed mixed-katakana reading (瓶ビール) that the earlier
+  // reading correction never actually reached your live account, only my
+  // local reference files. Same mechanism, just a second list.
+  applyOneTimeVocabFix(TOURIST_VOCAB_ONETIME_FIX_WAVE2);
 }
 
 
@@ -5676,7 +5695,27 @@ function buildQuizSession(type, items, mode) {
 // no single section to return to.
 function buildMixedQuizSession(entries, mode, backRoute) {
   const questions = [];
-  entries.forEach(({ type, item }) => fieldsFor(type, item).forEach(field => questions.push({ itemType: type, itemId: item.id, field })));
+  entries.forEach(({ type, item }) => fieldsFor(type, item).forEach(field => {
+    const q = { itemType: type, itemId: item.id, field };
+    // Tourist vocab's one Meaning question (see fieldsFor/isKanjiReadingSkipped)
+    // rotates between three ways to be asked, picked fresh each time the
+    // word comes up: (1) normal — see the word, type the English meaning;
+    // (2) reverse — see the English meaning, type the reading back (real
+    // production, not just recognition — reuses the same answer-checking
+    // as an ordinary reading question, just with English as the prompt
+    // instead of the word); (3) listening — hear it, type the meaning,
+    // no text shown at all. field flips to 'reading' for reverse so
+    // acceptedFor/isCloseEnough/the live romaji->kana converter all treat
+    // it exactly like any other reading answer, with zero changes to any
+    // of that shared machinery.
+    if (type === 'vocab' && field === 'meaning' && item.source === 'custom' && item.category === 'tourist') {
+      const roll = Math.random();
+      if (roll < 1 / 3) { q.quizStyle = 'reverse'; q.field = 'reading'; }
+      else if (roll < 2 / 3) q.quizStyle = 'listening';
+      else q.quizStyle = 'normal';
+    }
+    questions.push(q);
+  }));
   shuffleArray(questions);
   // Tracks every distinct type in the session so a finished mixed review
   // (e.g. the "Active Reviews" page, vocab+kanji together) can check
@@ -5756,22 +5795,36 @@ function renderQuizQuestion() {
   const segCount = Math.min(totalQuestions, 18);
   const segs = Array.from({ length: segCount }, (_, i) => `<span class="${i < Math.round((answeredCount / totalQuestions) * segCount) ? 'done' : ''}"></span>`).join('');
 
-  const label = type === 'grammar' ? 'Fill in the blank' : (q.field === 'meaning' ? 'Meaning' : 'Reading');
-  const promptChar = type === 'grammar' ? blankSentence(item) : displayWord(type, item);
+  const label = type === 'grammar' ? 'Fill in the blank'
+    : q.quizStyle === 'reverse' ? 'Type the Reading'
+    : q.quizStyle === 'listening' ? 'Listen & Translate'
+    : (q.field === 'meaning' ? 'Meaning' : 'Reading');
+  // Tourist vocab's Meaning question rotates between three prompt styles
+  // (see buildMixedQuizSession) — everything else always uses the plain
+  // "show the word" prompt.
+  const promptChar = type === 'grammar' ? blankSentence(item)
+    : q.quizStyle === 'reverse' ? displayMeaning(type, item)
+    : q.quizStyle === 'listening' ? '🔊'
+    : displayWord(type, item);
   const placeholder = type === 'grammar' ? 'type the missing part' : (q.field === 'meaning' ? 'English meaning' : 'reading (kana or romaji)');
-  // audio only offered on Meaning questions — playing the reading on a
-  // Reading question would just hand you the answer
-  const ttsButton = (type !== 'grammar' && q.field === 'meaning' && displayReading(type, item))
+  // audio only offered on a Meaning question (playing the reading on a
+  // Reading question — including "reverse" style, which is a reading
+  // question with English as the prompt — would just hand you the
+  // answer) — except "listening" style, where the audio IS the question,
+  // so it always gets a bigger, more prominent player in place of the
+  // small optional button.
+  const ttsButton = q.quizStyle === 'listening'
+    ? `<div class="hero-audio-wrap listening-audio" style="margin-top:16px">${audioButtonsHTML(displayReading(type, item), 'background:rgba(255,255,255,.25);border-color:transparent;color:#fff;font-size:16px;padding:10px 20px')}</div>`
+    : (type !== 'grammar' && q.field === 'meaning' && displayReading(type, item))
     ? `<div class="hero-audio-wrap" style="margin-top:8px">${audioButtonsHTML(displayReading(type, item), 'background:rgba(255,255,255,.18);border-color:transparent;color:#fff')}</div>`
     : '';
-  // Tourist vocab is only ever quizzed on Meaning (see fieldsFor) — the
-  // kanji word is shown as the prompt, same as everything else, but with
-  // its reading available as a hidden-by-default hint you can reveal,
-  // rather than as the prompt itself. Never applies to a Reading question
-  // (can't happen for tourist vocab anyway, but the check stays cheap
-  // insurance) and skipped for already-pure-kana words, which have
-  // nothing to reveal.
-  const kanaHint = (type === 'vocab' && item.source === 'custom' && item.category === 'tourist' && q.field === 'meaning' && !isPureKana(item.word) && displayReading(type, item))
+  // The hidden-reveal reading hint only makes sense for the "normal" style
+  // (word shown, meaning typed) — "reverse" already requires producing the
+  // reading directly (revealing it would just answer the question for
+  // you), and "listening" has no word on screen to hint about. Skipped for
+  // already-pure-kana words either way, which have nothing to reveal.
+  const kanaHint = (type === 'vocab' && item.source === 'custom' && item.category === 'tourist' && q.field === 'meaning'
+      && (!q.quizStyle || q.quizStyle === 'normal') && !isPureKana(item.word) && displayReading(type, item))
     ? `<div class="kana-reveal" style="margin-top:8px">
         <div class="kana-hint">${displayReading(type, item)}</div>
         <button type="button" class="reveal-btn" data-reveal-toggle data-show-label="Show reading" data-hide-label="Hide reading" style="background:rgba(255,255,255,.18);color:#fff;border-color:transparent">Show reading</button>
