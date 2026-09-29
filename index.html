@@ -3393,9 +3393,30 @@ function acceptedFor(type, item, field) {
 // instead of a hard wrong answer. Generalized from the old on'yomi/
 // kun'yomi-only pair to any number of otherReadings, since a kanji can
 // have several (WK's own vocab-level readings included).
+// Real, genuinely-correct readings you might type for the wrong reason —
+// mixing up a kanji's on'yomi/kun'yomi, or mixing up a kanji's own reading
+// with the compound reading of a vocab word built from it (both directions:
+// asked for the kanji, you type the vocab's reading; asked for the vocab,
+// you type one of its kanji's own readings). Matching one of these still
+// counts as a miss for SRS — see the caller — it just gets a gentler retry
+// instead of the full miss flow, since it's a "right ballpark, wrong
+// target" slip rather than a genuinely wrong guess.
 function otherReadingFor(type, item, field) {
-  if (type !== 'kanji' || field !== 'reading') return [];
-  return item.otherReadings || [];
+  if (field !== 'reading') return [];
+  if (type === 'kanji') {
+    const curated = item.otherReadings || [];
+    const vocabMatches = VOCAB.filter(v => v.word === item.char).map(v => v.reading).filter(Boolean);
+    return [...new Set([...curated, ...vocabMatches])];
+  }
+  if (type === 'vocab') {
+    const chars = [...new Set(String(item.word))].filter(ch => KANJI.some(k => k.char === ch));
+    const kanjiReadings = chars.flatMap(ch => {
+      const k = KANJI.find(kk => kk.char === ch);
+      return k ? [k.onyomi, k.kunyomi, ...(k.otherReadings || [])] : [];
+    }).filter(Boolean);
+    return [...new Set(kanjiReadings)];
+  }
+  return [];
 }
 
 /* ======================================================================
@@ -3579,15 +3600,29 @@ async function playViaVoicevoxEngine(text, speakerId) {
 // whatever's available right now (which is normally already populated by
 // the time someone's clicked into a lesson) rather than blocking on it.
 let _cachedVoices = null;
-function getJapaneseVoice() {
+// Most systems that ship more than one ja-JP voice at all name them after
+// the underlying character/persona rather than exposing gender as its own
+// field — these substrings are the common male ones (Windows' Ichiro,
+// iOS/macOS's Otoya, plus the generic word itself if a platform does label
+// it). Anything not matching is treated as the "female" bucket, same as
+// this app's fallback always defaulted to before. When only one ja-JP
+// voice exists at all (the common case — most systems ship exactly one),
+// gender can't change anything and both buttons keep sounding the same;
+// that's a real platform limitation, not something this app can fix.
+const MALE_VOICE_NAME_HINTS = ['ichiro', 'otoya', 'male', 'takeshi', 'daichi'];
+function getJapaneseVoice(gender = 'female') {
   if (!window.speechSynthesis) return null;
   const voices = window.speechSynthesis.getVoices();
   if (voices && voices.length) _cachedVoices = voices;
-  const pool = _cachedVoices || voices || [];
-  return pool.find(v => v.lang === 'ja-JP') || pool.find(v => v.lang && v.lang.startsWith('ja')) || null;
+  const pool = (_cachedVoices || voices || []).filter(v => v.lang === 'ja-JP' || (v.lang && v.lang.startsWith('ja')));
+  if (!pool.length) return null;
+  if (pool.length === 1) return pool[0];
+  const isMaleVoice = v => MALE_VOICE_NAME_HINTS.some(h => v.name.toLowerCase().includes(h));
+  const wantMale = gender === 'male';
+  return pool.find(v => isMaleVoice(v) === wantMale) || pool[0];
 }
 
-function playViaBrowserTTS(text) {
+function playViaBrowserTTS(text, gender = 'female') {
   if (!window.speechSynthesis) return false;
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = 'ja-JP';
@@ -3595,7 +3630,7 @@ function playViaBrowserTTS(text) {
   // matching one — setting just `.lang` is occasionally silently ignored
   // if the platform's default voice doesn't support it, which reads as
   // "nothing happened" with no error at all.
-  const jaVoice = getJapaneseVoice();
+  const jaVoice = getJapaneseVoice(gender);
   if (jaVoice) utter.voice = jaVoice;
   utter.onerror = e => console.warn('Browser speech synthesis error:', e.error);
   window.speechSynthesis.speak(utter);
@@ -3631,7 +3666,7 @@ async function playTTS(text, gender = 'female') {
       console.warn('Live VOICEVOX Engine unreachable, falling back to browser TTS:', err);
     }
   }
-  if (!playViaBrowserTTS(text)) {
+  if (!playViaBrowserTTS(text, gender)) {
     alert('No audio available: no pre-generated file, VOICEVOX Engine unreachable, and this browser has no built-in speech synthesis.');
   }
 }
@@ -4486,6 +4521,17 @@ function applyTouristVocabOnetimeFix() {
   // reading correction never actually reached your live account, only my
   // local reference files. Same mechanism, just a second list.
   applyOneTimeVocabFix(TOURIST_VOCAB_ONETIME_FIX_WAVE2);
+  // Wave 3 — wave 2 itself introduced one bad reading: splitting
+  // "中ジョッキ / 生中" carried over the bundle's own un-fixed mixed-katakana
+  // reading (ちゅうジョッキ) instead of the corrected all-hiragana form used
+  // everywhere else (ちゅうじょっき). Audio still worked either way (the
+  // lookup key folds katakana->hiragana regardless), but the displayed/
+  // typed reading was wrong. {word, reading} pair so this only touches
+  // that specific bad entry, not any correctly-spelled one.
+  applyOneTimeVocabFix({
+    remove: [{ word: '中ジョッキ', reading: 'ちゅうジョッキ' }],
+    add: [{ id: '中ジョッキ', word: '中ジョッキ', reading: 'ちゅうじょっき', meaning: 'Medium Mug', readingType: '', meaningMnemonic: '中 (ちゅう, "medium") + ジョッキ (loanword "jug/mug").', source: 'custom', category: 'tourist' }]
+  });
 }
 
 

@@ -1,12 +1,20 @@
 // Service worker for offline/installable support.
 //
 // Strategy:
-// - index.html (the actual code): network-first, falling back to cache when
-//   offline. This means whenever you're online, you always get the latest
-//   version I've pushed — the cache is just a safety net for offline use,
-//   not something that can serve you stale code indefinitely.
-// - Audio files, manifest.json, icons: cache-first. These are immutable
-//   once generated (a given word's audio file never changes), so there's
+// - index.html (the actual code) AND audio/manifest.json: network-first,
+//   falling back to cache when offline. manifest.json is NOT immutable —
+//   it grows every time new vocab gets audio generated for it — so
+//   treating it as cache-first (which it was until this bug fix) meant
+//   the very first time it got cached, it was cached FOREVER: a phone
+//   that had the app installed before a new custom word's audio was
+//   generated would never learn that word now has a real file, even
+//   though the file and an up-to-date manifest both genuinely exist on
+//   the server. New custom vocab would silently keep falling back to
+//   robotic browser TTS indefinitely. This is why it's split out from
+//   the actual audio files below now.
+// - Audio .wav files, icons: cache-first. These ARE genuinely immutable
+//   once generated (a given word's audio file never changes — a fix
+//   means a NEW filename, not new bytes under the old one), so there's
 //   no reason to hit the network for them once cached — this is what
 //   makes the app actually work with no connection on your phone.
 //
@@ -62,8 +70,9 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
-  const isCore = url.pathname.endsWith('/index.html') || url.pathname === '/' || url.pathname.endsWith('/');
-  const isAudio = url.pathname.includes('/audio/');
+  const isManifest = url.pathname.endsWith('/audio/manifest.json');
+  const isCore = isManifest || url.pathname.endsWith('/index.html') || url.pathname === '/' || url.pathname.endsWith('/');
+  const isAudio = url.pathname.includes('/audio/') && !isManifest;
 
   if (isAudio) {
     // cache-first: immutable content, no need to ever re-fetch once cached
