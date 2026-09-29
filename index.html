@@ -6624,7 +6624,15 @@ auth.onAuthStateChanged(user => {
 // keep working fine either way, this is purely additive.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(err => {
+    // updateViaCache: 'none' — without this, the browser is allowed to
+    // check "has sw.js changed?" against its own cached copy of sw.js
+    // instead of actually asking the network, so an update to THIS FILE
+    // can go unnoticed indefinitely even though the bytes on the server
+    // genuinely changed (this is exactly what just required a manual
+    // "Unregister" in DevTools to get past). Forcing every update check
+    // to hit the network for real means a normal reload is enough to pick
+    // up a future sw.js change, with no manual unregister needed.
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(err => {
       console.warn('Service worker registration skipped:', err.message);
     });
   });
