@@ -520,6 +520,8 @@
 
   .custom-vocab-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--color-widget-border);font-size:14px}
   .custom-vocab-row .cv-stage{flex:none;width:10px;height:10px;border-radius:3px;display:inline-block}
+  .custom-vocab-row .cv-info{display:flex;align-items:center;gap:12px;flex:1;min-width:0;color:inherit;text-decoration:none}
+  .custom-vocab-row .cv-info:hover{text-decoration:underline}
   .custom-vocab-row .cv-word{font-weight:700;min-width:70px}
   .custom-vocab-row .cv-reading{color:var(--color-widget-secondary-text);min-width:80px}
   .custom-vocab-row .cv-meaning{flex:1;color:var(--color-widget-secondary-text)}
@@ -4599,9 +4601,11 @@ function customVocabLearnedRow(type, item, record) {
   return `
     <div class="custom-vocab-row">
       <span class="cv-stage" style="background:${TIER_TOAST_COLOR[tierForStage(record.stage)]}"></span>
-      <span class="cv-word">${displayWord(type, item)}</span>
-      <span class="cv-reading">${item.reading || item.onyomi || item.kunyomi || ''}</span>
-      <span class="cv-meaning">${item.meaning}</span>
+      <a class="cv-info" href="#/${sectionBase(type)}/library/${encodeURIComponent(item.id)}">
+        <span class="cv-word">${displayWord(type, item)}</span>
+        <span class="cv-reading">${item.reading || item.onyomi || item.kunyomi || ''}</span>
+        <span class="cv-meaning">${item.meaning}</span>
+      </a>
       <button class="cv-remove" data-type="${type}" data-id="${item.id}">Remove</button>
     </div>`;
 }
@@ -6239,12 +6243,16 @@ function viewSentencesHub() {
   const kanjiCount = introducedItems('kanji').length;
   const grammarCount = introducedItems('grammar').length;
   const available = availableSentences().length;
+  const readDue = sentenceReviewQueue('read-type').length;
+  const readNew = sentenceNewQueue('read-type').length;
+  const translateDue = sentenceReviewQueue('translate').length;
+  const translateNew = sentenceNewQueue('translate').length;
   return { html: `
     <main>
       <div class="page-header">
         <h1><span class="chip" style="background:${COLOR_MAP.sentences.accent}">文</span>Sentences</h1>
       </div>
-      <p class="page-sub">Practice reading, typing, and translating using what you've already learned in Vocab, Kanji, and Grammar.</p>
+      <p class="page-sub">Practice reading, typing, and translating using what you've already learned in Vocab, Kanji, and Grammar. Each sentence tracks its own progress and comes back for review on the same schedule as everything else — get one right and it won't show up again until it's actually due.</p>
       <div class="pool-line">Built from <b>${vocabCount}</b> vocab words, <b>${kanjiCount}</b> kanji, and <b>${grammarCount}</b> grammar points you know — <b>${available}</b> sentence${available === 1 ? '' : 's'} unlocked</div>
 
       <div class="mode-grid">
@@ -6252,22 +6260,61 @@ function viewSentencesHub() {
           <div class="mode-icon">📖</div>
           <h2>Read &amp; Type</h2>
           <p>See a Japanese sentence made from words you know, then type it out.</p>
-          <a class="wk-button primary" href="#/sentences/read-type" ${available ? '' : 'style="pointer-events:none;opacity:.4"'}>Start Read &amp; Type</a>
+          <p class="wk-text">${readDue} due for review, ${readNew} not started yet</p>
+          <a class="wk-button primary" href="#/sentences/read-type" ${(readDue + readNew) ? '' : 'style="pointer-events:none;opacity:.4"'}>Start Read &amp; Type</a>
         </div>
         <div class="mode-card">
           <div class="mode-icon">🌐</div>
           <h2>Translate</h2>
           <p>Given an English sentence or scenario, type the Japanese translation yourself.</p>
-          <a class="wk-button primary" href="#/sentences/translate" ${available ? '' : 'style="pointer-events:none;opacity:.4"'}>Start Translate</a>
+          <p class="wk-text">${translateDue} due for review, ${translateNew} not started yet</p>
+          <a class="wk-button primary" href="#/sentences/translate" ${(translateDue + translateNew) ? '' : 'style="pointer-events:none;opacity:.4"'}>Start Translate</a>
         </div>
       </div>
       ${available ? '' : `<p class="empty-state" style="margin-top:16px">No sentences unlocked yet — learn some vocab/kanji/grammar to unlock them.</p>`}
     </main>` };
 }
 
+// Sentences get their own SRS tracks, completely separate from the shared
+// vocab/kanji/grammar Apprentice pool — same stage/timing mechanics
+// (applyReviewOutcome, SRS_HOURS, everything), just its own item keys, so
+// finishing a sentence here has no effect on that shared limit. Read & Type
+// and Translate are different enough skills that they're tracked as two
+// entirely independent tracks per sentence — getting a sentence's reading
+// down doesn't mean its translation is due any sooner or later.
+function sentenceItemType(mode) { return mode === 'translate' ? 'sentence-translate' : 'sentence-read'; }
+function sentencesForMode(mode) {
+  return availableSentences().filter(s => mode === 'translate' ? (s.acceptedTranslations && s.acceptedTranslations.length) : (s.acceptedReadings && s.acceptedReadings.length));
+}
+function sentenceReviewQueue(mode) {
+  const type = sentenceItemType(mode);
+  return sentencesForMode(mode).filter(s => {
+    const r = getRecord(type, s.id);
+    return r && r.stage < 9 && r.availableAt !== null && r.availableAt <= now();
+  });
+}
+function sentenceNewQueue(mode) {
+  const type = sentenceItemType(mode);
+  return sentencesForMode(mode).filter(s => !isIntroduced(type, s.id));
+}
+
+// BUG FIX: this used to build the ENTIRE available-sentences list every
+// time and cycle through it with `index = (index + 1) % pool.length` —
+// meaning it started over from the beginning every time you left and came
+// back (a plain JS variable, never persisted), and even within one sitting
+// it looped forever, showing sentences you'd already gotten right again
+// and again. Now it's a real queue — due-for-review sentences first, then
+// ones you haven't tried yet — sourced from actual SRS records the same
+// way vocab/kanji/grammar reviews are, so progress survives reloads and a
+// correctly-answered sentence goes on the same kind of timer as everything
+// else instead of reappearing immediately.
 function practiceSession(mode) {
-  const pool = availableSentences().filter(s => mode === 'translate' ? (s.acceptedTranslations && s.acceptedTranslations.length) : (s.acceptedReadings && s.acceptedReadings.length));
-  return { mode, pool, index: 0, total: pool.length };
+  const due = sentenceReviewQueue(mode);
+  const fresh = sentenceNewQueue(mode);
+  shuffleArray(due);
+  shuffleArray(fresh);
+  const pool = [...due, ...fresh];
+  return { mode, pool, total: pool.length, dueCount: due.length, newCount: fresh.length, missByItem: {} };
 }
 
 let sentencePractice = null;
@@ -6282,17 +6329,20 @@ function viewTranslate() {
 }
 
 function renderSentencePractice() {
-  const { mode, pool, index, total } = sentencePractice;
-  if (!total) {
-    return `<main><p class="empty-state" style="margin-top:40px">No sentences available for this mode yet. <a href="#/sentences">Back to Sentences</a></p></main>`;
+  const { pool, mode, total } = sentencePractice;
+  if (!pool.length) {
+    const message = total === 0
+      ? "Nothing here right now — come back later, or learn more vocab/kanji/grammar to unlock new sentences."
+      : "All done for now — you've cleared everything due. Nice work!";
+    return `<main><p class="empty-state" style="margin-top:40px">${message} <a href="#/sentences">Back to Sentences</a></p></main>`;
   }
-  const s = pool[index];
+  const s = pool[0];
   const isTranslate = mode === 'translate';
   return `
     <div class="quiz-hero" id="hero">
       <div class="quiz-hero-top">
         <a class="home" href="#/sentences" style="color:#fff;text-decoration:none">🏠</a>
-        <div class="count" style="font-size:13px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px">Sentence ${index + 1} of ${total}</div>
+        <div class="count" style="font-size:13px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px">Sentence ${total - pool.length + 1} of ${total}</div>
       </div>
       <div class="session-bar"><span class="done" style="width:100%"></span></div>
       ${isTranslate
@@ -6336,8 +6386,8 @@ function attachSentencePracticeHandlers() {
     if (locked) return;
     const val = input.value.trim();
     if (!val) return;
-    const { mode, pool, index } = sentencePractice;
-    const s = pool[index];
+    const { mode, pool } = sentencePractice;
+    const s = pool[0];
     // Both modes now accept the sentence's real kanji/kana text, a kana
     // reading derived from its romaji, AND the raw romaji itself (in case
     // the live conversion below missed something) — see sentenceKanaReading.
@@ -6355,13 +6405,27 @@ function attachSentencePracticeHandlers() {
       feedback.className = 'feedback-msg correct';
       lessonReviewPanel.classList.remove('visible');
       burstConfetti();
+      // Same stage/timing mechanics as vocab/kanji/grammar reviews (see
+      // applyReviewOutcome) — first time this sentence/mode combo is seen,
+      // it's introduced at Apprentice I same as a lesson would; any misses
+      // on the way to getting it right this round count against it exactly
+      // like a review miss does. It's on its own timer from here, so it
+      // won't come back up again until actually due.
+      const type = sentenceItemType(mode);
+      if (!isIntroduced(type, s.id)) introduceItem(type, s.id);
+      const record = getRecord(type, s.id);
+      const missCount = sentencePractice.missByItem[s.id] || 0;
+      applyReviewOutcome(record, missCount);
+      delete sentencePractice.missByItem[s.id];
+      saveState();
       setTimeout(() => {
-        sentencePractice.index = (sentencePractice.index + 1) % sentencePractice.total;
+        sentencePractice.pool.shift();
         document.getElementById('app').innerHTML = topNav('sentences', ['sentences', mode]) + renderSentencePractice();
         attachSentencePracticeHandlers();
         window.scrollTo(0, 0);
       }, 1100);
     } else {
+      sentencePractice.missByItem[s.id] = (sentencePractice.missByItem[s.id] || 0) + 1;
       input.classList.remove('shake');
       void input.offsetWidth;
       input.classList.add('incorrect', 'shake');

@@ -15830,5 +15830,125 @@
   "ぽいんとかーど/れしーと/べんとう": {
     "female": "6822084d026bea11d5567946ea8c2aee-female.wav",
     "male": "6822084d026bea11d5567946ea8c2aee-male.wav"
+  },
+  "げーむ": {
+    "female": "df136dad8b9cc1e99b9d902d48b6af86-female.wav",
+    "male": "df136dad8b9cc1e99b9d902d48b6af86-male.wav"
+  },
+  "こめでぃ": {
+    "female": "0fe6303fd10a788015376146e3e48d15-female.wav",
+    "male": "0fe6303fd10a788015376146e3e48d15-male.wav"
+  },
+  "あくしょん": {
+    "female": "d89ea7cb40946931cdb378acdbb7e03e-female.wav",
+    "male": "d89ea7cb40946931cdb378acdbb7e03e-male.wav"
+  },
+  "どんな": {
+    "female": "5aa73c28ccf27aec097582a474888bc3-female.wav",
+    "male": "5aa73c28ccf27aec097582a474888bc3-male.wav"
+  },
+  "ほらー": {
+    "female": "51127340b12c6e5527abe3b4eb3f7cc6-female.wav",
+    "male": "51127340b12c6e5527abe3b4eb3f7cc6-male.wav"
+  },
+  "どらま": {
+    "female": "0c5f0e27c31381bb1ab26034b62ba9b6-female.wav",
+    "male": "0c5f0e27c31381bb1ab26034b62ba9b6-male.wav"
+  },
+  "あめりかの": {
+    "female": "8ef026eeef167dc8ca0cdece478983c0-female.wav",
+    "male": "8ef026eeef167dc8ca0cdece478983c0-male.wav"
+  },
+  "にほんの": {
+    "female": "39a61b877c7015962a96daf077b952ae-female.wav",
+    "male": "39a61b877c7015962a96daf077b952ae-male.wav"
+  },
+  "ふぁんたじー": {
+    "female": "4958667a0e999e3a6fd463200802dd1c-female.wav",
+    "male": "4958667a0e999e3a6fd463200802dd1c-male.wav"
+  },
+  "すき": {
+    "female": "48bf2ba0fe2ea5f7c465f7cb95d590f6-female.wav",
+    "male": "48bf2ba0fe2ea5f7c465f7cb95d590f6-male.wav"
+  },
+  "けーぽっぷ": {
+    "female": "eb2fb3e69d2ed5cda5a8aab9f8d4e7cd-female.wav",
+    "male": "eb2fb3e69d2ed5cda5a8aab9f8d4e7cd-male.wav"
+  },
+  "かのじょ": {
+    "female": "0305473f1bbc7c5e51b75da0330d50bf-female.wav",
+    "male": "0305473f1bbc7c5e51b75da0330d50bf-male.wav"
+  },
+  "さんは": {
+    "female": "e1a2c14a93dcd6ef77ef84a8284a0f68-female.wav",
+    "male": "e1a2c14a93dcd6ef77ef84a8284a0f68-male.wav"
+  },
+  "かんこく": {
+    "female": "497b231c809759ef0f67054f912c169a-female.wav",
+    "male": "497b231c809759ef0f67054f912c169a-male.wav"
+  },
+  "いぎりす": {
+    "female": "83b625ca77134e882cb07fef5686e5a7-female.wav",
+    "male": "83b625ca77134e882cb07fef5686e5a7-male.wav"
+  },
+  "えりか": {
+    "female": "969817f1040621e4ac85ab2799809822-female.wav",
+    "male": "969817f1040621e4ac85ab2799809822-male.wav"
+  },
+  "だにえる": {
+    "female": "ab60ee219f5e8a07da7311b03d640dbd-female.wav",
+    "male": "ab60ee219f5e8a07da7311b03d640dbd-male.wav"
+  },
+  "かれし": {
+    "female": "548b5b1d918cdb838a92a97327bebc3a-female.wav",
+    "male": "548b5b1d918cdb838a92a97327bebc3a-male.wav"
+  },
+  "こちら": {
+    "female": "5683f686954e8bd95ac993ef013f1ccb-female.wav",
+    "male": "5683f686954e8bd95ac993ef013f1ccb-male.wav"
+  },
+  "といいます": {
+    "female": "dce427b4a537f7d18d9bd54f698e4c4a-female.wav",
+    "male": "dce427b4a537f7d18d9bd54f698e4c4a-male.wav"
+  },
+  "あんどりゅー": {
+    "female": "3eb8736368efb241ac039cc532a27765-female.wav",
+    "male": "3eb8736368efb241ac039cc532a27765-male.wav"
+  },
+  "じゃけっと": {
+    "female": "7a5fb50bee4d462328f1c48a202c0213-female.wav",
+    "male": "7a5fb50bee4d462328f1c48a202c0213-male.wav"
+  },
+  "ありがとうございます": {
+    "female": "94f49c978df33dc365b1b6aad2da8b7b-female.wav",
+    "male": "94f49c978df33dc365b1b6aad2da8b7b-male.wav"
+  },
+  "ねくたい": {
+    "female": "fb5feafa6908815d1c197a1c4afda793-female.wav",
+    "male": "fb5feafa6908815d1c197a1c4afda793-male.wav"
+  },
+  "いくら": {
+    "female": "6a687c8e824bc0f307d65e8c91fd552d-female.wav",
+    "male": "6a687c8e824bc0f307d65e8c91fd552d-male.wav"
+  },
+  "すかーと": {
+    "female": "838dcf47c065c9c2009a6cd184aeb6e0-female.wav",
+    "male": "838dcf47c065c9c2009a6cd184aeb6e0-male.wav"
+  },
+  "ね": {
+    "female": "448d36c51ab4eead31da6a6a5fb75a2d-female.wav",
+    "male": "448d36c51ab4eead31da6a6a5fb75a2d-male.wav"
+  },
+  "かわいい": {
+    "female": "11dfd6f514117bf9cc0d0b41203dd557-female.wav",
+    "male": "11dfd6f514117bf9cc0d0b41203dd557-male.wav"
+  },
+  "てぃーしゃつ": {
+    "female": "4d069a99dc997b793fff5f25267c2ac3-female.wav",
+    "male": "4d069a99dc997b793fff5f25267c2ac3-male.wav"
+  },
+  "ほしい": {
+    "female": "51d517db4a044bf7fc42e08a7f584a31-female.wav",
+    "male": "51d517db4a044bf7fc42e08a7f584a31-male.wav"
   }
 }

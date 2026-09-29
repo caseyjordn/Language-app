@@ -144,6 +144,8 @@ async function main() {
     path.join(__dirname, 'files', 'tourist-vocab-splitfix.json'),
     path.join(__dirname, 'files', 'tourist-vocab-wave2-fix.json'),
     path.join(__dirname, 'files', 'current-progress-9-27-parsed.json'),
+    path.join(__dirname, 'files', 'current-progress-9-28-parsed.json'),
+    path.join(__dirname, 'files', 'duo-batch-new.json'),
     ...process.argv.slice(2)
   ];
   customSources.forEach(f => {
