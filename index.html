@@ -5942,6 +5942,31 @@ function blankSentence(item) {
   return item.example.jp.replace(item.blankAnswer, '＿＿＿');
 }
 
+// BUG FIX: a correct answer shows "Correct!" INSTANTLY, but the actual
+// state change (stage promotion, availableAt, saveState) was deferred
+// 1.1s behind that for the confetti animation (see markCorrect below),
+// reading the quizSession variable live rather than a captured snapshot.
+// Leaving the review (End session & leave, or the app/tab just closing)
+// inside that 1.1s window nulled quizSession before the deferred callback
+// ran, so it threw trying to read quizSession.remaining and that answer —
+// the one you'd literally just watched get marked correct — was silently
+// never saved. It would then still show up as due again right away, since
+// its timer never actually advanced. pendingFinish holds whatever's
+// currently waiting so any exit path can flush it immediately (skip the
+// decorative delay, but still actually apply and save the outcome)
+// instead of abandoning it. Module-scoped (not inside attachQuizHandlers)
+// so the single top-level visibilitychange/pagehide listener below can
+// always reach whichever question is currently pending, instead of a
+// fresh listener piling up on every question re-render.
+let pendingFinish = null;
+function flushPendingFinish() {
+  if (!pendingFinish) return;
+  clearTimeout(pendingFinish.timer);
+  const run = pendingFinish.run;
+  pendingFinish = null;
+  run();
+}
+
 function attachQuizHandlers() {
   const input = document.getElementById('answerInput');
   const checkBtn = document.getElementById('checkBtn');
@@ -5992,7 +6017,7 @@ function attachQuizHandlers() {
     lessonReviewPanel.classList.remove('visible');
     checkBtn.textContent = '✓';
     burstConfetti();
-    setTimeout(() => {
+    const run = () => {
       finishQuestion(q, type, () => {
         if (mode === 'review') {
           const record = getRecord(type, q.itemId);
@@ -6016,7 +6041,8 @@ function attachQuizHandlers() {
         }
         // mode === 'practice': no state change — pure drilling
       });
-    }, 1100);
+    };
+    pendingFinish = { run, timer: setTimeout(() => { pendingFinish = null; run(); }, 1100) };
   }
 
   function check() {
@@ -6188,6 +6214,7 @@ function attachQuizHandlers() {
     quitBtn.addEventListener('click', () => { quitMenu.hidden = false; });
     document.getElementById('quitStay').addEventListener('click', () => { quitMenu.hidden = true; input.focus({ preventScroll: true }); });
     document.getElementById('quitLeave').addEventListener('click', () => {
+      flushPendingFinish();
       const dest = '#/' + quizSession.backRoute;
       quizSession = null;
       if (location.hash === dest) render(); else location.hash = dest;
@@ -6541,8 +6568,8 @@ function flushCloudSyncNow() {
   cloudSyncTimer = null;
   pushStateToCloud();
 }
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloudSyncNow(); });
-window.addEventListener('pagehide', flushCloudSyncNow);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { flushPendingFinish(); flushCloudSyncNow(); } });
+window.addEventListener('pagehide', () => { flushPendingFinish(); flushCloudSyncNow(); });
 
 function renderAuthLoading() {
   document.getElementById('app').innerHTML = `<div class="auth-shell"><div class="auth-loading">Loading…</div></div>`;
