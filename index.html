@@ -2827,6 +2827,35 @@ function nextAvailableAt(stage) {
 
 // Applies one item's review outcome for a whole session (missCount = how
 // many wrong sub-answers it got this session, 0 if answered clean).
+// Half-finished review items — see STATE.partialReviews. Only ever used by
+// real reviews; lessons/practice/duocheck resolve an item in one sitting by
+// design, so there's nothing to carry over for them.
+function partialKey(type, id) { return type + ':' + id; }
+function getPartial(type, id) {
+  return (STATE.partialReviews && STATE.partialReviews[partialKey(type, id)]) || null;
+}
+function bankPartialField(type, id, field, missCount) {
+  STATE.partialReviews = STATE.partialReviews || {};
+  const key = partialKey(type, id);
+  const entry = STATE.partialReviews[key] || { fields: {}, misses: 0 };
+  entry.fields[field] = true;
+  // Plain assignment, not max(): the live session's count was seeded FROM
+  // this value, so it's already >= it, and the "Mark correct" override
+  // legitimately takes a miss back off.
+  entry.misses = missCount || 0;
+  STATE.partialReviews[key] = entry;
+}
+function recordPartialMiss(type, id, missCount) {
+  STATE.partialReviews = STATE.partialReviews || {};
+  const key = partialKey(type, id);
+  const entry = STATE.partialReviews[key] || { fields: {}, misses: 0 };
+  entry.misses = missCount || 0;
+  STATE.partialReviews[key] = entry;
+}
+function clearPartial(type, id) {
+  if (STATE.partialReviews) delete STATE.partialReviews[partialKey(type, id)];
+}
+
 function applyReviewOutcome(record, missCount) {
   if (missCount === 0) {
     record.stage = Math.min(record.stage + 1, 9);
@@ -2851,6 +2880,18 @@ function defaultState() {
     updatedAt: 0,           // stamped on every saveState() — lets boot pick whichever of local/cloud is actually newer (see onAuthStateChanged)
     levels: { vocab: 1, kanji: 1, grammar: 1 },
     recentMistakes: [],     // { type, id, at }
+    // BUG FIX: an item only banks its SRS progress once EVERY question for
+    // it is answered (a vocab word needs both its meaning and its reading).
+    // Questions are shuffled across the whole session, so consecutive
+    // questions are almost always different items — meaning at any moment
+    // you have a pile of items sitting half-finished. Quitting threw ALL
+    // of that away: answer 7 questions across 7 different words, leave,
+    // and literally nothing was saved, because not one of them had both
+    // halves done. This remembers each half as soon as you get it right,
+    // keyed `${type}:${id}` -> { fields: { meaning: true }, misses: n },
+    // so leaving mid-session costs you nothing and coming back picks up
+    // only the halves you still owe.
+    partialReviews: {},
     lessonBatchSize: 5,     // how many new items are taught per lesson session before the end-of-batch quiz
     apprenticeLimit: 100,   // real WK's own default — caps how many items can sit in Apprentice at once, across vocab+kanji+grammar combined, so new lessons throttle until you clear some reviews (see roomForNewLessons)
     devTimeOffsetMs: 0,     // DEV ONLY — lets the "+24h" button fast-forward review timing for testing
@@ -4501,6 +4542,7 @@ function applyOneTimeVocabFix(fix) {
   STATE.customVocab.vocab = STATE.customVocab.vocab.filter(it => {
     if (!matches(it)) return true;
     delete STATE.items[itemKey('vocab', it.id)];
+    clearPartial('vocab', it.id);
     return false;
   });
   const known = new Set();
@@ -4856,6 +4898,7 @@ function attachCustomVocabHubHandlers() {
     STATE.customVocab.vocab = STATE.customVocab.vocab.filter(it => {
       if (!targetWords.has(it.word)) return true;
       delete STATE.items[itemKey('vocab', it.id)];
+      clearPartial('vocab', it.id);
       removed++;
       return false;
     });
@@ -4872,6 +4915,7 @@ function attachCustomVocabHubHandlers() {
       const id = btn.dataset.id;
       STATE.customVocab[type] = STATE.customVocab[type].filter(it => it.id !== id);
       delete STATE.items[itemKey(type, id)];
+      clearPartial(type, id);
       saveState();
       render();
     });
@@ -5739,14 +5783,30 @@ function buildQuizSession(type, items, mode) {
   return buildMixedQuizSession(items.map(item => ({ type, item })), mode, sectionBase(type));
 }
 
+// How many items a session works through at a time before moving on to the
+// next group. Matches WaniKani's default batch size. Only the questions
+// inside a batch get shuffled together, so an item's two cards are never
+// more than ~2x this many questions apart.
+const QUIZ_BATCH_ITEMS = 10;
+
 // Cross-category session (the Dashboard's "Custom Review") — entries is
 // [{type, item}, ...] spanning vocab/kanji/grammar in one shuffled mix.
 // backRoute is where "back"/finish navigates to, since a mixed session has
 // no single section to return to.
 function buildMixedQuizSession(entries, mode, backRoute) {
-  const questions = [];
-  entries.forEach(({ type, item }) => fieldsFor(type, item).forEach(field => {
-    const q = { itemType: type, itemId: item.id, field };
+  // Questions grouped by the item they belong to, so the batching below can
+  // keep an item's meaning and reading questions near each other.
+  const perItem = [];
+  entries.forEach(({ type, item }) => {
+    const questions = [];
+    // Reviews resume: skip the halves already banked by an earlier session
+    // that was closed before this item was finished (see STATE.partialReviews).
+    const banked = mode === 'review' ? ((getPartial(type, item.id) || {}).fields || {}) : {};
+    fieldsFor(type, item).filter(field => !banked[field]).forEach(field => {
+    // bankField is the field as fieldsFor named it, before the tourist
+    // reverse style flips q.field to 'reading' — banking has to key off the
+    // original name or a resumed session would re-ask the same half.
+    const q = { itemType: type, itemId: item.id, field, bankField: field };
     // Tourist vocab's one Meaning question (see fieldsFor/isKanjiReadingSkipped)
     // rotates between three ways to be asked, picked fresh each time the
     // word comes up: (1) normal — see the word, type the English meaning;
@@ -5765,8 +5825,24 @@ function buildMixedQuizSession(entries, mode, backRoute) {
       else q.quizStyle = 'normal';
     }
     questions.push(q);
-  }));
-  shuffleArray(questions);
+    });
+    if (questions.length) perItem.push(questions);
+  });
+  // WaniKani doesn't shuffle the whole pile at once — it works through a
+  // batch of items at a time, shuffling only within that batch. That's what
+  // keeps a word's meaning and reading cards close together instead of
+  // hundreds of questions apart, which matters for two reasons: an item
+  // can't bank its SRS progress until BOTH of its cards are answered, and
+  // answering them near each other is the point of the exercise (recall the
+  // word, then recall how to say it). Batching means at any moment you have
+  // at most one batch of half-finished items rather than the entire session.
+  shuffleArray(perItem);
+  const questions = [];
+  for (let i = 0; i < perItem.length; i += QUIZ_BATCH_ITEMS) {
+    const batch = [].concat(...perItem.slice(i, i + QUIZ_BATCH_ITEMS));
+    shuffleArray(batch);
+    questions.push(...batch);
+  }
   // Tracks every distinct type in the session so a finished mixed review
   // (e.g. the "Active Reviews" page, vocab+kanji together) can check
   // level-up for each type it touched, not just whichever type happened
@@ -5776,7 +5852,14 @@ function buildMixedQuizSession(entries, mode, backRoute) {
   // wrong), independent of answeredCount (which only counts a question
   // once, when it's FINALLY correct) — this is what drives the live
   // accuracy percentage shown during the session.
-  return { mode, backRoute, totalQuestions: questions.length, remaining: questions, missByItem: {}, answeredCount: 0, types, totalAttempts: 0, correctAttempts: 0 };
+  // Carry forward misses this item already earned in an earlier session that
+  // was closed mid-item, so resuming can't launder a miss into a clean review.
+  const missByItem = {};
+  if (mode === 'review') entries.forEach(({ type, item }) => {
+    const p = getPartial(type, item.id);
+    if (p && p.misses) missByItem[itemKey(type, item.id)] = p.misses;
+  });
+  return { mode, backRoute, totalQuestions: questions.length, remaining: questions, missByItem, answeredCount: 0, types, totalAttempts: 0, correctAttempts: 0 };
 }
 
 function viewReview(type) {
@@ -5987,9 +6070,23 @@ function attachQuizHandlers() {
   function finishQuestion(q, type, outcomeFn) {
     quizSession.remaining.shift();
     quizSession.answeredCount++;
-    const stillPending = quizSession.remaining.some(r => r.itemId === q.itemId);
-    if (!stillPending) {
-      outcomeFn();
+    // itemType matters: a vocab word and a kanji can share an id (力, 日, 水
+    // all exist as both), and without it one would be treated as the other's
+    // outstanding half and never bank.
+    const stillPending = quizSession.remaining.some(r => r.itemId === q.itemId && r.itemType === q.itemType);
+    if (stillPending) {
+      // Half done, not finishable yet — persist the half so closing the app
+      // here doesn't throw it away (see STATE.partialReviews).
+      if (quizSession.mode === 'review') {
+        bankPartialField(type, q.itemId, q.bankField || q.field, quizSession.missByItem[itemKey(type, q.itemId)] || 0);
+        saveState();
+      }
+    } else {
+      const wasReview = quizSession.mode === 'review';
+      // finally: outcomeFn also does presentation work (the stage-change
+      // toast), and a hiccup there must not leave a stale half-finished
+      // entry behind that would skip this item's questions forever.
+      try { outcomeFn(); } finally { if (wasReview) clearPartial(type, q.itemId); }
       saveState();
     }
     if (!quizSession.remaining.length) {
@@ -6021,7 +6118,7 @@ function attachQuizHandlers() {
       finishQuestion(q, type, () => {
         if (mode === 'review') {
           const record = getRecord(type, q.itemId);
-          const missCount = quizSession.missByItem[q.itemId] || 0;
+          const missCount = quizSession.missByItem[itemKey(q.itemType, q.itemId)] || 0;
           const oldStage = record.stage;
           applyReviewOutcome(record, missCount);
           showStageChangeToast(type, item, oldStage, record.stage);
@@ -6036,7 +6133,7 @@ function attachQuizHandlers() {
           // Apprentice II (stage 2) instead of the usual Apprentice I,
           // since "knew it well enough to try, just not perfectly" is a
           // step ahead of never having seen it.
-          const missCount = quizSession.missByItem[q.itemId] || 0;
+          const missCount = quizSession.missByItem[itemKey(q.itemType, q.itemId)] || 0;
           setItemStage(type, q.itemId, missCount > 0 ? 2 : 5);
         }
         // mode === 'practice': no state change — pure drilling
@@ -6079,7 +6176,8 @@ function attachQuizHandlers() {
       // for SRS purposes, same as real WK, just with friendlier UX than a
       // full miss.
       const matchedOther = otherReadingFor(type, item, q.field).find(r => isCloseEnough(val, [r]));
-      quizSession.missByItem[q.itemId] = (quizSession.missByItem[q.itemId] || 0) + 1;
+      quizSession.missByItem[itemKey(q.itemType, q.itemId)] = (quizSession.missByItem[itemKey(q.itemType, q.itemId)] || 0) + 1;
+      if (quizSession.mode === 'review') { recordPartialMiss(type, q.itemId, quizSession.missByItem[itemKey(q.itemType, q.itemId)]); saveState(); }
       input.classList.remove('shake');
       void input.offsetWidth;
       input.classList.add('incorrect', 'shake');
@@ -6087,7 +6185,8 @@ function attachQuizHandlers() {
       feedback.className = 'feedback-msg incorrect';
       setTimeout(() => { input.classList.remove('incorrect'); input.value = ''; }, 500);
     } else {
-      quizSession.missByItem[q.itemId] = (quizSession.missByItem[q.itemId] || 0) + 1;
+      quizSession.missByItem[itemKey(q.itemType, q.itemId)] = (quizSession.missByItem[itemKey(q.itemType, q.itemId)] || 0) + 1;
+      if (quizSession.mode === 'review') { recordPartialMiss(type, q.itemId, quizSession.missByItem[itemKey(q.itemType, q.itemId)]); saveState(); }
       lastMissedVal = val;
       input.classList.remove('shake');
       void input.offsetWidth;
@@ -6128,11 +6227,16 @@ function attachQuizHandlers() {
     // at a random position instead — a real reshuffle into the deck —
     // and never at index 0, so it can't immediately repeat as the very
     // next question either.
+    // The reinsert is also bounded to roughly the current batch (see
+    // QUIZ_BATCH_ITEMS), not the whole remaining queue — dropping a missed
+    // card 170 questions away would undo the batching and leave its partner
+    // card stranded for the rest of the session.
     const missed = quizSession.remaining.shift();
     if (quizSession.remaining.length === 0) {
       quizSession.remaining.push(missed);
     } else {
-      const insertAt = 1 + Math.floor(Math.random() * quizSession.remaining.length);
+      const window = Math.min(quizSession.remaining.length, QUIZ_BATCH_ITEMS * 2);
+      const insertAt = 1 + Math.floor(Math.random() * window);
       quizSession.remaining.splice(insertAt, 0, missed);
     }
     rerenderQuiz();
@@ -6153,7 +6257,7 @@ function attachQuizHandlers() {
       const q = quizSession.remaining[0];
       const type = q.itemType;
       const item = contentFor(type).find(it => it.id === q.itemId);
-      quizSession.missByItem[q.itemId] = Math.max(0, (quizSession.missByItem[q.itemId] || 0) - 1);
+      quizSession.missByItem[itemKey(q.itemType, q.itemId)] = Math.max(0, (quizSession.missByItem[itemKey(q.itemType, q.itemId)] || 0) - 1);
       quizSession.correctAttempts++; // that submission counted as wrong a moment ago -- correct the accuracy % too
       learnSynonym(type, q.itemId, q.field, lastMissedVal);
       markCorrect(q, type, item, true);
