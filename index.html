@@ -5011,7 +5011,69 @@ function viewBackupRestore() {
         <button class="wk-button" id="importBtn">Import (overwrites current progress)</button>
         <span id="importStatus" class="backup-status"></span>
       </div>
+      <div class="backup-section">
+        <h2>Review backlog</h2>
+        <p class="wk-text">You have <strong id="backlogCount">${dueBacklogKeys().length}</strong> items due right now. Spreading them out keeps every item's SRS stage exactly as it is — it only staggers <em>when</em> each one comes due, so each day tops out around the number below (counting reviews that were already scheduled for that day). Items you're still learning (Apprentice) come first; the ones you know best (Master/Enlightened) wait longest. Within a stage, the most overdue go first.</p>
+        <label class="wk-text">Items per day: <input type="number" id="backlogPerDay" min="10" max="300" value="50" style="width:5em"></label>
+        <button class="wk-button primary" id="backlogBtn">Spread out backlog</button>
+        <span id="backlogStatus" class="backup-status"></span>
+      </div>
     </main>`, after: attachBackupHandlers };
+}
+
+// ---------------------------------------------------------------------
+// Backlog spreader. A big pile of overdue reviews (hundreds at once) is
+// demoralizing and unworkable, but the fix is NOT to reset progress —
+// it's to reschedule. This keeps every due item's stage untouched and
+// only moves its availableAt: the highest-priority `perDay` stay due now,
+// the rest go to the start of later days, each day filled up to `perDay`
+// counting reviews that were already going to come due that day anyway.
+// Priority = lowest SRS stage first (Apprentice items are the fragile
+// ones you're actively learning; letting them wait costs the most), then
+// most overdue first within a stage.
+// ---------------------------------------------------------------------
+function dueBacklogKeys() {
+  const t = now();
+  return Object.keys(STATE.items).filter(k => {
+    const r = STATE.items[k];
+    return r && r.stage < 9 && r.availableAt != null && r.availableAt <= t;
+  });
+}
+function spreadReviewBacklog(perDay) {
+  const t = now();
+  const backlog = dueBacklogKeys().sort((a, b) => {
+    const ra = STATE.items[a], rb = STATE.items[b];
+    return (ra.stage - rb.stage) || (ra.availableAt - rb.availableAt);
+  });
+  const backlogSet = new Set(backlog);
+  const DAY = 24 * 3600 * 1000;
+  const midnight0 = new Date(t); midnight0.setHours(0, 0, 0, 0);
+  const dayStart = k => { const d = new Date(midnight0); d.setDate(d.getDate() + k); return d.getTime(); };
+  // Reviews already scheduled per future day (not part of the backlog).
+  const alreadyOnDay = k => {
+    const s = dayStart(k), e = dayStart(k + 1);
+    let n = 0;
+    for (const key in STATE.items) {
+      if (backlogSet.has(key)) continue;
+      const r = STATE.items[key];
+      if (r && r.stage < 9 && r.availableAt != null && r.availableAt >= s && r.availableAt < e) n++;
+    }
+    return n;
+  };
+  let i = 0, day = 0;
+  const schedule = [];
+  while (i < backlog.length) {
+    // Day 0 = right now; nothing else is due yet today beyond the backlog itself.
+    // Always place at least a few per day so it can't stall on a heavy day.
+    const room = day === 0 ? perDay : Math.max(10, perDay - alreadyOnDay(day));
+    const take = backlog.slice(i, i + room);
+    if (day > 0) take.forEach(key => { STATE.items[key].availableAt = dayStart(day); });
+    schedule.push(take.length);
+    i += take.length;
+    day++;
+  }
+  saveState();
+  return { total: backlog.length, days: schedule.length, schedule };
 }
 
 function attachBackupHandlers() {
@@ -5023,6 +5085,20 @@ function attachBackupHandlers() {
   const importStatus = document.getElementById('importStatus');
 
   exportBox.value = JSON.stringify(STATE, null, 2);
+
+  const backlogBtn = document.getElementById('backlogBtn');
+  backlogBtn.addEventListener('click', () => {
+    const status = document.getElementById('backlogStatus');
+    const perDay = Math.max(10, Math.min(300, parseInt(document.getElementById('backlogPerDay').value, 10) || 50));
+    const due = dueBacklogKeys().length;
+    if (due <= perDay) { status.textContent = `Only ${due} due — nothing to spread.`; return; }
+    if (!confirm(`Spread ${due} due items out at about ${perDay}/day? Stages stay the same; only due dates change.`)) return;
+    const res = spreadReviewBacklog(perDay);
+    status.textContent = `Done — ${res.schedule[0]} due now, the rest spread over the next ${res.days - 1} day${res.days === 2 ? '' : 's'}.`;
+    status.style.color = 'var(--color-correct)';
+    document.getElementById('backlogCount').textContent = dueBacklogKeys().length;
+    exportBox.value = JSON.stringify(STATE, null, 2);
+  });
 
   copyBtn.addEventListener('click', async () => {
     try {
@@ -5784,10 +5860,12 @@ function buildQuizSession(type, items, mode) {
 }
 
 // How many items a session works through at a time before moving on to the
-// next group. Matches WaniKani's default batch size. Only the questions
-// inside a batch get shuffled together, so an item's two cards are never
-// more than ~2x this many questions apart.
-const QUIZ_BATCH_ITEMS = 10;
+// next group. Only the questions inside a batch get shuffled together, so
+// an item's two cards are never more than ~2x this many questions apart.
+// Casey asked for pairs no more than ~5 apart: 3 items = 6 questions per
+// batch, so a pair is at most 5 positions apart (WaniKani's default is 10,
+// which allowed gaps of up to ~19).
+const QUIZ_BATCH_ITEMS = 3;
 
 // Cross-category session (the Dashboard's "Custom Review") — entries is
 // [{type, item}, ...] spanning vocab/kanji/grammar in one shuffled mix.
